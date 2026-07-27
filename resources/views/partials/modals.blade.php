@@ -58,10 +58,59 @@
                     <label class="flex items-center gap-2 text-forest-700 hover:text-forest-900 cursor-pointer select-none">
                         <input type="checkbox" class="accent-forest-500 cursor-pointer border-[#b8dad0]"> Ingat saya
                     </label>
-                    <a href="#" class="text-forest-600 hover:text-forest-800 transition hover:underline">Lupa Password?</a>
+                    <a href="#" id="btn-forgot-password" class="text-forest-600 hover:text-forest-800 transition hover:underline">Lupa Password?</a>
                 </div>
                 <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
                     Masuk Sekarang
+                </button>
+            </form>
+
+            <!-- Reset Password Form -->
+            <form id="form-reset-password" class="space-y-4 hidden">
+                <div class="mb-2">
+                    <p class="text-xs text-forest-700 leading-relaxed">Masukkan alamat email terdaftar Anda dan kata sandi baru untuk mengatur ulang kata sandi Anda secara langsung.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-email">Alamat Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
+                            <i class="far fa-envelope text-sm"></i>
+                        </span>
+                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="email" id="reset-email" required placeholder="nama@email.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass">Kata Sandi Baru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
+                            <i class="fas fa-lock text-sm"></i>
+                        </span>
+                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="password" id="reset-pass" required placeholder="••••••••">
+                        <button type="button" id="toggle-reset-pass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass-confirm">Konfirmasi Kata Sandi Baru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
+                            <i class="fas fa-lock text-sm"></i>
+                        </span>
+                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="password" id="reset-pass-confirm" required placeholder="••••••••">
+                        <button type="button" id="toggle-reset-pass-confirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between text-xs pt-1">
+                    <button type="button" id="btn-back-to-login" class="text-forest-600 hover:text-forest-800 transition hover:underline">
+                        Kembali ke Masuk
+                    </button>
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
+                    Ubah Kata Sandi
                 </button>
             </form>
             
@@ -93,7 +142,6 @@
                         </span>
                         <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-8 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition appearance-none cursor-pointer" id="reg-role">
                             <option value="peserta" selected>Peserta / Pendaftar THK Awards</option>
-                            <option value="asesor">Asesor / Tim Penilai</option>
                             <option value="umum">Masyarakat Umum</option>
                         </select>
                         <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">

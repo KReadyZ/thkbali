@@ -175,6 +175,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $news->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </section>
 
@@ -290,6 +295,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $assessors->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </section>
 
@@ -343,6 +353,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $agendas->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </section>
 
@@ -391,6 +406,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $galleries->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </section>
 
@@ -436,7 +456,7 @@
                             <!-- Year Filter -->
                             <select id="awardee-year-filter" class="bg-beige-50 border border-beige-300 rounded-xl px-3 py-2 text-xs font-semibold text-forest-800 outline-none cursor-pointer focus:ring-1 focus:ring-gold-500">
                                 <option value="">Semua Tahun</option>
-                                @foreach($awardees->pluck('year')->unique()->sortDesc() as $y)
+                                @foreach(\App\Models\Awardee::pluck('year')->unique()->sortDesc() as $y)
                                     <option value="{{ $y }}">{{ $y }}</option>
                                 @endforeach
                             </select>
@@ -494,6 +514,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $awardees->appends(request()->query())->links() }}
                     </div>
                 </div>
             </section>
@@ -562,6 +587,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Pagination Links -->
+                    <div class="mt-6">
+                        {{ $proposals->appends(request()->query())->links() }}
                     </div>
                 </div>
             </section>

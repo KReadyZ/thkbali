@@ -61,10 +61,6 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        if (!$this->checkAuth()) {
-            return redirect()->route('admin.login');
-        }
-
         $statistics = Statistic::first() ?? new Statistic([
             'pilar_filosofi' => 3,
             'peserta_awards' => 120,
@@ -72,13 +68,13 @@ class AdminController extends Controller
             'kategori_awards' => 12,
             'desa_adat_penerima' => 8,
         ]);
-        $news = News::orderBy('id', 'desc')->get();
-        $assessors = Assessor::orderBy('id', 'asc')->get();
-        $agendas = Agenda::orderBy('id', 'desc')->get();
-        $galleries = Gallery::orderBy('id', 'desc')->get();
+        $news = News::orderBy('id', 'desc')->paginate(10, ['*'], 'page_news');
+        $assessors = Assessor::orderBy('id', 'asc')->paginate(10, ['*'], 'page_assessors');
+        $agendas = Agenda::orderBy('id', 'desc')->paginate(10, ['*'], 'page_agendas');
+        $galleries = Gallery::orderBy('id', 'desc')->paginate(12, ['*'], 'page_galleries');
         $awardCategories = AwardCategory::orderBy('id', 'asc')->get();
-        $awardees = Awardee::orderBy('id', 'desc')->get();
-        $proposals = Proposal::with('user')->orderBy('id', 'desc')->get();
+        $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
+        $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
 
         return view('admin.dashboard', compact(
             'statistics',

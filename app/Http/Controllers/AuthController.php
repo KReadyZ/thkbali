@@ -16,10 +16,11 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|in:peserta,asesor,umum',
+            'role' => 'required|string|in:peserta,umum',
             'password' => 'required|string|min:8',
         ], [
             'email.unique' => 'Alamat email ini sudah terdaftar.',
+            'role.in' => 'Peran pendaftaran tidak valid.',
             'password.min' => 'Kata sandi minimal harus 8 karakter.',
         ]);
 
@@ -144,5 +145,42 @@ class AuthController extends Controller
             'success' => false,
             'message' => 'Gagal mengunggah berkas. Silakan coba lagi.'
         ], 500);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
+            'password.required' => 'Kata sandi baru wajib diisi.',
+            'password.min' => 'Kata sandi baru minimal harus 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi baru tidak cocok.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Alamat email tidak terdaftar.'
+            ], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kata sandi berhasil diatur ulang! Silakan masuk dengan kata sandi baru Anda.'
+        ]);
     }
 }

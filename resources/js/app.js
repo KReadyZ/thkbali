@@ -659,6 +659,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabRegisterBtn = document.getElementById('tab-register');
     const formLogin = document.getElementById('form-login');
     const formRegister = document.getElementById('form-register');
+    const formResetPassword = document.getElementById('form-reset-password');
+    const btnForgotPassword = document.getElementById('btn-forgot-password');
+    const btnBackToLogin = document.getElementById('btn-back-to-login');
 
     // Contact Us Modal
     const contactModal = document.getElementById('contact-modal');
@@ -704,6 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
+            if (formResetPassword) formResetPassword.classList.add('hidden');
         } else {
             tabRegisterBtn.classList.add('border-forest-500', 'text-forest-950');
             tabRegisterBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
@@ -712,7 +716,31 @@ document.addEventListener('DOMContentLoaded', () => {
             
             formRegister.classList.remove('hidden');
             formLogin.classList.add('hidden');
+            if (formResetPassword) formResetPassword.classList.add('hidden');
         }
+    }
+
+    // Forgot Password Transition
+    if (btnForgotPassword && formResetPassword && formLogin) {
+        btnForgotPassword.addEventListener('click', (e) => {
+            e.preventDefault();
+            formLogin.classList.add('hidden');
+            formRegister.classList.add('hidden');
+            formResetPassword.classList.remove('hidden');
+            
+            // Deactivate both tabs style
+            tabLoginBtn.classList.remove('border-forest-500', 'text-forest-950');
+            tabLoginBtn.classList.add('border-transparent', 'text-forest-400');
+            tabRegisterBtn.classList.remove('border-forest-500', 'text-forest-950');
+            tabRegisterBtn.classList.add('border-transparent', 'text-forest-400');
+        });
+    }
+
+    if (btnBackToLogin) {
+        btnBackToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchTab('login');
+        });
     }
 
     // Toggle Login Password Visibility
@@ -743,6 +771,45 @@ document.addEventListener('DOMContentLoaded', () => {
             const isPass = regPassInput.getAttribute('type') === 'password';
             regPassInput.setAttribute('type', isPass ? 'text' : 'password');
             const icon = toggleRegPassBtn.querySelector('i');
+            if (icon) {
+                if (isPass) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+        });
+    }
+
+    // Toggle Reset Password Visibility
+    const toggleResetPassBtn = document.getElementById('toggle-reset-pass');
+    const resetPassInput = document.getElementById('reset-pass');
+    if (toggleResetPassBtn && resetPassInput) {
+        toggleResetPassBtn.addEventListener('click', () => {
+            const isPass = resetPassInput.getAttribute('type') === 'password';
+            resetPassInput.setAttribute('type', isPass ? 'text' : 'password');
+            const icon = toggleResetPassBtn.querySelector('i');
+            if (icon) {
+                if (isPass) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+        });
+    }
+
+    const toggleResetPassConfirmBtn = document.getElementById('toggle-reset-pass-confirm');
+    const resetPassConfirmInput = document.getElementById('reset-pass-confirm');
+    if (toggleResetPassConfirmBtn && resetPassConfirmInput) {
+        toggleResetPassConfirmBtn.addEventListener('click', () => {
+            const isPass = resetPassConfirmInput.getAttribute('type') === 'password';
+            resetPassConfirmInput.setAttribute('type', isPass ? 'text' : 'password');
+            const icon = toggleResetPassConfirmBtn.querySelector('i');
             if (icon) {
                 if (isPass) {
                     icon.classList.remove('fa-eye');
@@ -946,6 +1013,54 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(err => {
                 showAuthAlert('auth-alert', err.message || 'Pendaftaran gagal. Silakan coba kembali.', 'error');
+            });
+        });
+    }
+
+    if (formResetPassword) {
+        formResetPassword.addEventListener('submit', (e) => {
+            e.preventDefault();
+            hideAuthAlert('auth-alert');
+
+            const email = document.getElementById('reset-email').value;
+            const pass = document.getElementById('reset-pass').value;
+            const passConfirm = document.getElementById('reset-pass-confirm').value;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch('/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: pass,
+                    password_confirmation: passConfirm
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw err; });
+                }
+                return res.json();
+            })
+            .then(data => {
+                showAuthAlert('auth-alert', data.message, 'success');
+                setTimeout(() => {
+                    // Switch to login tab and autofill email
+                    switchTab('login');
+                    document.getElementById('login-email').value = email;
+                    document.getElementById('login-pass').value = '';
+                    document.getElementById('login-pass').focus();
+                    
+                    // Clear reset form
+                    formResetPassword.reset();
+                    hideAuthAlert('auth-alert');
+                }, 2000);
+            })
+            .catch(err => {
+                showAuthAlert('auth-alert', err.message || 'Gagal mengatur ulang kata sandi. Silakan coba kembali.', 'error');
             });
         });
     }

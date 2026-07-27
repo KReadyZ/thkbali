@@ -15,20 +15,12 @@ class AssessorDashboardController extends Controller
 
     public function index()
     {
-        if (!$this->checkAuth()) {
-            return redirect()->route('home')->withErrors(['auth' => 'Anda tidak memiliki hak akses asesor.']);
-        }
-
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->get();
         return view('assessor.dashboard', compact('proposals'));
     }
 
     public function updateStatus(Request $request, $id)
     {
-        if (!$this->checkAuth()) {
-            return redirect()->route('home')->withErrors(['auth' => 'Anda tidak memiliki hak akses asesor.']);
-        }
-
         $request->validate([
             'status' => 'required|string',
         ]);

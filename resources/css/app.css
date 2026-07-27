@@ -1,0 +1,327 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Instrument+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Playfair Display', Georgia, Cambria, serif;
+    
+    --color-forest-50: #eff5f2;
+    --color-forest-100: #d4e5dd;
+    --color-forest-200: #abcbbe;
+    --color-forest-300: #7eb09c;
+    --color-forest-400: #558f79;
+    --color-forest-500: #12614b; /* Primary deep green - brighter and more vibrant */
+    --color-forest-600: #0e4e3b;
+    --color-forest-700: #0a3d2e; /* Dark green */
+    --color-forest-800: #072c21;
+    --color-forest-900: #041c15;
+    --color-forest-950: #02110c; /* Footer deep green */
+    
+    --color-gold-50: #fbf8f3;
+    --color-gold-100: #f7eed7;
+    --color-gold-200: #eedeb0;
+    --color-gold-300: #e0c880;
+    --color-gold-400: #d0ad51;
+    --color-gold-500: #c59e57; /* Accent gold */
+    --color-gold-600: #a7803e;
+    --color-gold-700: #82602e;
+    --color-gold-800: #5e4421;
+    --color-gold-900: #423018;
+    
+    --color-beige-50: #faf9f6;
+    --color-beige-100: #f5f3e8; /* Light background */
+    --color-beige-200: #eae7d3;
+    --color-beige-300: #dad5b4;
+    --color-beige-400: #c5be8e;
+    --color-beige-500: #a39c63;
+}
+
+/* Base custom classes */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Page fade-in/fade-out transitions */
+.page-fade {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.page-fade.fade-in {
+    opacity: 1;
+}
+
+.no-js .page-fade {
+    opacity: 1 !important;
+}
+
+/* Language Switcher Buttons styling */
+.lang-btn {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.lang-btn:hover {
+    color: #ffffff;
+}
+
+.lang-btn.active-lang {
+    background-color: var(--color-gold-500);
+    color: var(--color-forest-950);
+}
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal-delay-1 { transition-delay: 100ms; }
+.scroll-reveal-delay-2 { transition-delay: 200ms; }
+.scroll-reveal-delay-3 { transition-delay: 300ms; }
+.scroll-reveal-delay-4 { transition-delay: 400ms; }
+.scroll-reveal-delay-5 { transition-delay: 500ms; }
+
+/* Custom premium elements styling */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glassmorphism-dark {
+    background: rgba(12, 62, 47, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(197, 158, 87, 0.2);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #03140e;
+}
+::-webkit-scrollbar-thumb {
+    background: #c59e57;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a7803e;
+}
+
+/* Scrolled Header Style */
+header.scrolled {
+    background-color: rgba(4, 28, 21, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1) !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 1px solid rgba(197, 158, 87, 0.15) !important;
+}
+
+/* Custom Navigation Link & Active Scrollspy Indicator */
+section[id] {
+    scroll-margin-top: 115px; /* Offset to prevent titles sliding under header */
+}
+
+.nav-link {
+    position: relative;
+    font-family: 'Instrument Sans', ui-sans-serif, system-ui;
+    color: rgba(255, 255, 255, 0.75);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -6px;
+    left: 0;
+    background-color: var(--color-gold-500);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 0 8px rgba(197, 158, 87, 0.5);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.nav-link.active {
+    color: var(--color-gold-400) !important;
+    font-family: var(--font-serif), 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Mobile drawer active navigation links */
+#mobile-menu-overlay nav a.active {
+    color: var(--color-gold-400) !important;
+    font-family: var(--font-serif), 'Playfair Display', serif;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   Continuous News Ticker Marquee Styling
+   ========================================================================== */
+@keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
+
+/* Hide default browser eye icon / password reveal button (e.g. in Microsoft Edge) */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* ==========================================================================
+   Google Translate Widget Custom Styling for Default Dropdown
+   ========================================================================== */
+#google-translate-container {
+    background: transparent !important;
+}
+
+#google_translate_element {
+    display: inline-block !important;
+}
+
+#google_translate_element .goog-te-gadget {
+    display: inline-block !important;
+    color: transparent !important; /* Hides "Powered by" text node by making it transparent */
+}
+
+/* Hide other Google branding nodes */
+#google_translate_element .goog-te-gadget span,
+#google_translate_element .goog-te-gadget a {
+    display: none !important;
+}
+
+/* Style the native Google Translate select element */
+#google_translate_element .goog-te-gadget .goog-te-combo {
+    color: #ffffff !important;
+    font-size: 11px !important; /* Smaller text */
+    background-color: rgba(4, 28, 21, 0.85) !important;
+    border: 1px solid rgba(197, 158, 87, 0.3) !important;
+    padding: 5px 22px 5px 10px !important; /* Tighter padding */
+    border-radius: 9999px !important;
+    font-family: 'Instrument Sans', sans-serif !important;
+    outline: none !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.3) !important; /* Compact shadow */
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+    appearance: none !important; /* Standard */
+    -webkit-appearance: none !important; /* Safari/Chrome */
+    -moz-appearance: none !important; /* Firefox */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c59e57' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important; /* Move arrow closer to the right edge */
+    background-size: 10px !important; /* Smaller arrow icon */
+}
+
+#google_translate_element .goog-te-gadget .goog-te-combo:hover {
+    border-color: rgba(197, 158, 87, 0.6) !important;
+    background-color: rgba(4, 28, 21, 0.95) !important;
+    transform: scale(1.02) !important;
+}
+
+#google_translate_element .goog-te-gadget .goog-te-combo option {
+    background-color: #041c15 !important;
+    color: #ffffff !important;
+    font-family: 'Instrument Sans', sans-serif !important;
+    font-size: 11px !important;
+    padding: 6px !important;
+}
+
+/* Hide the Google Translate banner at the top of the page when translated (including modern iframe classes) */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-yAWNEb-L7lbkb,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* Prevent Google Translate from shifting the page down */
+html {
+    top: 0px !important;
+}
+
+body {
+    top: 0px !important;
+    position: static !important;
+}
+
+.goog-tooltip, .goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Dynamic language text display based on translation state */
+.lang-id-text {
+    display: inline !important;
+}
+.lang-en-text {
+    display: none !important;
+}
+
+/* When translated to any other language (Google Translate changes html lang tag) */
+html:not([lang="id"]) .lang-id-text {
+    display: none !important;
+}
+html:not([lang="id"]) .lang-en-text {
+    display: inline !important;
+}
+
+
+
+
+
+

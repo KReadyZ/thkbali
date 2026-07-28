@@ -94,9 +94,9 @@
                     </ul>
                 </div>
                 
-                <button class="open-contact-btn w-full py-3.5 rounded-full border border-forest-500/20 text-forest-700 font-bold hover:border-gold-500 hover:text-gold-600 transition duration-300 text-sm">
-                    Akun diundang oleh Admin — Hubungi Kami
-                </button>
+                <a href="https://wa.me/6281337644463?text=Halo%20Admin%20THK%20Bali%2C%20saya%20ingin%20mendaftar%20sebagai%20Asesor" target="_blank" class="w-full py-3.5 rounded-full border border-forest-500/20 text-forest-700 font-bold hover:border-gold-500 hover:text-gold-600 transition duration-300 text-sm flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-base"></i> Hubungi Kami (Daftar via WhatsApp)
+                </a>
             </div>
         </div>           </div>
         </div>

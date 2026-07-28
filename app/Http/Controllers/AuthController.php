@@ -13,15 +13,56 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        $role = $request->role ?? 'peserta';
+
+        if ($role === 'umum') {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+            ], [
+                'email.unique' => 'Alamat email ini sudah terdaftar.',
+                'password.min' => 'Kata sandi minimal harus 8 karakter.',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => 'umum',
+                'password' => Hash::make($request->password),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pendaftaran Akun Umum berhasil! Silakan masuk dengan akun Anda.',
+                'email' => $user->email
+            ]);
+        }
+
+        // For peserta
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|in:peserta,umum',
-            'password' => 'required|string|min:8',
+            'institution_name' => 'required|string|max:255',
+            'category' => 'required|string',
+            'address' => 'required|string',
+            'gmaps_link' => 'nullable|string|max:1000',
+            'contact_name' => 'required|string|max:255',
+            'contact_wa' => 'required|string|max:50',
+            'contact_email' => 'required|string|email|max:255|unique:users,email',
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ], [
-            'email.unique' => 'Alamat email ini sudah terdaftar.',
-            'role.in' => 'Peran pendaftaran tidak valid.',
-            'password.min' => 'Kata sandi minimal harus 8 karakter.',
+            'contact_email.unique' => 'Alamat email kontak person ini sudah terdaftar sebagai akun.',
+            'payment_proof.mimes' => 'Bukti pembayaran harus berupa gambar (JPG, PNG) atau PDF.',
+            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal adalah 5 MB.',
+            'prev_accreditation.mimes' => 'Hasil akreditasi sebelumnya harus berupa gambar atau PDF.',
+            'prev_accreditation.max' => 'Ukuran hasil akreditasi sebelumnya maksimal adalah 5 MB.',
         ]);
 
         if ($validator->fails()) {
@@ -31,16 +72,54 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Create User (default password thkbali123)
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
+            'name' => $request->contact_name,
+            'email' => $request->contact_email,
+            'role' => 'peserta',
+            'password' => Hash::make('thkbali123'),
         ]);
+
+        $data = [
+            'user_id' => $user->id,
+            'institution_name' => $request->institution_name,
+            'category' => $request->category,
+            'address' => $request->address,
+            'gmaps_link' => $request->gmaps_link,
+            'contact_name' => $request->contact_name,
+            'contact_wa' => $request->contact_wa,
+            'contact_email' => $request->contact_email,
+            'file_path' => '-', // Default value placeholder until they login and upload!
+            'status' => 'Pengajuan',
+        ];
+
+        if ($request->hasFile('payment_proof')) {
+            $file = $request->file('payment_proof');
+            $filename = 'payment_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/payments');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['payment_proof'] = '/uploads/payments/' . $filename;
+        }
+
+        if ($request->hasFile('prev_accreditation')) {
+            $file = $request->file('prev_accreditation');
+            $filename = 'prev_acc_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/accreditations');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['prev_accreditation'] = '/uploads/accreditations/' . $filename;
+        }
+
+        Proposal::create($data);
 
         return response()->json([
             'success' => true,
-            'message' => 'Pendaftaran berhasil! Silakan masuk dengan akun Anda.',
+            'message' => 'Pendaftaran berhasil dikirim! Akun Anda (Email: ' . $user->email . ' / Password: thkbali123) akan aktif setelah diverifikasi oleh Admin/Asesor.',
             'email' => $user->email
         ]);
     }
@@ -62,11 +141,22 @@ class AuthController extends Controller
         $remember = $request->has('remember');
 
         if (Auth::attempt($request->only('email', 'password'), $remember)) {
+            $user = Auth::user();
+            if ($user->role === 'peserta') {
+                $proposal = Proposal::where('user_id', $user->id)->first();
+                if (!$proposal || $proposal->status === 'Pengajuan') {
+                    Auth::logout();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Pendaftaran Anda sedang diproses oleh admin. Akun Anda akan aktif setelah verifikasi pembayaran.'
+                    ], 403);
+                }
+            }
             $request->session()->regenerate();
             return response()->json([
                 'success' => true,
                 'message' => 'Masuk berhasil! Menghubungkan sesi Anda...',
-                'user' => Auth::user()
+                'user' => $user
             ]);
         }
 
@@ -85,13 +175,13 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    public function registerProposal(Request $request)
+    public function uploadProposal(Request $request)
     {
         $user = Auth::user();
         if (!$user || $user->role !== 'peserta') {
             return response()->json([
                 'success' => false,
-                'message' => 'Hanya pengguna dengan peran Peserta yang dapat mendaftar.'
+                'message' => 'Hanya pengguna dengan peran Peserta yang dapat mengunggah berkas.'
             ], 403);
         }
 
@@ -103,9 +193,16 @@ class AuthController extends Controller
             'contact_name' => 'required|string|max:255',
             'contact_wa' => 'required|string|max:50',
             'contact_email' => 'required|email|max:255',
+            'proposal_file' => 'required|file|mimes:pdf,zip|max:10240', // max 10MB
             'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
             'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
+            'link_parahyangan' => 'required|string|max:1000',
+            'link_pawongan' => 'required|string|max:1000',
+            'link_palemahan' => 'required|string|max:1000',
         ], [
+            'proposal_file.required' => 'Berkas pendaftaran sertifikasi wajib diunggah.',
+            'proposal_file.mimes' => 'Berkas sertifikasi harus berupa dokumen format PDF atau ZIP.',
+            'proposal_file.max' => 'Ukuran berkas sertifikasi maksimal adalah 10 MB.',
             'payment_proof.mimes' => 'Bukti pembayaran harus berupa gambar (JPG, PNG) atau PDF.',
             'payment_proof.max' => 'Ukuran bukti pembayaran maksimal adalah 5 MB.',
             'prev_accreditation.mimes' => 'Hasil akreditasi sebelumnya harus berupa gambar atau PDF.',
@@ -127,89 +224,13 @@ class AuthController extends Controller
             'contact_name' => $request->contact_name,
             'contact_wa' => $request->contact_wa,
             'contact_email' => $request->contact_email,
-            'status' => 'Registrasi',
-        ];
-
-        // Handle payment proof
-        if ($request->hasFile('payment_proof')) {
-            $file = $request->file('payment_proof');
-            $filename = 'payment_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $uploadPath = public_path('uploads/payments');
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-            $file->move($uploadPath, $filename);
-            $data['payment_proof'] = '/uploads/payments/' . $filename;
-        }
-
-        // Handle previous accreditation
-        if ($request->hasFile('prev_accreditation')) {
-            $file = $request->file('prev_accreditation');
-            $filename = 'prev_acc_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $uploadPath = public_path('uploads/accreditations');
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-            $file->move($uploadPath, $filename);
-            $data['prev_accreditation'] = '/uploads/accreditations/' . $filename;
-        }
-
-        $proposal = Proposal::updateOrCreate(
-            ['user_id' => $user->id],
-            $data
-        );
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Pendaftaran instansi dan pembayaran berhasil disimpan! Silakan lanjutkan dengan mengunggah berkas sertifikasi.'
-        ]);
-    }
-
-    public function uploadProposal(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user || $user->role !== 'peserta') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Hanya pengguna dengan peran Peserta yang dapat mengunggah berkas.'
-            ], 403);
-        }
-
-        // Verify that they have filled Form 1 first
-        $proposal = Proposal::where('user_id', $user->id)->first();
-        if (!$proposal) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Silakan lakukan pendaftaran instansi & pembayaran terlebih dahulu.'
-            ], 422);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'proposal_file' => 'required|file|mimes:pdf,zip|max:10240', // max 10MB
-            'link_parahyangan' => 'required|string|max:1000',
-            'link_pawongan' => 'required|string|max:1000',
-            'link_palemahan' => 'required|string|max:1000',
-        ], [
-            'proposal_file.required' => 'Berkas pendaftaran sertifikasi wajib diunggah.',
-            'proposal_file.mimes' => 'Berkas sertifikasi harus berupa dokumen format PDF atau ZIP.',
-            'proposal_file.max' => 'Ukuran berkas sertifikasi maksimal adalah 10 MB.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first()
-            ], 422);
-        }
-
-        $data = [
             'link_parahyangan' => $request->link_parahyangan,
             'link_pawongan' => $request->link_pawongan,
             'link_palemahan' => $request->link_palemahan,
             'status' => 'Pengajuan',
         ];
 
-        // Handle proposal file
+        // 1. Handle proposal file
         if ($request->hasFile('proposal_file')) {
             $file = $request->file('proposal_file');
             $filename = 'proposal_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -221,11 +242,39 @@ class AuthController extends Controller
             $data['file_path'] = '/uploads/proposals/' . $filename;
         }
 
-        $proposal->update($data);
+        // 2. Handle payment proof
+        if ($request->hasFile('payment_proof')) {
+            $file = $request->file('payment_proof');
+            $filename = 'payment_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/payments');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['payment_proof'] = '/uploads/payments/' . $filename;
+        }
+
+        // 3. Handle previous accreditation
+        if ($request->hasFile('prev_accreditation')) {
+            $file = $request->file('prev_accreditation');
+            $filename = 'prev_acc_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/accreditations');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['prev_accreditation'] = '/uploads/accreditations/' . $filename;
+        }
+
+        // Save or Update Proposal in DB
+        $proposal = Proposal::updateOrCreate(
+            ['user_id' => $user->id],
+            $data
+        );
 
         return response()->json([
             'success' => true,
-            'message' => 'Berkas sertifikasi dan link pilar filosofis berhasil diunggah! Status Anda saat ini adalah: Pengajuan.'
+            'message' => 'Berkas pendaftaran dan detail instansi Anda berhasil diunggah! Status Anda saat ini adalah: Pengajuan.'
         ]);
     }
 

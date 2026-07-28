@@ -36,15 +36,9 @@
                 <div class="hidden lg:flex items-center gap-3">
                     <!-- Actions for Peserta -->
                     @if(Auth::user()->role === 'peserta')
-                        @if(!isset($userProposal))
-                            <button id="open-register-proposal-btn" class="open-register-proposal-btn px-4 py-2 rounded-full bg-gold-500 text-forest-950 text-xs font-bold hover:bg-gold-400 hover:shadow-lg hover:shadow-gold-500/20 transition duration-300 cursor-pointer whitespace-nowrap">
-                                <i class="fas fa-file-invoice-dollar mr-1"></i> Daftar & Pembayaran
-                            </button>
-                        @elseif(empty($userProposal->file_path))
-                            <button id="open-upload-proposal-btn" class="open-upload-proposal-btn px-4 py-2 rounded-full bg-gold-500 text-forest-950 text-xs font-bold hover:bg-gold-400 hover:shadow-lg hover:shadow-gold-500/20 transition duration-300 cursor-pointer whitespace-nowrap">
-                                <i class="fas fa-cloud-upload-alt mr-1"></i> Unggah Berkas Sertifikasi
-                            </button>
-                        @endif
+                        <button id="open-upload-btn" class="px-4 py-2 rounded-full bg-gold-500 text-forest-950 text-xs font-bold hover:bg-gold-400 hover:shadow-lg hover:shadow-gold-500/20 transition duration-300 cursor-pointer whitespace-nowrap">
+                            <i class="fas fa-cloud-upload-alt mr-1"></i> Unggah Berkas
+                        </button>
                     @endif
 
                     <!-- User Name & Greeting with nested Status Badge -->
@@ -171,15 +165,9 @@
                                 Status: {{ $userProposal->status }}
                             </div>
                         @endif
-                        @if(!isset($userProposal))
-                            <button id="open-register-proposal-btn-mobile" class="open-register-proposal-btn w-full py-3 rounded-full bg-gold-500 text-forest-950 font-bold hover:bg-gold-400 transition">
-                                <i class="fas fa-file-invoice-dollar mr-1"></i> Daftar & Pembayaran
-                            </button>
-                        @elseif(empty($userProposal->file_path))
-                            <button id="open-upload-proposal-btn-mobile" class="open-upload-proposal-btn w-full py-3 rounded-full bg-gold-500 text-forest-950 font-bold hover:bg-gold-400 transition">
-                                <i class="fas fa-cloud-upload-alt mr-1"></i> Unggah Berkas Sertifikasi
-                            </button>
-                        @endif
+                        <button id="open-upload-btn-mobile" class="w-full py-3 rounded-full bg-gold-500 text-forest-950 font-bold hover:bg-gold-400 transition">
+                            <i class="fas fa-cloud-upload-alt mr-1"></i> Unggah Berkas
+                        </button>
                     @endif
                     
                     <a href="{{ route('logout') }}" class="block w-full py-3 text-center rounded-full border border-red-500/30 text-red-400 font-bold hover:bg-red-500/10 transition">

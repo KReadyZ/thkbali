@@ -911,9 +911,132 @@
     </div>
 </div>
 
-<!-- 4. UPLOAD PROPOSAL MODAL (Peserta Only) -->
+<!-- 4.1 REGISTRASI INSTANSI & PEMBAYARAN MODAL (Peserta Only) -->
+<div id="register-proposal-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
+    <div class="modal-dialog bg-[#eaf4f0] border border-[#c6e1d7] w-full max-w-xl rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(4,28,21,0.1)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
+        <!-- Close Button (Top Right) -->
+        <button id="register-modal-close" class="absolute top-4 right-4 z-10 p-2 text-forest-400 hover:text-forest-950 hover:bg-forest-200/50 rounded-full transition cursor-pointer" aria-label="Tutup">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- Modal Header -->
+        <div class="p-6 border-b border-[#c6e1d7] bg-[#dfeee8]">
+            <h3 class="font-serif text-lg font-bold text-forest-950">Registrasi Instansi & Pembayaran</h3>
+            <p class="text-xs text-forest-600">Lengkapi profil lembaga/perusahaan dan unggah bukti transfer pembayaran pendaftaran</p>
+        </div>
+        
+        <!-- Modal Body content -->
+        <div class="p-6 md:p-8 space-y-6 overflow-y-auto flex-1">
+            <!-- Alert Notice -->
+            <div id="register-alert" class="hidden p-4 rounded-2xl text-xs font-bold transition-all duration-300 transform scale-95 opacity-0 flex items-start gap-3">
+                <div class="shrink-0 mt-0.5" id="register-alert-icon"></div>
+                <div class="flex-1" id="register-alert-msg"></div>
+            </div>
+
+            <!-- Register Form -->
+            <form id="form-register-proposal" class="space-y-6" enctype="multipart/form-data">
+                @csrf
+                
+                <!-- Section 1: Informasi Instansi -->
+                <div class="border-b border-[#c6e1d7] pb-4">
+                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                        <i class="fas fa-building text-gold-600"></i> Informasi Instansi / Perusahaan
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-institution">Nama Instansi / Perusahaan</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-institution" name="institution_name" required placeholder="Contoh: Hotel Grand Bali">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-category">Kategori Penghargaan</label>
+                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-category" name="category">
+                                <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
+                                <option value="Destinasi">Destinasi Wisata</option>
+                                <option value="Restoran">Restoran / Kuliner</option>
+                                <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
+                                <option value="Desa Adat">Desa Adat</option>
+                                <option value="Individu">Kategori Individu</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-address" name="address" required placeholder="Contoh: Jl. Danau Tamblingan No. 88, Sanur, Denpasar">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="url" id="reg-inst-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Informasi Kontak Person -->
+                <div class="border-b border-[#c6e1d7] pb-4">
+                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                        <i class="fas fa-address-book text-gold-600"></i> Kontak Person (CP)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-contact-name">Nama CP</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-contact-name" name="contact_name" required placeholder="Nama Lengkap CP">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-contact-wa">No. WhatsApp CP</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-contact-wa" name="contact_wa" required placeholder="Contoh: 08123456789">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-contact-email">Email CP</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-inst-contact-email" name="contact_email" required placeholder="nama.cp@email.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Unggah Bukti & Hasil Akreditasi -->
+                <div>
+                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                        <i class="fas fa-file-invoice-dollar text-gold-600"></i> Pembayaran & Akreditasi Sebelumnya
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-payment">Bukti Pembayaran Pendaftaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-inst-payment" name="payment_proof" accept="image/*,.pdf">
+                            <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="reg-inst-prev-acc">Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-inst-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
+                            <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="register-progress-container" class="hidden space-y-1.5 pt-2">
+                    <div class="flex items-center justify-between text-[10px] font-bold text-forest-700">
+                        <span>Mengirim data pendaftaran...</span>
+                        <span id="register-progress-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-forest-200 rounded-full h-2 overflow-hidden">
+                        <div id="register-progress-bar" class="bg-forest-500 h-full w-0 transition-all duration-100"></div>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit-register-proposal" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4 flex items-center justify-center gap-2">
+                    <span id="btn-submit-register-text">Daftar & Kirim Bukti</span>
+                    <svg id="register-spinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 4.2 UPLOAD PROPOSAL MODAL (Peserta Only) -->
 <div id="upload-proposal-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
-    <div class="modal-dialog bg-[#eaf4f0] border border-[#c6e1d7] w-full max-w-2xl rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(4,28,21,0.1)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
+    <div class="modal-dialog bg-[#eaf4f0] border border-[#c6e1d7] w-full max-w-xl rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(4,28,21,0.1)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
         <!-- Close Button (Top Right) -->
         <button id="upload-modal-close" class="absolute top-4 right-4 z-10 p-2 text-forest-400 hover:text-forest-950 hover:bg-forest-200/50 rounded-full transition cursor-pointer" aria-label="Tutup">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -923,8 +1046,8 @@
 
         <!-- Modal Header -->
         <div class="p-6 border-b border-[#c6e1d7] bg-[#dfeee8]">
-            <h3 class="font-serif text-lg font-bold text-forest-950">Unggah Berkas Sertifikasi & Data Instansi</h3>
-            <p class="text-xs text-forest-600">Lengkapi formulir registrasi dan dokumen pendukung sertifikasi Tri Hita Karana Awards Anda</p>
+            <h3 class="font-serif text-lg font-bold text-forest-950">Unggah Berkas Sertifikasi & Link Pilar</h3>
+            <p class="text-xs text-forest-600">Unggah dokumen sertifikasi evaluasi dan cantumkan link dokumen pilar filosofis Anda</p>
         </div>
         
         <!-- Modal Body content -->
@@ -939,84 +1062,19 @@
             <form id="form-upload-proposal" class="space-y-6" enctype="multipart/form-data">
                 @csrf
                 
-                <!-- Section 1: Informasi Instansi -->
+                <!-- Section 1: Unggah Berkas Utama -->
                 <div class="border-b border-[#c6e1d7] pb-4">
                     <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                        <i class="fas fa-building text-gold-600"></i> Informasi Instansi / Perusahaan
+                        <i class="fas fa-file-archive text-gold-600"></i> Dokumen Sertifikasi
                     </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-institution">Nama Instansi / Perusahaan</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-institution" name="institution_name" required placeholder="Contoh: Hotel Grand Bali">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-category">Kategori Penghargaan</label>
-                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="upload-category" name="category">
-                                <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
-                                <option value="Destinasi">Destinasi Wisata</option>
-                                <option value="Restoran">Restoran / Kuliner</option>
-                                <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
-                                <option value="Desa Adat">Desa Adat</option>
-                                <option value="Individu">Kategori Individu</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-address">Alamat Lengkap Perusahaan / Lembaga</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-address" name="address" required placeholder="Contoh: Jl. Danau Tamblingan No. 88, Sanur, Denpasar">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="url" id="upload-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
-                        </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas Sertifikasi <span class="text-[9px] text-red-500 font-bold">(PDF/ZIP, Wajib)</span></label>
+                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2 text-forest-950 text-sm outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" required>
+                        <p class="text-[10px] text-forest-600/70 mt-1">Unggah berkas kelengkapan kriteria sertifikasi (Maks. 10MB)</p>
                     </div>
                 </div>
 
-                <!-- Section 2: Informasi Kontak Person -->
-                <div class="border-b border-[#c6e1d7] pb-4">
-                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                        <i class="fas fa-address-book text-gold-600"></i> Kontak Person (CP)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-contact-name">Nama CP</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-contact-name" name="contact_name" required placeholder="Nama Lengkap CP">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-contact-wa">No. WhatsApp CP</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-contact-wa" name="contact_wa" required placeholder="Contoh: 08123456789">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-contact-email">Email CP</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="upload-contact-email" name="contact_email" required placeholder="nama.cp@email.com">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Unggah Dokumen & Hasil Akreditasi -->
-                <div class="border-b border-[#c6e1d7] pb-4">
-                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                        <i class="fas fa-file-archive text-gold-600"></i> Unggahan Berkas
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas <span class="text-[9px] text-red-500 font-bold">(PDF/ZIP)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" required>
-                            <p class="text-[9px] text-forest-600/70 mt-1">Proposal (Maks. 10MB)</p>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-payment">Bukti Pembayaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-payment" name="payment_proof" accept="image/*,.pdf">
-                            <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-prev-acc">Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
-                            <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 4: Link Dokumen Pilar Tri Hita Karana -->
+                <!-- Section 2: Link Dokumen Pilar Tri Hita Karana -->
                 <div>
                     <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
                         <i class="fas fa-link text-gold-600"></i> Tautan Dokumen Pilar Filosofis (Cloud Drive/Bitly)

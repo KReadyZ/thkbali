@@ -906,31 +906,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
-    // Modal Unggah Berkas Trigger
-    const uploadModal = document.getElementById('upload-proposal-modal');
-    const openUploadBtn = document.getElementById('open-upload-btn');
-    const openUploadBtnMobile = document.getElementById('open-upload-btn-mobile');
+    // Modal 1: Registrasi Instansi & Pembayaran
+    const registerProposalModal = document.getElementById('register-proposal-modal');
+    const openRegisterProposalBtns = document.querySelectorAll('.open-register-proposal-btn');
+    const registerModalCloseBtn = document.getElementById('register-modal-close');
+    const formRegisterProposal = document.getElementById('form-register-proposal');
+
+    openRegisterProposalBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeMobileMenu();
+            openModal(registerProposalModal);
+        });
+    });
+
+    if (registerModalCloseBtn) {
+        registerModalCloseBtn.addEventListener('click', () => {
+            closeModal(registerProposalModal);
+            hideAuthAlert('register-alert');
+        });
+    }
+
+    // Modal 2: Unggah Berkas Sertifikasi & Link Pilar
+    const uploadProposalModal = document.getElementById('upload-proposal-modal');
+    const openUploadProposalBtns = document.querySelectorAll('.open-upload-proposal-btn');
     const uploadModalCloseBtn = document.getElementById('upload-modal-close');
     const formUploadProposal = document.getElementById('form-upload-proposal');
 
-    if (openUploadBtn) {
-        openUploadBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(uploadModal);
-        });
-    }
-
-    if (openUploadBtnMobile) {
-        openUploadBtnMobile.addEventListener('click', (e) => {
+    openUploadProposalBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
             closeMobileMenu();
-            openModal(uploadModal);
+            openModal(uploadProposalModal);
         });
-    }
+    });
 
     if (uploadModalCloseBtn) {
         uploadModalCloseBtn.addEventListener('click', () => {
-            closeModal(uploadModal);
+            closeModal(uploadProposalModal);
             hideAuthAlert('upload-alert');
         });
     }
@@ -1065,6 +1078,80 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (formRegisterProposal) {
+        formRegisterProposal.addEventListener('submit', (e) => {
+            e.preventDefault();
+            hideAuthAlert('register-alert');
+
+            const formData = new FormData(formRegisterProposal);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            const submitBtn = document.getElementById('btn-submit-register-proposal');
+            const submitText = document.getElementById('btn-submit-register-text');
+            const spinner = document.getElementById('register-spinner');
+            const progressContainer = document.getElementById('register-progress-container');
+            const progressBar = document.getElementById('register-progress-bar');
+            const progressPercent = document.getElementById('register-progress-percent');
+
+            // Set loading state
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitText) submitText.textContent = 'Mengirim...';
+            if (spinner) spinner.classList.remove('hidden');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/proposal/register');
+            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    if (progressContainer) progressContainer.classList.remove('hidden');
+                    if (progressBar) progressBar.style.width = percentComplete + '%';
+                    if (progressPercent) progressPercent.textContent = percentComplete + '%';
+                }
+            });
+
+            xhr.onload = () => {
+                // Reset states
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitText) submitText.textContent = 'Daftar & Kirim Bukti';
+                if (spinner) spinner.classList.add('hidden');
+                if (progressContainer) progressContainer.classList.add('hidden');
+                if (progressBar) progressBar.style.width = '0%';
+                if (progressPercent) progressPercent.textContent = '0%';
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const data = JSON.parse(xhr.responseText);
+                    showAuthAlert('register-alert', data.message, 'success');
+                    formRegisterProposal.reset();
+                    setTimeout(() => {
+                        closeModal(registerProposalModal);
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    let errorMessage = 'Gagal mendaftar.';
+                    try {
+                        const errData = JSON.parse(xhr.responseText);
+                        if (errData && errData.message) {
+                            errorMessage = errData.message;
+                        }
+                    } catch (e) {}
+                    showAuthAlert('register-alert', errorMessage, 'error');
+                }
+            };
+
+            xhr.onerror = () => {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitText) submitText.textContent = 'Daftar & Kirim Bukti';
+                if (spinner) spinner.classList.add('hidden');
+                if (progressContainer) progressContainer.classList.add('hidden');
+                showAuthAlert('register-alert', 'Terjadi kesalahan jaringan.', 'error');
+            };
+
+            xhr.send(formData);
+        });
+    }
+
     if (formUploadProposal) {
         formUploadProposal.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -1112,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showAuthAlert('upload-alert', data.message, 'success');
                     formUploadProposal.reset();
                     setTimeout(() => {
-                        closeModal(uploadModal);
+                        closeModal(uploadProposalModal);
                         window.location.reload();
                     }, 2000);
                 } else {

@@ -13,6 +13,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/forgot-password', [AuthController::class, 'resetPassword'])->name('password.reset.post');
 Route::any('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/proposal/register', [AuthController::class, 'registerProposal'])->name('proposal.register');
 Route::post('/proposal/upload', [AuthController::class, 'uploadProposal'])->name('proposal.upload');
 
 // 2. Admin Back Office Routes

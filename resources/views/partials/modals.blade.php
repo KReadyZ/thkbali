@@ -140,14 +140,19 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-cat">Kategori Penghargaan</label>
-                        <select class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
-                            <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
-                            <option value="Destinasi">Destinasi Wisata</option>
-                            <option value="Restoran">Restoran / Kuliner</option>
-                            <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
-                            <option value="Desa Adat">Desa Adat</option>
-                            <option value="Individu">Kategori Individu</option>
-                        </select>
+                        <div class="relative">
+                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-4 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
+                                <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
+                                <option value="Destinasi">Destinasi Wisata</option>
+                                <option value="Restoran">Restoran / Kuliner</option>
+                                <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
+                                <option value="Desa Adat">Desa Adat</option>
+                                <option value="Individu">Kategori Individu</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
@@ -985,14 +990,19 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-category">Kategori Penghargaan</label>
-                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="upload-category" name="category">
-                                <option value="Akomodasi" {{ isset($userProposal) && $userProposal->category === 'Akomodasi' ? 'selected' : '' }}>Akomodasi / Perhotelan</option>
-                                <option value="Destinasi" {{ isset($userProposal) && $userProposal->category === 'Destinasi' ? 'selected' : '' }}>Destinasi Wisata</option>
-                                <option value="Restoran" {{ isset($userProposal) && $userProposal->category === 'Restoran' ? 'selected' : '' }}>Restoran / Kuliner</option>
-                                <option value="Lembaga Pendidikan" {{ isset($userProposal) && $userProposal->category === 'Lembaga Pendidikan' ? 'selected' : '' }}>Kategori Pendidikan</option>
-                                <option value="Desa Adat" {{ isset($userProposal) && $userProposal->category === 'Desa Adat' ? 'selected' : '' }}>Desa Adat</option>
-                                <option value="Individu" {{ isset($userProposal) && $userProposal->category === 'Individu' ? 'selected' : '' }}>Kategori Individu</option>
-                            </select>
+                            <div class="relative">
+                                <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-4 pr-10 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="upload-category" name="category">
+                                    <option value="Akomodasi" {{ isset($userProposal) && $userProposal->category === 'Akomodasi' ? 'selected' : '' }}>Akomodasi / Perhotelan</option>
+                                    <option value="Destinasi" {{ isset($userProposal) && $userProposal->category === 'Destinasi' ? 'selected' : '' }}>Destinasi Wisata</option>
+                                    <option value="Restoran" {{ isset($userProposal) && $userProposal->category === 'Restoran' ? 'selected' : '' }}>Restoran / Kuliner</option>
+                                    <option value="Lembaga Pendidikan" {{ isset($userProposal) && $userProposal->category === 'Lembaga Pendidikan' ? 'selected' : '' }}>Kategori Pendidikan</option>
+                                    <option value="Desa Adat" {{ isset($userProposal) && $userProposal->category === 'Desa Adat' ? 'selected' : '' }}>Desa Adat</option>
+                                    <option value="Individu" {{ isset($userProposal) && $userProposal->category === 'Individu' ? 'selected' : '' }}>Kategori Individu</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </span>
+                            </div>
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-address">Alamat Lengkap Perusahaan / Lembaga</label>

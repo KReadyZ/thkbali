@@ -1006,21 +1006,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(data => {
-                showAuthAlert('auth-alert', data.message, 'success');
-                setTimeout(() => {
-                    // Switch to login tab and autofill email
-                    switchTab('login');
-                    document.getElementById('login-email').value = data.email || '';
-                    document.getElementById('login-pass').value = '';
-                    document.getElementById('login-pass').focus();
-                    
-                    // Clear register form
-                    formRegister.reset();
-                    if (typeof toggleRegisterFields === 'function') {
-                        toggleRegisterFields();
-                    }
-                    hideAuthAlert('auth-alert');
-                }, 6000);
+                // Show a persistent success notice with a login button — no auto redirect
+                const alertContainer = document.getElementById('auth-alert');
+                if (alertContainer) {
+                    alertContainer.innerHTML = `
+                        <div class="flex flex-col gap-2 w-full">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-emerald-800 text-sm font-medium leading-snug">${data.message}</span>
+                            </div>
+                            <button id="go-to-login-btn" type="button" class="self-start mt-1 px-4 py-1.5 bg-forest-900 text-white rounded-full text-xs font-bold hover:bg-forest-950 transition cursor-pointer">
+                                Masuk Sekarang &rarr;
+                            </button>
+                        </div>
+                    `;
+                    alertContainer.classList.remove('hidden');
+                    alertContainer.classList.add('bg-emerald-50', 'border', 'border-emerald-200', 'rounded-2xl', 'p-3');
+
+                    document.getElementById('go-to-login-btn')?.addEventListener('click', () => {
+                        switchTab('login');
+                        document.getElementById('login-email').value = data.email || '';
+                        document.getElementById('login-pass').value = '';
+                        document.getElementById('login-pass').focus();
+                        formRegister.reset();
+                        if (typeof toggleRegisterFields === 'function') {
+                            toggleRegisterFields();
+                        }
+                        alertContainer.classList.add('hidden');
+                        alertContainer.innerHTML = '';
+                        alertContainer.classList.remove('bg-emerald-50', 'border', 'border-emerald-200', 'rounded-2xl', 'p-3');
+                    });
+                }
             })
             .catch(err => {
                 if (submitBtn) {

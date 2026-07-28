@@ -868,12 +868,38 @@
 
             <!-- Date and Meta -->
             <div class="flex items-center justify-between text-xs text-white/60 pb-2 border-b border-white/10">
-                <span id="news-drawer-date" class="font-medium">12 Jun 2026</span>
+                <div class="flex items-center gap-2">
+                    <span id="news-drawer-date" class="font-medium">12 Jun 2026</span>
+                    <span class="text-white/30">•</span>
+                    <span id="news-drawer-views" class="text-white/70"><i class="far fa-eye mr-1"></i>0 dibaca</span>
+                </div>
                 <span id="news-drawer-category" class="px-2.5 py-0.5 border border-gold-500/30 text-gold-400 font-semibold rounded-full uppercase tracking-wider text-[9px]">Filosofi</span>
             </div>
 
             <!-- Title -->
             <h4 id="news-drawer-headline" class="font-serif text-gold-400 text-2xl font-bold leading-tight">Detail Berita</h4>
+
+            <!-- Social Share Buttons -->
+            <div class="flex flex-wrap gap-2 py-3 border-y border-white/10 my-4" id="news-share-container">
+                <a href="#" id="news-share-fb" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3b5998] hover:bg-[#3b5998]/90 text-white text-[11px] font-bold transition">
+                    <i class="fab fa-facebook-f"></i> Share
+                </a>
+                <a href="#" id="news-share-wa" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25d366] hover:bg-[#25d366]/90 text-white text-[11px] font-bold transition">
+                    <i class="fab fa-whatsapp"></i> Share
+                </a>
+                <a href="#" id="news-share-line" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#06c755] hover:bg-[#06c755]/90 text-white text-[11px] font-bold transition">
+                    <i class="fab fa-line"></i> Share
+                </a>
+                <a href="#" id="news-share-tg" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0088cc] hover:bg-[#0088cc]/90 text-white text-[11px] font-bold transition">
+                    <i class="fab fa-telegram-plane"></i> Share
+                </a>
+                <a href="#" id="news-share-x" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-black/90 text-white text-[11px] font-bold transition border border-white/10">
+                    <i class="fa-brands fa-x-twitter"></i> Post
+                </a>
+                <button id="news-share-copy" class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#8cc63f] hover:bg-[#8cc63f]/90 text-white transition cursor-pointer" title="Salin Tautan">
+                    <i class="fas fa-share-alt text-[11px]"></i>
+                </button>
+            </div>
 
             <!-- Rich Content Paragraphs -->
             <div id="news-drawer-content" class="text-white/80 leading-relaxed text-sm md:text-base space-y-4">

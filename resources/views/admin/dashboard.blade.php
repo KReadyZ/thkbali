@@ -621,6 +621,10 @@
                         <input type="text" id="news-date" name="date" required placeholder="Contoh: 12 Jun 2026" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2 text-sm">
                     </div>
                     <div>
+                        <label class="block text-xs font-semibold text-forest-700 mb-1">Jumlah Pengunjung (Views)</label>
+                        <input type="number" id="news-views" name="views" min="0" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2 text-sm">
+                    </div>
+                    <div>
                         <label class="block text-xs font-semibold text-forest-700 mb-1">Gambar Pendukung</label>
                         <input type="file" name="image_file" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2 text-xs">
                     </div>
@@ -715,6 +719,10 @@
                     <div>
                         <label class="block text-xs font-semibold text-forest-700 mb-1">Tempat</label>
                         <input type="text" id="ag-place" name="place" required placeholder="Contoh: Denpasar Institute" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-forest-700 mb-1">Jumlah Pengunjung (Views)</label>
+                        <input type="number" id="ag-views" name="views" min="0" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-forest-700 mb-1">Flyer / Brosur Gambar</label>
@@ -889,6 +897,7 @@
             document.getElementById('news-category-id').value = '';
             document.getElementById('news-category-en').value = '';
             document.getElementById('news-date').value = '';
+            document.getElementById('news-views').value = '0';
             document.getElementById('news-content-id').value = '';
             document.getElementById('news-content-en').value = '';
             modalNews.classList.remove('hidden');
@@ -902,6 +911,7 @@
             document.getElementById('news-category-id').value = item.category_id;
             document.getElementById('news-category-en').value = item.category_en;
             document.getElementById('news-date').value = item.date;
+            document.getElementById('news-views').value = item.views || 0;
             document.getElementById('news-content-id').value = item.content_id.join('\n');
             document.getElementById('news-content-en').value = item.content_en.join('\n');
             modalNews.classList.remove('hidden');
@@ -955,6 +965,7 @@
             document.getElementById('ag-date').value = '';
             document.getElementById('ag-time').value = '';
             document.getElementById('ag-place').value = '';
+            document.getElementById('ag-views').value = '0';
             document.getElementById('ag-desc').value = '';
             modalAgenda.classList.remove('hidden');
             modalAgenda.classList.add('flex');
@@ -967,6 +978,7 @@
             document.getElementById('ag-date').value = item.date_range;
             document.getElementById('ag-time').value = item.time;
             document.getElementById('ag-place').value = item.place;
+            document.getElementById('ag-views').value = item.views || 0;
             document.getElementById('ag-desc').value = item.description;
             modalAgenda.classList.remove('hidden');
             modalAgenda.classList.add('flex');

@@ -1580,6 +1580,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const drawerCategory = document.getElementById('news-drawer-category');
         const drawerHeadline = document.getElementById('news-drawer-headline');
         const drawerContentContainer = document.getElementById('news-drawer-content');
+        const drawerViews = document.getElementById('news-drawer-views');
 
         if (drawerImage) drawerImage.src = item.image;
         if (drawerDate) drawerDate.textContent = item.date;
@@ -1589,6 +1590,64 @@ document.addEventListener('DOMContentLoaded', () => {
         if (drawerHeadline) {
             drawerHeadline.textContent = isEn ? item.titleEn : item.title;
         }
+        if (drawerViews) {
+            drawerViews.innerHTML = '<i class="far fa-eye mr-1"></i>' + (item.views || 0) + ' dibaca';
+        }
+
+        // Setup share URLs and actions
+        const shareUrl = window.location.origin + window.location.pathname + '?news=' + item.id;
+        const shareTitle = isEn ? item.titleEn : item.title;
+
+        const fbBtn = document.getElementById('news-share-fb');
+        const waBtn = document.getElementById('news-share-wa');
+        const lineBtn = document.getElementById('news-share-line');
+        const tgBtn = document.getElementById('news-share-tg');
+        const xBtn = document.getElementById('news-share-x');
+        const copyBtn = document.getElementById('news-share-copy');
+
+        if (fbBtn) fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        if (waBtn) waBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + shareUrl)}`;
+        if (lineBtn) lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}`;
+        if (tgBtn) tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+        if (xBtn) xBtn.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+
+        if (copyBtn) {
+            const newCopyBtn = copyBtn.cloneNode(true);
+            copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
+            newCopyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    const originalHTML = newCopyBtn.innerHTML;
+                    newCopyBtn.innerHTML = '<i class="fas fa-check text-[11px]"></i>';
+                    setTimeout(() => {
+                        newCopyBtn.innerHTML = originalHTML;
+                    }, 2000);
+                }).catch(err => console.error(err));
+            });
+        }
+
+        // Increment views count in database
+        fetch(`/news/view/${item.id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(resData => {
+            if (resData.success) {
+                item.views = resData.views;
+                if (window.newsData && window.newsData[newsId]) {
+                    window.newsData[newsId].views = resData.views;
+                }
+                if (drawerViews) {
+                    drawerViews.innerHTML = '<i class="far fa-eye mr-1"></i>' + resData.views + ' dibaca';
+                }
+            }
+        })
+        .catch(err => console.error(err));
 
         if (drawerContentContainer) {
             drawerContentContainer.innerHTML = '';
@@ -2000,12 +2059,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('agenda-modal-title').textContent = item.title;
         document.getElementById('agenda-modal-image').src = item.image;
-        document.getElementById('agenda-modal-views').textContent = `${item.views} dibaca`;
+        document.getElementById('agenda-modal-views').textContent = `${item.views || 0} dibaca`;
         document.getElementById('agenda-modal-contributor').textContent = `Kontributor: ${item.contributor}`;
         document.getElementById('agenda-modal-date').textContent = item.date_range;
         document.getElementById('agenda-modal-time').textContent = item.time;
         document.getElementById('agenda-modal-place').textContent = item.place;
         document.getElementById('agenda-modal-desc').textContent = item.description;
+
+        // Setup share URLs and actions
+        const shareUrl = window.location.origin + window.location.pathname + '?agenda=' + item.id;
+        const shareTitle = item.title;
+
+        const fbBtn = document.getElementById('agenda-share-fb');
+        const waBtn = document.getElementById('agenda-share-wa');
+        const lineBtn = document.getElementById('agenda-share-line');
+        const tgBtn = document.getElementById('agenda-share-tg');
+        const xBtn = document.getElementById('agenda-share-x');
+        const copyBtn = document.getElementById('agenda-share-copy');
+
+        if (fbBtn) fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        if (waBtn) waBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + shareUrl)}`;
+        if (lineBtn) lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}`;
+        if (tgBtn) tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+        if (xBtn) xBtn.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+
+        if (copyBtn) {
+            const newCopyBtn = copyBtn.cloneNode(true);
+            copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
+            newCopyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    const originalHTML = newCopyBtn.innerHTML;
+                    newCopyBtn.innerHTML = '<i class="fas fa-check text-[11px]"></i>';
+                    setTimeout(() => {
+                        newCopyBtn.innerHTML = originalHTML;
+                    }, 2000);
+                }).catch(err => console.error(err));
+            });
+        }
+
+        // Increment views count in database
+        fetch(`/agenda/view/${item.id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(resData => {
+            if (resData.success) {
+                item.views = resData.views;
+                if (window.agendaData && window.agendaData[id]) {
+                    window.agendaData[id].views = resData.views;
+                }
+                const viewsEl = document.getElementById('agenda-modal-views');
+                if (viewsEl) {
+                    viewsEl.textContent = `${resData.views} dibaca`;
+                }
+            }
+        })
+        .catch(err => console.error(err));
 
         agendaModal.classList.remove('hidden');
         agendaModal.classList.add('flex');
@@ -2054,5 +2169,15 @@ document.addEventListener('DOMContentLoaded', () => {
         agendaModal.addEventListener('click', (e) => {
             if (e.target === agendaModal) closeAgendaModal();
         });
+    }
+
+    // Deep linking handler on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialNewsId = urlParams.get('news');
+    const initialAgendaId = urlParams.get('agenda');
+    if (initialNewsId) {
+        setTimeout(() => openNewsDrawer(initialNewsId), 600);
+    } else if (initialAgendaId) {
+        setTimeout(() => openAgendaModal(initialAgendaId), 600);
     }
 });

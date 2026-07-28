@@ -122,6 +122,7 @@ class AdminController extends Controller
             'content_id' => 'required|string', // raw text, split by newline
             'content_en' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
+            'views' => 'nullable|integer',
         ]);
 
         // Helper to format content into paragraphs array
@@ -141,6 +142,7 @@ class AdminController extends Controller
             'date' => $request->date,
             'content_id' => $parseParagraphs($request->content_id),
             'content_en' => $parseParagraphs($content_en),
+            'views' => $request->views ?? 0,
         ];
 
         if ($request->hasFile('image_file')) {
@@ -232,9 +234,11 @@ class AdminController extends Controller
             'place' => 'required|string',
             'description' => 'required|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
+            'views' => 'nullable|integer',
         ]);
 
         $data = $request->only(['title', 'contributor', 'date_range', 'time', 'place', 'description']);
+        $data['views'] = $request->views ?? 0;
 
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');

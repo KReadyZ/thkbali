@@ -22,7 +22,7 @@ class HomeController extends Controller
             'desa_adat_penerima' => 8,
         ]);
         $news = News::all();
-        $assessors = Assessor::all();
+        $assessors = Assessor::paginate(4)->fragment('asesor-seksi');
         $agendas = Agenda::all();
         $galleries = Gallery::all();
         $awardCategories = AwardCategory::all();
@@ -126,5 +126,19 @@ class HomeController extends Controller
             'awardees',
             'userProposal'
         ));
+    }
+
+    public function incrementNewsView($id)
+    {
+        $news = \App\Models\News::findOrFail($id);
+        $news->increment('views');
+        return response()->json(['success' => true, 'views' => $news->views]);
+    }
+
+    public function incrementAgendaView($id)
+    {
+        $agenda = \App\Models\Agenda::findOrFail($id);
+        $agenda->increment('views');
+        return response()->json(['success' => true, 'views' => $agenda->views]);
     }
 }

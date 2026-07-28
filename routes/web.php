@@ -60,3 +60,7 @@ Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\AssessorDashboardController::class, 'index'])->name('assessor.dashboard');
     Route::post('/proposal/status/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'updateStatus'])->name('assessor.proposal.status');
 });
+
+// 4. View Increment Routes
+Route::post('/news/view/{id}', [\App\Http\Controllers\HomeController::class, 'incrementNewsView'])->name('news.view.increment');
+Route::post('/agenda/view/{id}', [\App\Http\Controllers\HomeController::class, 'incrementAgendaView'])->name('agenda.view.increment');

@@ -119,6 +119,28 @@
                                 Deskripsi Agenda
                             </div>
                         </div>
+
+                        <!-- Social Share Buttons -->
+                        <div class="flex flex-wrap gap-2 py-3 border-y border-white/10 my-4" id="agenda-share-container">
+                            <a href="#" id="agenda-share-fb" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3b5998] hover:bg-[#3b5998]/90 text-white text-[11px] font-bold transition">
+                                <i class="fab fa-facebook-f"></i> Share
+                            </a>
+                            <a href="#" id="agenda-share-wa" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25d366] hover:bg-[#25d366]/90 text-white text-[11px] font-bold transition">
+                                <i class="fab fa-whatsapp"></i> Share
+                            </a>
+                            <a href="#" id="agenda-share-line" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#06c755] hover:bg-[#06c755]/90 text-white text-[11px] font-bold transition">
+                                <i class="fab fa-line"></i> Share
+                            </a>
+                            <a href="#" id="agenda-share-tg" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0088cc] hover:bg-[#0088cc]/90 text-white text-[11px] font-bold transition">
+                                <i class="fab fa-telegram-plane"></i> Share
+                            </a>
+                            <a href="#" id="agenda-share-x" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-black/90 text-white text-[11px] font-bold transition border border-white/10">
+                                <i class="fa-brands fa-x-twitter"></i> Post
+                            </a>
+                            <button id="agenda-share-copy" class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#8cc63f] hover:bg-[#8cc63f]/90 text-white transition cursor-pointer" title="Salin Tautan">
+                                <i class="fas fa-share-alt text-[11px]"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Action CTA -->

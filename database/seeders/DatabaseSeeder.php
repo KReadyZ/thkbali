@@ -57,6 +57,7 @@ class DatabaseSeeder extends Seeder
                     'Through fair water distribution and ritual ceremonies at Ulun Danu Temple, Subak strengthens the harmonious relationship among farmers, the universe, and the Creator.',
                     'Until today, this world cultural heritage continues to survive as a fortress of food security and local Balinese water democracy.'
                 ],
+                'views' => 312,
             ],
             [
                 'title_id' => 'Desa Adat Penerima THK Awards 2026 Diumumkan',
@@ -75,6 +76,7 @@ class DatabaseSeeder extends Seeder
                     'These villages successfully integrated source-based waste management programs, protection of sacred springs, and preservation of local banjar dance arts.',
                     'The assessment was objectively conducted by an independent team of assessors over three full months.'
                 ],
+                'views' => 198,
             ],
             [
                 'title_id' => 'Pendaftaran THK Awards 2027 Resmi Dibuka',
@@ -93,6 +95,7 @@ class DatabaseSeeder extends Seeder
                     'Participants can begin filling in their profile data, downloading evaluation guides for each pillar, and uploading supporting documents on the official web portal of THK Bali.',
                     'This initial registration phase will close at the end of next month, before continuing to the administrative document verification phase and assessors’ field visits. Ensure your institution participates in preserving Bali’s harmony.'
                 ],
+                'views' => 420,
             ]
         ];
 

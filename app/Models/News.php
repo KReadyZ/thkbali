@@ -16,6 +16,7 @@ class News extends Model
         'content_id',
         'content_en',
         'is_verified',
+        'views',
     ];
 
     protected $casts = [

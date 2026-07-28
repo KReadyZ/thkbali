@@ -108,7 +108,8 @@
             'date' => $item->date,
             'image' => $item->image,
             'content' => $item->content_id,
-            'contentEn' => $item->content_en
+            'contentEn' => $item->content_en,
+            'views' => $item->views ?? 0
         ]];
     });
 @endphp

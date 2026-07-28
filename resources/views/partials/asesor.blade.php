@@ -64,6 +64,39 @@
                 </div>
             @endforeach
         </div>
+
+        <!-- Pagination Links -->
+        @if ($assessors->hasPages())
+            <div class="flex flex-wrap justify-center items-center gap-2 mt-12 pb-4 scroll-reveal">
+                {{-- Previous Page Link --}}
+                @if ($assessors->onFirstPage())
+                    <span class="w-10 h-10 rounded-full border border-beige-300 bg-white text-beige-300 flex items-center justify-center text-xs font-medium select-none cursor-not-allowed">Prev</span>
+                @else
+                    <a href="{{ $assessors->previousPageUrl() }}" class="w-10 h-10 rounded-full border border-beige-300 bg-white text-gold-600 hover:bg-beige-200 hover:text-forest-950 flex items-center justify-center text-xs font-medium transition cursor-pointer">Prev</a>
+                @endif
+
+                {{-- Pagination Pages --}}
+                @foreach ($assessors->getUrlRange(1, $assessors->lastPage()) as $page => $url)
+                    @if ($page == $assessors->currentPage())
+                        <span class="w-10 h-10 rounded-full bg-beige-200 border border-beige-300 text-forest-950 flex items-center justify-center text-xs font-bold select-none shadow-inner">{{ $page }}</span>
+                    @else
+                        <a href="{{ $url }}" class="w-10 h-10 rounded-full border border-beige-300 bg-white text-gold-600 hover:bg-beige-200 hover:text-forest-950 flex items-center justify-center text-xs font-medium transition cursor-pointer">{{ $page }}</a>
+                    @endif
+                @endforeach
+
+                {{-- Next Page Link --}}
+                @if ($assessors->hasMorePages())
+                    <a href="{{ $assessors->nextPageUrl() }}" class="w-10 h-10 rounded-full border border-beige-300 bg-white text-gold-600 hover:bg-beige-200 hover:text-forest-950 flex items-center justify-center text-xs font-medium transition cursor-pointer">Next</a>
+                @else
+                    <span class="w-10 h-10 rounded-full border border-beige-300 bg-white text-beige-300 flex items-center justify-center text-xs font-medium select-none cursor-not-allowed">Next</span>
+                @endif
+
+                {{-- Last Page Link --}}
+                @if ($assessors->currentPage() < $assessors->lastPage())
+                    <a href="{{ $assessors->url($assessors->lastPage()) }}" class="w-10 h-10 rounded-full border border-beige-300 bg-white text-gold-600 hover:bg-beige-200 hover:text-forest-950 flex items-center justify-center text-xs font-medium transition cursor-pointer">Last</a>
+                @endif
+            </div>
+        @endif
     </div>
 </section>
 

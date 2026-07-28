@@ -114,6 +114,45 @@
                 </button>
             </form>
             
+            <!-- Payment Info Step (Step 1 for Peserta) -->
+            <div id="payment-info-step" class="hidden">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-6 h-6 rounded-full bg-forest-900 text-white text-[10px] font-black flex items-center justify-center shrink-0">1</div>
+                    <span class="text-xs font-bold text-forest-900 uppercase tracking-wider">Langkah 1 dari 2 — Lakukan Pembayaran</span>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-[#c6e1d7] p-5 space-y-4 text-center">
+                    <!-- QR Code -->
+                    <div id="pay-qr-container" class="hidden flex justify-center">
+                        <img id="pay-qr-img" src="" alt="QR Pembayaran" class="w-36 h-36 object-contain rounded-2xl border border-[#c6e1d7] shadow-sm">
+                    </div>
+                    <div id="pay-qr-placeholder" class="flex flex-col items-center gap-1.5 text-forest-500/40">
+                        <i class="fas fa-spinner fa-spin text-2xl"></i>
+                        <span class="text-[10px]">Memuat info pembayaran...</span>
+                    </div>
+
+                    <!-- Bank Info -->
+                    <div class="space-y-1.5" id="pay-bank-info">
+                        <div class="text-[10px] font-bold text-forest-700/60 uppercase tracking-widest">Transfer ke:</div>
+                        <div id="pay-bank-name" class="text-xl font-black text-forest-900">-</div>
+                        <div id="pay-account-number" class="text-2xl font-black text-gold-600 tracking-widest select-all">-</div>
+                        <div id="pay-account-name" class="text-sm font-semibold text-forest-700">a/n -</div>
+                        <div class="mt-2 py-2 px-4 bg-[#dfeee8] rounded-xl border border-[#b8dad0] inline-block mx-auto">
+                            <span class="text-xs font-bold text-forest-800">Biaya Pendaftaran: <span id="pay-amount" class="text-base font-black text-forest-900">-</span></span>
+                        </div>
+                    </div>
+                    <p id="pay-description" class="text-[11px] text-forest-700/70 leading-relaxed hidden"></p>
+                </div>
+
+                <div class="mt-1 text-[10px] text-forest-600/70 text-center">
+                    Simpan bukti pembayaran Anda untuk diunggah pada form pendaftaran di langkah berikutnya.
+                </div>
+
+                <button type="button" id="btn-proceed-to-register" class="mt-4 w-full py-3.5 bg-forest-900 text-white rounded-full text-sm font-bold hover:bg-forest-950 transition cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle"></i> Saya Sudah Melakukan Pembayaran → Isi Form
+                </button>
+            </div>
+
             <!-- Register Form -->
             <form id="form-register" class="space-y-4 hidden" enctype="multipart/form-data">
                 <div>

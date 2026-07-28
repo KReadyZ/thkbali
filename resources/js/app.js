@@ -698,27 +698,91 @@ document.addEventListener('DOMContentLoaded', () => {
         tabRegisterBtn.addEventListener('click', () => switchTab('register'));
     }
 
+
+    const paymentInfoStep = document.getElementById('payment-info-step');
+    const btnProceedToRegister = document.getElementById('btn-proceed-to-register');
+    let paymentInfoLoaded = false;
+
+    function loadPaymentInfo() {
+        if (paymentInfoLoaded) return;
+        fetch('/payment-info')
+            .then(r => r.json())
+            .then(data => {
+                paymentInfoLoaded = true;
+                const placeholder = document.getElementById('pay-qr-placeholder');
+                if (placeholder) placeholder.classList.add('hidden');
+
+                const bankName = document.getElementById('pay-bank-name');
+                const accNum = document.getElementById('pay-account-number');
+                const accName = document.getElementById('pay-account-name');
+                const amount = document.getElementById('pay-amount');
+                const desc = document.getElementById('pay-description');
+                const qrContainer = document.getElementById('pay-qr-container');
+                const qrImg = document.getElementById('pay-qr-img');
+
+                if (bankName) bankName.textContent = data.bank_name || '-';
+                if (accNum) accNum.textContent = data.account_number || '-';
+                if (accName) accName.textContent = 'a/n ' + (data.account_name || '-');
+                if (amount) amount.textContent = data.amount || '-';
+
+                if (desc && data.description) {
+                    desc.textContent = data.description;
+                    desc.classList.remove('hidden');
+                }
+                if (qrImg && qrContainer && data.qr_image) {
+                    qrImg.src = '/' + data.qr_image;
+                    qrContainer.classList.remove('hidden');
+                    qrContainer.classList.add('flex');
+                }
+            })
+            .catch(() => {
+                const placeholder = document.getElementById('pay-qr-placeholder');
+                if (placeholder) { placeholder.innerHTML = '<span class="text-xs text-red-400">Gagal memuat info pembayaran.</span>'; }
+            });
+    }
+
     function switchTab(tab) {
         if (tab === 'login') {
             tabLoginBtn.classList.add('border-forest-500', 'text-forest-950');
             tabLoginBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
             tabRegisterBtn.classList.add('border-transparent', 'text-forest-400', 'hover:text-forest-800');
             tabRegisterBtn.classList.remove('border-forest-500', 'text-forest-950');
-            
+
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
+            if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
         } else {
             tabRegisterBtn.classList.add('border-forest-500', 'text-forest-950');
             tabRegisterBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
             tabLoginBtn.classList.add('border-transparent', 'text-forest-400', 'hover:text-forest-800');
             tabLoginBtn.classList.remove('border-forest-500', 'text-forest-950');
-            
-            formRegister.classList.remove('hidden');
+
             formLogin.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
+
+            // Show payment info step first, keep form hidden
+            if (paymentInfoStep) {
+                paymentInfoStep.classList.remove('hidden');
+                loadPaymentInfo();
+            }
+            formRegister.classList.add('hidden');
         }
     }
+
+    if (btnProceedToRegister) {
+        btnProceedToRegister.addEventListener('click', () => {
+            if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
+            formRegister.classList.remove('hidden');
+            // Reset to Peserta role to show peserta fields
+            const regRole = document.getElementById('reg-role');
+            if (regRole && regRole.value !== 'peserta') {
+                regRole.value = 'peserta';
+            }
+            if (typeof toggleRegisterFields === 'function') toggleRegisterFields();
+        });
+    }
+
 
     // Forgot Password Transition
     if (btnForgotPassword && formResetPassword && formLogin) {

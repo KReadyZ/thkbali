@@ -52,8 +52,14 @@ Route::prefix('admin')->group(function () {
         // CRUD Proposals / Pendaftaran
         Route::post('/proposal/status/{id}', [AdminController::class, 'updateProposalStatus'])->name('admin.proposal.status');
         Route::any('/proposal/delete/{id}', [AdminController::class, 'deleteProposal'])->name('admin.proposal.delete');
+
+        // Payment Settings
+        Route::post('/payment-setting', [AdminController::class, 'updatePaymentSetting'])->name('admin.payment.update');
     });
 });
+
+// Public endpoint: get payment info for registration modal
+Route::get('/payment-info', [AdminController::class, 'getPaymentSetting'])->name('payment.info');
 
 // 3. Assessor Panel Routes
 Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {

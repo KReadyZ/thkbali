@@ -11,6 +11,7 @@ use App\Models\AwardCategory;
 use App\Models\Awardee;
 use App\Models\User;
 use App\Models\Proposal;
+use App\Models\PaymentSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +65,7 @@ class AdminController extends Controller
         $statistics = Statistic::first() ?? new Statistic([
             'pilar_filosofi' => 3,
             'peserta_awards' => 120,
-            'asesor_aktif' => 45,
+            'asesor_aktif'   => 45,
             'kategori_awards' => 12,
             'desa_adat_penerima' => 8,
         ]);
@@ -75,6 +76,7 @@ class AdminController extends Controller
         $awardCategories = AwardCategory::orderBy('id', 'asc')->get();
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
+        $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
 
         return view('admin.dashboard', compact(
             'statistics',
@@ -84,7 +86,8 @@ class AdminController extends Controller
             'galleries',
             'awardCategories',
             'awardees',
-            'proposals'
+            'proposals',
+            'paymentSetting'
         ));
     }
 
@@ -477,5 +480,56 @@ class AdminController extends Controller
         }
 
         return back()->with('success', 'Pendaftaran dan akun peserta berhasil dihapus dari sistem dan database.');
+    }
+
+    // Payment Settings
+    public function updatePaymentSetting(Request $request)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $request->validate([
+            'bank_name'      => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+            'account_name'   => 'required|string|max:255',
+            'amount'         => 'required|string|max:255',
+            'description'    => 'nullable|string|max:500',
+            'qr_image'       => 'nullable|image|mimes:jpeg,jpg,png,webp|max:3072',
+        ]);
+
+        $setting = PaymentSetting::first() ?? new PaymentSetting();
+        $setting->bank_name      = $request->bank_name;
+        $setting->account_number = $request->account_number;
+        $setting->account_name   = $request->account_name;
+        $setting->amount         = $request->amount;
+        $setting->description    = $request->description;
+
+        if ($request->hasFile('qr_image')) {
+            // Delete old QR if exists
+            if ($setting->qr_image && file_exists(public_path($setting->qr_image))) {
+                @unlink(public_path($setting->qr_image));
+            }
+            $file = $request->file('qr_image');
+            $filename = 'qr_payment_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/payment'), $filename);
+            $setting->qr_image = 'images/payment/' . $filename;
+        }
+
+        $setting->save();
+
+        return back()->with('success', 'Informasi pembayaran pendaftaran berhasil diperbarui.');
+    }
+
+    // Public API to expose payment settings for frontend
+    public function getPaymentSetting()
+    {
+        $setting = PaymentSetting::first();
+        return response()->json($setting ?? [
+            'bank_name'      => 'BPD Bali',
+            'account_number' => '009.02.12.00001-1',
+            'account_name'   => 'Yayasan THK Bali',
+            'amount'         => 'Rp 500.000',
+            'description'    => 'Transfer dengan mencantumkan nama instansi sebagai berita transfer.',
+            'qr_image'       => null,
+        ]);
     }
 }

@@ -66,6 +66,9 @@
                 <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="proposals">
                     <i class="fas fa-file-invoice w-5 text-center text-gold-500"></i> Kelola Pendaftaran
                 </button>
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="payment">
+                    <i class="fas fa-university w-5 text-center text-gold-500"></i> Info Pembayaran
+                </button>
             </nav>
             <div class="mt-auto p-4 border-t border-white/5">
                 <a href="{{ route('home') }}" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition text-xs font-bold">
@@ -602,6 +605,83 @@
                     <!-- Pagination Links -->
                     <div class="mt-6">
                         {{ $proposals->appends(request()->query())->links() }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== TAB: PAYMENT ==================== -->
+            <section id="tab-content-payment" class="tab-pane hidden">
+                <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
+                    <div class="mb-6">
+                        <h2 class="font-serif text-2xl font-bold text-forest-900">Informasi Pembayaran Pendaftaran</h2>
+                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur rekening bank, jumlah biaya pendaftaran, dan QR Code yang akan ditampilkan kepada calon peserta sebelum mengisi form pendaftaran.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left: Edit Form -->
+                        <div>
+                            <form action="{{ route('admin.payment.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                                @csrf
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Bank</label>
+                                    <input type="text" name="bank_name" value="{{ $paymentSetting->bank_name ?? 'BPD Bali' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: BPD Bali">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nomor Rekening</label>
+                                    <input type="text" name="account_number" value="{{ $paymentSetting->account_number ?? '009.02.12.00001-1' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: 009.02.12.00001-1">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Pemilik Rekening / Atas Nama</label>
+                                    <input type="text" name="account_name" value="{{ $paymentSetting->account_name ?? 'Yayasan THK Bali' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: Yayasan THK Bali">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Jumlah Biaya Pendaftaran</label>
+                                    <input type="text" name="amount" value="{{ $paymentSetting->amount ?? 'Rp 500.000' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: Rp 500.000">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Catatan / Instruksi Transfer <span class="text-[10px] text-forest-700/50 font-normal">(Opsional)</span></label>
+                                    <textarea name="description" rows="3" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: Transfer dengan mencantumkan nama instansi sebagai berita transfer.">{{ $paymentSetting->description ?? '' }}</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti QR Code Pembayaran <span class="text-[10px] text-forest-700/50 font-normal">(JPG/PNG max 3MB)</span></label>
+                                    <input type="file" name="qr_image" accept="image/*" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
+                                </div>
+                                <div class="pt-2">
+                                    <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full text-sm shadow-sm cursor-pointer transition">
+                                        <i class="fas fa-save mr-1.5"></i> Simpan Informasi Pembayaran
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right: Preview -->
+                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center gap-5">
+                            <h3 class="text-sm font-bold text-forest-900 uppercase tracking-wider text-center">Preview Tampilan di Form Pendaftaran</h3>
+
+                            @if($paymentSetting->qr_image)
+                                <div class="bg-white rounded-2xl p-3 shadow-sm border border-beige-200">
+                                    <img src="{{ asset($paymentSetting->qr_image) }}" alt="QR Pembayaran" class="w-36 h-36 object-contain rounded-xl">
+                                </div>
+                            @else
+                                <div class="bg-white rounded-2xl p-3 border-2 border-dashed border-beige-300 flex flex-col items-center justify-center w-36 h-36 text-center">
+                                    <i class="fas fa-qrcode text-3xl text-beige-400 mb-1"></i>
+                                    <span class="text-[10px] text-beige-500">Belum ada QR</span>
+                                </div>
+                            @endif
+
+                            <div class="w-full text-center space-y-2 bg-white rounded-2xl p-4 border border-beige-200">
+                                <div class="text-xs text-forest-700/60 font-bold uppercase tracking-widest">Transfer ke:</div>
+                                <div class="text-xl font-black text-forest-900">{{ $paymentSetting->bank_name ?? 'BPD Bali' }}</div>
+                                <div class="text-2xl font-black text-gold-600 tracking-widest">{{ $paymentSetting->account_number ?? '009.02.12.00001-1' }}</div>
+                                <div class="text-sm font-semibold text-forest-700">a/n {{ $paymentSetting->account_name ?? 'Yayasan THK Bali' }}</div>
+                                <div class="mt-2 py-1.5 px-3 bg-gold-100 rounded-xl border border-gold-300">
+                                    <span class="text-xs font-bold text-gold-700">Biaya Pendaftaran: <span class="text-base text-gold-600">{{ $paymentSetting->amount ?? 'Rp 500.000' }}</span></span>
+                                </div>
+                                @if($paymentSetting->description)
+                                    <p class="text-[10px] text-forest-700/60 leading-snug">{{ $paymentSetting->description }}</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

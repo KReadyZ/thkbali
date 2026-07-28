@@ -585,7 +585,10 @@
                                                 </select>
                                             </form>
                                         </td>
-                                        <td class="py-3 px-4 text-right">
+                                        <td class="py-3 px-4 text-right flex items-center justify-end">
+                                            <button onclick="openAdminProposalDetail({{ json_encode($prop) }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs mr-3 cursor-pointer">
+                                                Detail
+                                            </button>
                                             <a href="{{ route('admin.proposal.delete', $prop->id) }}" class="delete-confirm-btn text-red-500 hover:text-red-400 font-bold text-xs" data-message="PERHATIAN: Menghapus pendaftaran ini juga akan menghapus akun peserta (login) secara permanen di database. Apakah Anda yakin?">
                                                 Hapus
                                             </a>
@@ -858,6 +861,122 @@
         </div>
     </div>
 
+    <!-- ==================== ADMIN PROPOSAL DETAIL MODAL ==================== -->
+    <div id="modal-admin-proposal-detail" class="fixed inset-0 bg-black/75 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-beige-200 max-w-2xl w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto relative flex flex-col">
+            <button onclick="closeAdminProposalDetail()" class="absolute top-4 right-4 p-2 text-forest-400 hover:text-forest-950 rounded-full transition cursor-pointer" aria-label="Tutup">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="font-serif text-xl font-bold text-forest-900 mb-6">Detail Pendaftaran & Dokumen</h3>
+            
+            <div class="space-y-6 text-sm">
+                <!-- Section 1: Informasi Instansi -->
+                <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
+                    <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
+                        <i class="fas fa-building text-gold-600 mr-1.5"></i> Profil Instansi / Perusahaan
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 text-xs md:text-sm">
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Nama Instansi</span>
+                            <strong id="det-inst-name" class="text-forest-900">-</strong>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Kategori Penghargaan</span>
+                            <strong id="det-inst-cat" class="text-forest-900">-</strong>
+                        </div>
+                        <div class="md:col-span-2">
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Alamat Lengkap</span>
+                            <strong id="det-inst-address" class="text-forest-900">-</strong>
+                        </div>
+                        <div class="md:col-span-2">
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Link Google Maps</span>
+                            <a id="det-inst-gmaps" href="#" target="_blank" class="text-gold-600 font-bold hover:underline break-all">-</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Informasi Kontak Person -->
+                <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
+                    <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
+                        <i class="fas fa-address-book text-gold-600 mr-1.5"></i> Kontak Person (CP)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs md:text-sm">
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Nama CP</span>
+                            <strong id="det-cp-name" class="text-forest-900">-</strong>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">WhatsApp CP</span>
+                            <a id="det-cp-wa" href="#" target="_blank" class="text-gold-600 font-bold hover:underline">-</a>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Email CP</span>
+                            <a id="det-cp-email" href="#" class="text-gold-600 font-bold hover:underline">-</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Unggahan Berkas -->
+                <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
+                    <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
+                        <i class="fas fa-file-archive text-gold-600 mr-1.5"></i> Berkas Pendukung & Bukti Pembayaran
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs md:text-sm">
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Berkas Sertifikasi</span>
+                            <a id="det-file-proposal" href="#" target="_blank" class="text-gold-600 font-bold hover:underline flex items-center gap-1 mt-1">
+                                <i class="fas fa-file-pdf"></i> Lihat Berkas
+                            </a>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Bukti Pembayaran</span>
+                            <a id="det-file-payment" href="#" target="_blank" class="text-gold-600 font-bold hover:underline flex items-center gap-1 mt-1">
+                                <i class="fas fa-file-invoice-dollar"></i> Lihat Bukti
+                            </a>
+                            <span id="det-file-payment-empty" class="text-red-500 font-medium hidden">Belum Unggah</span>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Akreditasi Sebelumnya</span>
+                            <a id="det-file-accred" href="#" target="_blank" class="text-gold-600 font-bold hover:underline flex items-center gap-1 mt-1">
+                                <i class="fas fa-medal"></i> Lihat Hasil
+                            </a>
+                            <span id="det-file-accred-empty" class="text-red-500 font-medium hidden">Belum Unggah</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Tautan Dokumen Pilar THK -->
+                <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
+                    <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
+                        <i class="fas fa-link text-gold-600 mr-1.5"></i> Tautan Dokumen Pilar Filosofis
+                    </h4>
+                    <div class="space-y-3 text-xs md:text-sm">
+                        <div class="flex items-center justify-between border-b border-beige-100 pb-1.5">
+                            <span class="text-forest-800 font-medium">Link Bidang Parahyangan:</span>
+                            <a id="det-link-parahyangan" href="#" target="_blank" class="text-gold-600 font-bold hover:underline break-all">-</a>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-beige-100 pb-1.5">
+                            <span class="text-forest-800 font-medium">Link Bidang Pawongan:</span>
+                            <a id="det-link-pawongan" href="#" target="_blank" class="text-gold-600 font-bold hover:underline break-all">-</a>
+                        </div>
+                        <div class="flex items-center justify-between pb-0.5">
+                            <span class="text-forest-800 font-medium">Link Bidang Palemahan:</span>
+                            <a id="det-link-palemahan" href="#" target="_blank" class="text-gold-600 font-bold hover:underline break-all">-</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <button onclick="closeAdminProposalDetail()" class="px-6 py-2 bg-forest-900 text-white rounded-full text-xs font-bold hover:bg-forest-950 transition cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript block for tabs toggle and edit actions -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -921,6 +1040,98 @@
                 }
             }
         });
+
+        // 5. Admin Proposal Detail Helpers
+        const modalAdminPropDetail = document.getElementById('modal-admin-proposal-detail');
+        function openAdminProposalDetail(item) {
+            if (!modalAdminPropDetail) return;
+            
+            document.getElementById('det-inst-name').textContent = item.institution_name || '-';
+            document.getElementById('det-inst-cat').textContent = item.category || '-';
+            document.getElementById('det-inst-address').textContent = item.address || '-';
+            
+            const gmapsEl = document.getElementById('det-inst-gmaps');
+            if (item.gmaps_link) {
+                gmapsEl.href = item.gmaps_link;
+                gmapsEl.textContent = item.gmaps_link;
+                gmapsEl.classList.remove('hidden');
+            } else {
+                gmapsEl.href = '#';
+                gmapsEl.textContent = 'Tidak Ada';
+            }
+
+            document.getElementById('det-cp-name').textContent = item.contact_name || '-';
+            
+            const cpWa = document.getElementById('det-cp-wa');
+            if (item.contact_wa) {
+                cpWa.href = `https://wa.me/${item.contact_wa.replace(/[^0-9]/g, '')}`;
+                cpWa.textContent = item.contact_wa;
+            } else {
+                cpWa.href = '#';
+                cpWa.textContent = '-';
+            }
+
+            const cpEmail = document.getElementById('det-cp-email');
+            if (item.contact_email) {
+                cpEmail.href = `mailto:${item.contact_email}`;
+                cpEmail.textContent = item.contact_email;
+            } else {
+                cpEmail.href = '#';
+                cpEmail.textContent = '-';
+            }
+
+            document.getElementById('det-file-proposal').href = item.file_path || '#';
+            
+            const filePayment = document.getElementById('det-file-payment');
+            const filePaymentEmpty = document.getElementById('det-file-payment-empty');
+            if (item.payment_proof) {
+                filePayment.href = item.payment_proof;
+                filePayment.classList.remove('hidden');
+                filePaymentEmpty.classList.add('hidden');
+            } else {
+                filePayment.classList.add('hidden');
+                filePaymentEmpty.classList.remove('hidden');
+            }
+
+            const fileAccred = document.getElementById('det-file-accred');
+            const fileAccredEmpty = document.getElementById('det-file-accred-empty');
+            if (item.prev_accreditation) {
+                fileAccred.href = item.prev_accreditation;
+                fileAccred.classList.remove('hidden');
+                fileAccredEmpty.classList.add('hidden');
+            } else {
+                fileAccred.classList.add('hidden');
+                fileAccredEmpty.classList.remove('hidden');
+            }
+
+            const formatLink = (lnk) => {
+                if (!lnk) return '#';
+                if (!lnk.startsWith('http://') && !lnk.startsWith('https://')) {
+                    return 'https://' + lnk;
+                }
+                return lnk;
+            };
+
+            const linkParah = document.getElementById('det-link-parahyangan');
+            linkParah.href = formatLink(item.link_parahyangan);
+            linkParah.textContent = item.link_parahyangan || '-';
+
+            const linkPawo = document.getElementById('det-link-pawongan');
+            linkPawo.href = formatLink(item.link_pawongan);
+            linkPawo.textContent = item.link_pawongan || '-';
+
+            const linkPalem = document.getElementById('det-link-palemahan');
+            linkPalem.href = formatLink(item.link_palemahan);
+            linkPalem.textContent = item.link_palemahan || '-';
+
+            modalAdminPropDetail.classList.remove('hidden');
+            modalAdminPropDetail.classList.add('flex');
+        }
+        function closeAdminProposalDetail() {
+            if (!modalAdminPropDetail) return;
+            modalAdminPropDetail.classList.add('hidden');
+            modalAdminPropDetail.classList.remove('flex');
+        }
 
         // 1. News Modal Helpers
         const modalNews = document.getElementById('modal-news');

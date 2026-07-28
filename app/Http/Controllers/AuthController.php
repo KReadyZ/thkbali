@@ -98,10 +98,25 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'institution_name' => 'required|string|max:255',
             'category' => 'required|string',
+            'address' => 'required|string',
+            'gmaps_link' => 'nullable|string|max:1000',
+            'contact_name' => 'required|string|max:255',
+            'contact_wa' => 'required|string|max:50',
+            'contact_email' => 'required|email|max:255',
             'proposal_file' => 'required|file|mimes:pdf,zip|max:10240', // max 10MB
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
+            'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
+            'link_parahyangan' => 'required|string|max:1000',
+            'link_pawongan' => 'required|string|max:1000',
+            'link_palemahan' => 'required|string|max:1000',
         ], [
-            'proposal_file.mimes' => 'Berkas harus berupa dokumen format PDF atau ZIP.',
-            'proposal_file.max' => 'Ukuran berkas maksimal adalah 10 MB.',
+            'proposal_file.required' => 'Berkas pendaftaran sertifikasi wajib diunggah.',
+            'proposal_file.mimes' => 'Berkas sertifikasi harus berupa dokumen format PDF atau ZIP.',
+            'proposal_file.max' => 'Ukuran berkas sertifikasi maksimal adalah 10 MB.',
+            'payment_proof.mimes' => 'Bukti pembayaran harus berupa gambar (JPG, PNG) atau PDF.',
+            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal adalah 5 MB.',
+            'prev_accreditation.mimes' => 'Hasil akreditasi sebelumnya harus berupa gambar atau PDF.',
+            'prev_accreditation.max' => 'Ukuran hasil akreditasi sebelumnya maksimal adalah 5 MB.',
         ]);
 
         if ($validator->fails()) {
@@ -111,40 +126,66 @@ class AuthController extends Controller
             ], 422);
         }
 
+        $data = [
+            'institution_name' => $request->institution_name,
+            'category' => $request->category,
+            'address' => $request->address,
+            'gmaps_link' => $request->gmaps_link,
+            'contact_name' => $request->contact_name,
+            'contact_wa' => $request->contact_wa,
+            'contact_email' => $request->contact_email,
+            'link_parahyangan' => $request->link_parahyangan,
+            'link_pawongan' => $request->link_pawongan,
+            'link_palemahan' => $request->link_palemahan,
+            'status' => 'Pengajuan',
+        ];
+
+        // 1. Handle proposal file
         if ($request->hasFile('proposal_file')) {
             $file = $request->file('proposal_file');
             $filename = 'proposal_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            
-            // Create uploads directory if it doesn't exist
             $uploadPath = public_path('uploads/proposals');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
-            
             $file->move($uploadPath, $filename);
-            $filePath = '/uploads/proposals/' . $filename;
-
-            // Save or Update Proposal in DB
-            $proposal = Proposal::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'institution_name' => $request->institution_name,
-                    'category' => $request->category,
-                    'file_path' => $filePath,
-                    'status' => 'Pengajuan',
-                ]
-            );
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Berkas pendaftaran berhasil diunggah! Status Anda saat ini adalah: Pengajuan.'
-            ]);
+            $data['file_path'] = '/uploads/proposals/' . $filename;
         }
 
+        // 2. Handle payment proof
+        if ($request->hasFile('payment_proof')) {
+            $file = $request->file('payment_proof');
+            $filename = 'payment_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/payments');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['payment_proof'] = '/uploads/payments/' . $filename;
+        }
+
+        // 3. Handle previous accreditation
+        if ($request->hasFile('prev_accreditation')) {
+            $file = $request->file('prev_accreditation');
+            $filename = 'prev_acc_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/accreditations');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['prev_accreditation'] = '/uploads/accreditations/' . $filename;
+        }
+
+        // Save or Update Proposal in DB
+        $proposal = Proposal::updateOrCreate(
+            ['user_id' => $user->id],
+            $data
+        );
+
         return response()->json([
-            'success' => false,
-            'message' => 'Gagal mengunggah berkas. Silakan coba lagi.'
-        ], 500);
+            'success' => true,
+            'message' => 'Berkas pendaftaran dan detail instansi Anda berhasil diunggah! Status Anda saat ini adalah: Pengajuan.'
+        ]);
     }
 
     public function resetPassword(Request $request)

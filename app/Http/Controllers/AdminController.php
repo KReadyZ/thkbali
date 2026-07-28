@@ -125,8 +125,21 @@ class AdminController extends Controller
             'views' => 'nullable|integer',
         ]);
 
-        // Helper to format content into paragraphs array
+        // Helper to format content into paragraphs array (handling Summernote HTML)
         $parseParagraphs = function($text) {
+            if (preg_match('/<[a-z][\s\S]*>/i', $text)) {
+                $cleaned = str_replace(["\r", "\n"], "", $text);
+                $parts = preg_split('/<\/p>/i', $cleaned);
+                $paragraphs = [];
+                foreach ($parts as $part) {
+                    $part = trim($part);
+                    if ($part !== '') {
+                        $part = preg_replace('/^<p>/i', '', $part);
+                        $paragraphs[] = $part;
+                    }
+                }
+                return $paragraphs;
+            }
             return array_values(array_filter(array_map('trim', explode("\n", $text))));
         };
 

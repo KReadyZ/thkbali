@@ -2064,7 +2064,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('agenda-modal-date').textContent = item.date_range;
         document.getElementById('agenda-modal-time').textContent = item.time;
         document.getElementById('agenda-modal-place').textContent = item.place;
-        document.getElementById('agenda-modal-desc').textContent = item.description;
+        document.getElementById('agenda-modal-desc').innerHTML = item.description;
 
         // Setup share URLs and actions
         const shareUrl = window.location.origin + window.location.pathname + '?agenda=' + item.id;

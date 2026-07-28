@@ -7,6 +7,13 @@
     @vite(['resources/css/app.css'])
     <!-- FontAwesome for Dashboard icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <!-- jQuery (required by Summernote) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Summernote Lite CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 <body class="bg-beige-100 text-forest-950 h-screen flex flex-col font-sans overflow-hidden">
 
@@ -876,6 +883,35 @@
                 });
             });
 
+            // Initialize Summernote Lite on textareas
+            $('#news-content-id').summernote({
+                placeholder: 'Masukkan konten berita secara detail...',
+                tabsize: 2,
+                height: 250,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear', 'italic']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+
+            $('#ag-desc').summernote({
+                placeholder: 'Masukkan materi, ketentuan, manfaat, dan narahubung agenda secara detail...',
+                tabsize: 2,
+                height: 250,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear', 'italic']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+
             // Restore active tab from localStorage if exists
             const activeTabId = localStorage.getItem('admin-active-tab');
             if (activeTabId) {
@@ -898,7 +934,7 @@
             document.getElementById('news-category-en').value = '';
             document.getElementById('news-date').value = '';
             document.getElementById('news-views').value = '0';
-            document.getElementById('news-content-id').value = '';
+            $('#news-content-id').summernote('code', '');
             document.getElementById('news-content-en').value = '';
             modalNews.classList.remove('hidden');
             modalNews.classList.add('flex');
@@ -912,7 +948,7 @@
             document.getElementById('news-category-en').value = item.category_en;
             document.getElementById('news-date').value = item.date;
             document.getElementById('news-views').value = item.views || 0;
-            document.getElementById('news-content-id').value = item.content_id.join('\n');
+            $('#news-content-id').summernote('code', item.content_id.join('\n'));
             document.getElementById('news-content-en').value = item.content_en.join('\n');
             modalNews.classList.remove('hidden');
             modalNews.classList.add('flex');
@@ -966,7 +1002,7 @@
             document.getElementById('ag-time').value = '';
             document.getElementById('ag-place').value = '';
             document.getElementById('ag-views').value = '0';
-            document.getElementById('ag-desc').value = '';
+            $('#ag-desc').summernote('code', '');
             modalAgenda.classList.remove('hidden');
             modalAgenda.classList.add('flex');
         }
@@ -979,7 +1015,7 @@
             document.getElementById('ag-time').value = item.time;
             document.getElementById('ag-place').value = item.place;
             document.getElementById('ag-views').value = item.views || 0;
-            document.getElementById('ag-desc').value = item.description;
+            $('#ag-desc').summernote('code', item.description);
             modalAgenda.classList.remove('hidden');
             modalAgenda.classList.add('flex');
         }

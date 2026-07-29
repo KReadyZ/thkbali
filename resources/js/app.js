@@ -1027,7 +1027,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showAuthAlert('auth-alert', data.message, 'success');
                 setTimeout(() => {
                     closeModal(authModal);
-                    window.location.reload();
+                    if (data.redirect_url && data.redirect_url !== '/') {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        window.location.reload();
+                    }
                 }, 1200);
             })
             .catch(err => {

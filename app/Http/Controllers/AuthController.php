@@ -153,10 +153,20 @@ class AuthController extends Controller
                 }
             }
             $request->session()->regenerate();
+
+            // Determine redirect URL based on role
+            $redirectUrl = '/';
+            if ($user->role === 'asesor') {
+                $redirectUrl = '/assessor';
+            } elseif ($user->role === 'admin') {
+                $redirectUrl = '/admin';
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Masuk berhasil! Menghubungkan sesi Anda...',
-                'user' => $user
+                'user' => $user,
+                'redirect_url' => $redirectUrl
             ]);
         }
 

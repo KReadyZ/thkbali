@@ -141,4 +141,44 @@ class HomeController extends Controller
         $agenda->increment('views');
         return response()->json(['success' => true, 'views' => $agenda->views]);
     }
+
+    public function checkRealtimeStatus()
+    {
+        if (!auth()->check()) {
+            return response()->json([
+                'authenticated' => false
+            ]);
+        }
+
+        $user = auth()->user();
+        
+        // If user is admin or assessor, calculate a checksum of proposals count + latest updated_at
+        if (in_array($user->role, ['admin', 'asesor'])) {
+            $count = \App\Models\Proposal::count();
+            $latest = \App\Models\Proposal::latest('updated_at')->first();
+            $hash = md5($count . ($latest ? $latest->updated_at->toIso8601String() : ''));
+            
+            return response()->json([
+                'authenticated' => true,
+                'role' => $user->role,
+                'hash' => $hash
+            ]);
+        }
+
+        // If user is peserta, check status of their proposal
+        if ($user->role === 'peserta') {
+            $proposal = $user->proposal;
+            return response()->json([
+                'authenticated' => true,
+                'role' => $user->role,
+                'status' => $proposal ? $proposal->status : null,
+                'proposal_id' => $proposal ? $proposal->id : null
+            ]);
+        }
+
+        return response()->json([
+            'authenticated' => true,
+            'role' => $user->role
+        ]);
+    }
 }

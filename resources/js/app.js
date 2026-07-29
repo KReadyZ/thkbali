@@ -2281,4 +2281,126 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (initialAgendaId) {
         setTimeout(() => openAgendaModal(initialAgendaId), 600);
     }
+
+    // ==========================================================================
+    // Realtime Status Polling & Auto Refresh
+    // ==========================================================================
+    let currentProposalStatus = null;
+    let initialAdminHash = null;
+
+    function initRealtimePolling() {
+        // Poll every 8 seconds
+        setInterval(performRealtimeCheck, 8000);
+        // Also run immediately
+        performRealtimeCheck();
+    }
+
+    function performRealtimeCheck() {
+        fetch('/api/realtime-check', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Offline or Session ended');
+            return response.json();
+        })
+        .then(data => {
+            if (!data.authenticated) return;
+
+            // 1. Handle Peserta role (auto-update status badge without refresh)
+            if (data.role === 'peserta' && data.status) {
+                if (currentProposalStatus === null) {
+                    currentProposalStatus = data.status;
+                } else if (currentProposalStatus !== data.status) {
+                    // Update current status tracker
+                    currentProposalStatus = data.status;
+
+                    // Automatically update status badges in DOM
+                    document.querySelectorAll('span.ml-1.px-2.py-0.5.bg-gold-500\\/20').forEach(el => {
+                        el.textContent = data.status;
+                    });
+                    
+                    document.querySelectorAll('.text-xs.font-semibold.text-gold-400.bg-gold-500\\/10').forEach(el => {
+                        el.textContent = 'Status: ' + data.status;
+                    });
+
+                    // Trigger a custom notification using our nice alert banner if visible, or a toast
+                    console.log('Status updated in real-time to: ' + data.status);
+                    
+                    // Show a toast or beautiful reload notification
+                    showRealtimeNotification(`Status pendaftaran Anda telah diperbarui menjadi "${data.status}" secara real-time!`);
+                }
+            }
+
+            // 2. Handle Admin or Assessor roles
+            if (['admin', 'asesor'].includes(data.role) && data.hash) {
+                if (initialAdminHash === null) {
+                    initialAdminHash = data.hash;
+                } else if (initialAdminHash !== data.hash) {
+                    // Hash changed! That means a new proposal was added or status updated.
+                    initialAdminHash = data.hash;
+
+                    // Check if they are typing in any input field or have a modal open.
+                    // If they are actively filling out a form, do not reload automatically to avoid data loss.
+                    const isUserEditing = document.activeElement && 
+                        (document.activeElement.tagName === 'INPUT' || 
+                         document.activeElement.tagName === 'TEXTAREA' || 
+                         document.activeElement.tagName === 'SELECT' ||
+                         document.activeElement.getAttribute('contenteditable') === 'true' ||
+                         document.activeElement.closest('.note-editable')); // Summernote editor check
+                    
+                    const isAnyModalOpen = document.querySelector('.modal-pane:not(.hidden), #modal-news:not(.hidden), #modal-assessor:not(.hidden), #modal-agenda:not(.hidden), #modal-gallery:not(.hidden), #modal-awardee:not(.hidden), #modal-assessor-proposal-detail:not(.hidden)');
+
+                    if (!isUserEditing && !isAnyModalOpen) {
+                        console.log('New data detected on server. Auto-refreshing dashboard...');
+                        window.location.reload();
+                    } else {
+                        console.log('New data detected on server, but skipped reload because admin is currently active in a form or modal.');
+                    }
+                }
+            }
+        })
+        .catch(err => {
+            // Silently ignore network connection failures during polling
+        });
+    }
+
+    function showRealtimeNotification(msg) {
+        // Create an elegant floating notification toast
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-5 right-5 z-50 max-w-sm bg-forest-950 text-white rounded-2xl shadow-[0_10px_30px_rgba(4,28,21,0.3)] border border-gold-500/30 p-4 transform translate-y-10 opacity-0 transition-all duration-500 flex items-start gap-3';
+        toast.innerHTML = `
+            <div class="p-1.5 bg-gold-500/10 rounded-lg text-gold-400 shrink-0">
+                <i class="fas fa-bell animate-bounce text-sm"></i>
+            </div>
+            <div class="flex-1 space-y-1">
+                <h4 class="text-xs font-black uppercase tracking-wider text-gold-400">Pembaruan Real-Time</h4>
+                <p class="text-[11px] text-white/80 font-medium leading-relaxed">${msg}</p>
+            </div>
+            <button class="text-white/40 hover:text-white transition cursor-pointer select-none" onclick="this.parentElement.remove()">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+        `;
+        document.body.appendChild(toast);
+
+        // Animate entrance
+        setTimeout(() => {
+            toast.classList.remove('translate-y-10', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+        }, 10);
+
+        // Auto remove after 7 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }
+        }, 7000);
+    }
+
+    // Initialize polling
+    initRealtimePolling();
 });

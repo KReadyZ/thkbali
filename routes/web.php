@@ -70,3 +70,6 @@ Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {
 // 4. View Increment Routes
 Route::post('/news/view/{id}', [\App\Http\Controllers\HomeController::class, 'incrementNewsView'])->name('news.view.increment');
 Route::post('/agenda/view/{id}', [\App\Http\Controllers\HomeController::class, 'incrementAgendaView'])->name('agenda.view.increment');
+
+// 5. Realtime Status Check Route
+Route::get('/api/realtime-check', [\App\Http\Controllers\HomeController::class, 'checkRealtimeStatus'])->name('api.realtime.check');

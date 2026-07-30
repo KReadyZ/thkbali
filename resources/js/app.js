@@ -765,9 +765,34 @@ document.addEventListener('DOMContentLoaded', () => {
             if (paymentInfoStep) {
                 paymentInfoStep.classList.remove('hidden');
                 loadPaymentInfo();
+                
+                // Reset payment proof file input and proceed button
+                if (regPaymentProof) regPaymentProof.value = '';
+                if (btnProceedToRegister) {
+                    btnProceedToRegister.classList.add('opacity-50', 'pointer-events-none');
+                    btnProceedToRegister.classList.remove('hover:bg-forest-950', 'cursor-pointer');
+                    btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Bukti Pembayaran Belum Diunggah';
+                }
             }
             formRegister.classList.add('hidden');
         }
+    }
+
+    const regPaymentProof = document.getElementById('reg-payment-proof');
+    if (regPaymentProof && btnProceedToRegister) {
+        regPaymentProof.addEventListener('change', () => {
+            if (regPaymentProof.files && regPaymentProof.files.length > 0) {
+                // Enable button
+                btnProceedToRegister.classList.remove('opacity-50', 'pointer-events-none');
+                btnProceedToRegister.classList.add('hover:bg-forest-950', 'cursor-pointer');
+                btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Saya Sudah Melakukan Pembayaran &rarr; Isi Form';
+            } else {
+                // Disable button
+                btnProceedToRegister.classList.add('opacity-50', 'pointer-events-none');
+                btnProceedToRegister.classList.remove('hover:bg-forest-950', 'cursor-pointer');
+                btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Bukti Pembayaran Belum Diunggah';
+            }
+        });
     }
 
     if (btnProceedToRegister) {

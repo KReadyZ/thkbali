@@ -55,10 +55,11 @@ class AuthController extends Controller
             'contact_name' => 'required|string|max:255',
             'contact_wa' => 'required|string|max:50',
             'contact_email' => 'required|string|email|max:255|unique:users,email',
-            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'payment_proof' => 'required|file|mimes:jpeg,png,jpg,pdf|max:5120',
             'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ], [
             'contact_email.unique' => 'Alamat email kontak person ini sudah terdaftar sebagai akun.',
+            'payment_proof.required' => 'Bukti pembayaran wajib diunggah.',
             'payment_proof.mimes' => 'Bukti pembayaran harus berupa gambar (JPG, PNG) atau PDF.',
             'payment_proof.max' => 'Ukuran bukti pembayaran maksimal adalah 5 MB.',
             'prev_accreditation.mimes' => 'Hasil akreditasi sebelumnya harus berupa gambar atau PDF.',

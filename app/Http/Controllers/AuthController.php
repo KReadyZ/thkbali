@@ -55,11 +55,18 @@ class AuthController extends Controller
             'contact_name' => 'required|string|max:255',
             'contact_wa' => 'required|string|max:50',
             'contact_email' => 'required|string|email|max:255|unique:users,email',
-            'payment_proof' => 'required|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
             'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'thk_leader_name' => 'nullable|string|max:255',
+            'thk_leader_wa' => 'nullable|string|max:50',
+            'pic_parahyangan_name' => 'nullable|string|max:255',
+            'pic_parahyangan_wa' => 'nullable|string|max:50',
+            'pic_pawongan_name' => 'nullable|string|max:255',
+            'pic_pawongan_wa' => 'nullable|string|max:50',
+            'pic_palemahan_name' => 'nullable|string|max:255',
+            'pic_palemahan_wa' => 'nullable|string|max:50',
         ], [
             'contact_email.unique' => 'Alamat email kontak person ini sudah terdaftar sebagai akun.',
-            'payment_proof.required' => 'Bukti pembayaran wajib diunggah.',
             'payment_proof.mimes' => 'Bukti pembayaran harus berupa gambar (JPG, PNG) atau PDF.',
             'payment_proof.max' => 'Ukuran bukti pembayaran maksimal adalah 5 MB.',
             'prev_accreditation.mimes' => 'Hasil akreditasi sebelumnya harus berupa gambar atau PDF.',
@@ -92,6 +99,14 @@ class AuthController extends Controller
             'contact_email' => $request->contact_email,
             'file_path' => '-', // Default value placeholder until they login and upload!
             'status' => 'Pengajuan',
+            'thk_leader_name' => $request->thk_leader_name,
+            'thk_leader_wa' => $request->thk_leader_wa,
+            'pic_parahyangan_name' => $request->pic_parahyangan_name,
+            'pic_parahyangan_wa' => $request->pic_parahyangan_wa,
+            'pic_pawongan_name' => $request->pic_pawongan_name,
+            'pic_pawongan_wa' => $request->pic_pawongan_wa,
+            'pic_palemahan_name' => $request->pic_palemahan_name,
+            'pic_palemahan_wa' => $request->pic_palemahan_wa,
         ];
 
         if ($request->hasFile('payment_proof')) {

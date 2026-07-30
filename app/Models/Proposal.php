@@ -21,7 +21,15 @@ class Proposal extends Model
         'prev_accreditation',
         'link_parahyangan',
         'link_pawongan',
-        'link_palemahan'
+        'link_palemahan',
+        'thk_leader_name',
+        'thk_leader_wa',
+        'pic_parahyangan_name',
+        'pic_parahyangan_wa',
+        'pic_pawongan_name',
+        'pic_pawongan_wa',
+        'pic_palemahan_name',
+        'pic_palemahan_wa'
     ];
 
     public function user()

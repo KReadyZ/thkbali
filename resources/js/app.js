@@ -742,7 +742,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function switchTab(tab) {
-        const step2Fields = document.getElementById('register-step-2-fields');
         if (tab === 'login') {
             tabLoginBtn.classList.add('border-forest-500', 'text-forest-950');
             tabLoginBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
@@ -752,7 +751,6 @@ document.addEventListener('DOMContentLoaded', () => {
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
             if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
-            if (step2Fields) step2Fields.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
         } else {
             tabRegisterBtn.classList.add('border-forest-500', 'text-forest-950');
@@ -763,55 +761,20 @@ document.addEventListener('DOMContentLoaded', () => {
             formLogin.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
 
-            // Show outer form container
-            formRegister.classList.remove('hidden');
-            if (step2Fields) step2Fields.classList.add('hidden');
-
-            // Show payment info step first
+            // Hide old payment info step, show form register directly
             if (paymentInfoStep) {
-                paymentInfoStep.classList.remove('hidden');
-                loadPaymentInfo();
-                
-                // Reset payment proof file input and proceed button
-                if (regPaymentProof) regPaymentProof.value = '';
-                if (btnProceedToRegister) {
-                    btnProceedToRegister.classList.add('opacity-50', 'pointer-events-none');
-                    btnProceedToRegister.classList.remove('hover:bg-forest-950', 'cursor-pointer');
-                    btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Bukti Pembayaran Belum Diunggah';
-                }
+                paymentInfoStep.classList.add('hidden');
             }
-        }
-    }
+            formRegister.classList.remove('hidden');
+            loadPaymentInfo();
 
-    const regPaymentProof = document.getElementById('reg-payment-proof');
-    if (regPaymentProof && btnProceedToRegister) {
-        regPaymentProof.addEventListener('change', () => {
-            if (regPaymentProof.files && regPaymentProof.files.length > 0) {
-                // Enable button
-                btnProceedToRegister.classList.remove('opacity-50', 'pointer-events-none');
-                btnProceedToRegister.classList.add('hover:bg-forest-950', 'cursor-pointer');
-                btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Saya Sudah Melakukan Pembayaran &rarr; Isi Form';
-            } else {
-                // Disable button
-                btnProceedToRegister.classList.add('opacity-50', 'pointer-events-none');
-                btnProceedToRegister.classList.remove('hover:bg-forest-950', 'cursor-pointer');
-                btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Bukti Pembayaran Belum Diunggah';
-            }
-        });
-    }
-
-    if (btnProceedToRegister) {
-        btnProceedToRegister.addEventListener('click', () => {
-            if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
-            const step2Fields = document.getElementById('register-step-2-fields');
-            if (step2Fields) step2Fields.classList.remove('hidden');
             // Reset to Peserta role to show peserta fields
             const regRole = document.getElementById('reg-role');
             if (regRole && regRole.value !== 'peserta') {
                 regRole.value = 'peserta';
             }
             if (typeof toggleRegisterFields === 'function') toggleRegisterFields();
-        });
+        }
     }
 
 

@@ -998,6 +998,31 @@
                     </div>
                 </div>
 
+                <!-- Section: Struktur Tim THK -->
+                <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
+                    <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
+                        <i class="fas fa-users text-gold-600 mr-1.5"></i> Struktur Tim THK Perusahaan / Lembaga
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 text-xs md:text-sm">
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">Ketua Tim THK</span>
+                            <span id="det-thk-leader" class="text-forest-900 font-semibold">-</span>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">PIC Parahyangan</span>
+                            <span id="det-pic-parahyangan" class="text-forest-900 font-semibold">-</span>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">PIC Pawongan</span>
+                            <span id="det-pic-pawongan" class="text-forest-900 font-semibold">-</span>
+                        </div>
+                        <div>
+                            <span class="text-forest-700/60 block text-[10px] uppercase font-bold">PIC Palemahan</span>
+                            <span id="det-pic-palemahan" class="text-forest-900 font-semibold">-</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section 3: Unggahan Berkas -->
                 <div class="bg-beige-50/50 p-4 rounded-2xl border border-beige-200/50">
                     <h4 class="font-bold text-forest-900 border-b border-beige-200 pb-2 mb-3 uppercase tracking-wider text-xs">
@@ -1158,6 +1183,31 @@
             } else {
                 cpEmail.href = '#';
                 cpEmail.textContent = '-';
+            }
+
+            const thkLeaderEl = document.getElementById('det-thk-leader');
+            if (thkLeaderEl) {
+                const name = item.thk_leader_name || '-';
+                const wa = item.thk_leader_wa ? ` (${item.thk_leader_wa})` : '';
+                thkLeaderEl.textContent = name + wa;
+            }
+            const picParahEl = document.getElementById('det-pic-parahyangan');
+            if (picParahEl) {
+                const name = item.pic_parahyangan_name || '-';
+                const wa = item.pic_parahyangan_wa ? ` (${item.pic_parahyangan_wa})` : '';
+                picParahEl.textContent = name + wa;
+            }
+            const picPawoEl = document.getElementById('det-pic-pawongan');
+            if (picPawoEl) {
+                const name = item.pic_pawongan_name || '-';
+                const wa = item.pic_pawongan_wa ? ` (${item.pic_pawongan_wa})` : '';
+                picPawoEl.textContent = name + wa;
+            }
+            const picPalemEl = document.getElementById('det-pic-palemahan');
+            if (picPalemEl) {
+                const name = item.pic_palemahan_name || '-';
+                const wa = item.pic_palemahan_wa ? ` (${item.pic_palemahan_wa})` : '';
+                picPalemEl.textContent = name + wa;
             }
 
             document.getElementById('det-file-proposal').href = item.file_path || '#';

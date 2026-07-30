@@ -742,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function switchTab(tab) {
+        const step2Fields = document.getElementById('register-step-2-fields');
         if (tab === 'login') {
             tabLoginBtn.classList.add('border-forest-500', 'text-forest-950');
             tabLoginBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
@@ -751,6 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
             if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
+            if (step2Fields) step2Fields.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
         } else {
             tabRegisterBtn.classList.add('border-forest-500', 'text-forest-950');
@@ -761,7 +763,11 @@ document.addEventListener('DOMContentLoaded', () => {
             formLogin.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
 
-            // Show payment info step first, keep form hidden
+            // Show outer form container
+            formRegister.classList.remove('hidden');
+            if (step2Fields) step2Fields.classList.add('hidden');
+
+            // Show payment info step first
             if (paymentInfoStep) {
                 paymentInfoStep.classList.remove('hidden');
                 loadPaymentInfo();
@@ -774,7 +780,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     btnProceedToRegister.innerHTML = '<i class="fas fa-check-circle"></i> Bukti Pembayaran Belum Diunggah';
                 }
             }
-            formRegister.classList.add('hidden');
         }
     }
 
@@ -798,7 +803,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnProceedToRegister) {
         btnProceedToRegister.addEventListener('click', () => {
             if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
-            formRegister.classList.remove('hidden');
+            const step2Fields = document.getElementById('register-step-2-fields');
+            if (step2Fields) step2Fields.classList.remove('hidden');
             // Reset to Peserta role to show peserta fields
             const regRole = document.getElementById('reg-role');
             if (regRole && regRole.value !== 'peserta') {

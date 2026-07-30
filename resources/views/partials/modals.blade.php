@@ -160,89 +160,92 @@
                     </button>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-role">Daftar Sebagai</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="fas fa-users-cog text-sm"></i>
-                        </span>
-                        <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-8 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition appearance-none cursor-pointer" id="reg-role" name="role" onchange="toggleRegisterFields()">
-                            <option value="peserta" selected>Peserta / Pendaftar THK Awards</option>
-                            <option value="umum">Masyarakat Umum</option>
-                        </select>
-                        <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Fields for Peserta (Pendaftaran & Bukti Bayar) -->
-                <div id="register-fields-peserta" class="space-y-4">
+                <!-- Registration Fields Step (Step 2) -->
+                <div id="register-step-2-fields" class="hidden space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-name">Nama Instansi / Perusahaan</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-name" name="institution_name" placeholder="Contoh: Hotel Grand Bali">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-cat">Kategori Penghargaan</label>
+                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-role">Daftar Sebagai</label>
                         <div class="relative">
-                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-4 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
-                                <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
-                                <option value="Destinasi">Destinasi Wisata</option>
-                                <option value="Restoran">Restoran / Kuliner</option>
-                                <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
-                                <option value="Desa Adat">Desa Adat</option>
-                                <option value="Individu">Kategori Individu</option>
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
+                                <i class="fas fa-users-cog text-sm"></i>
+                            </span>
+                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-8 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition appearance-none cursor-pointer" id="reg-role" name="role" onchange="toggleRegisterFields()">
+                                <option value="peserta" selected>Peserta / Pendaftar THK Awards</option>
+                                <option value="umum">Masyarakat Umum</option>
                             </select>
                             <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
                                 <i class="fas fa-chevron-down text-xs"></i>
                             </span>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-address" name="address" placeholder="Contoh: Jl. Sunset Road No. 99, Kuta">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="url" id="reg-inst-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-name">Nama Kontak Person (CP)</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-name" name="contact_name" placeholder="Nama Lengkap CP">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-wa">No. WhatsApp CP</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-wa" name="contact_wa" placeholder="Contoh: 08123456789">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-email">Email CP</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-cp-email" name="contact_email" placeholder="nama.cp@email.com">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-prev-acc">Hasil Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
-                    </div>
-                </div>
 
-                <!-- Fields for Umum -->
-                <div id="register-fields-umum" class="space-y-4 hidden">
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-name">Nama Lengkap</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-name" name="name" placeholder="Nama Lengkap Anda">
+                    <!-- Fields for Peserta (Pendaftaran & Bukti Bayar) -->
+                    <div id="register-fields-peserta" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-name">Nama Instansi / Perusahaan</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-name" name="institution_name" placeholder="Contoh: Hotel Grand Bali">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-cat">Kategori Penghargaan</label>
+                            <div class="relative">
+                                <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-4 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
+                                    <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
+                                    <option value="Destinasi">Destinasi Wisata</option>
+                                    <option value="Restoran">Restoran / Kuliner</option>
+                                    <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
+                                    <option value="Desa Adat">Desa Adat</option>
+                                    <option value="Individu">Kategori Individu</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-address" name="address" placeholder="Contoh: Jl. Sunset Road No. 99, Kuta">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="url" id="reg-inst-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-name">Nama Kontak Person (CP)</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-name" name="contact_name" placeholder="Nama Lengkap CP">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-wa">No. WhatsApp CP</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-wa" name="contact_wa" placeholder="Contoh: 08123456789">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-email">Email CP</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-cp-email" name="contact_email" placeholder="nama.cp@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-prev-acc">Hasil Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-email">Alamat Email</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-email" name="email" placeholder="nama@email.com">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-pass">Kata Sandi Baru</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="password" id="reg-pass" name="password" placeholder="Min. 8 karakter">
-                    </div>
-                </div>
 
-                <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
-                    Kirim Pendaftaran
-                </button>
+                    <!-- Fields for Umum -->
+                    <div id="register-fields-umum" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-name">Nama Lengkap</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-name" name="name" placeholder="Nama Lengkap Anda">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-email">Alamat Email</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-email" name="email" placeholder="nama@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-pass">Kata Sandi Baru</label>
+                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="password" id="reg-pass" name="password" placeholder="Min. 8 karakter">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
+                        Kirim Pendaftaran
+                    </button>
+                </div>
             </form>
         </div>
     </div>

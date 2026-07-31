@@ -299,6 +299,10 @@ body {
 }
 
 .goog-text-highlight,
+font,
+font:hover,
+font:active,
+font:focus,
 font.goog-text-highlight,
 body .goog-text-highlight,
 html body font.goog-text-highlight,

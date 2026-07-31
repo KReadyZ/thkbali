@@ -778,20 +778,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchTab(tab) {
         if (tab === 'login') {
-            tabLoginBtn.classList.add('border-forest-500', 'text-forest-950');
-            tabLoginBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
-            tabRegisterBtn.classList.add('border-transparent', 'text-forest-400', 'hover:text-forest-800');
-            tabRegisterBtn.classList.remove('border-forest-500', 'text-forest-950');
+            tabLoginBtn.classList.add('bg-white', 'shadow-sm', 'text-forest-950');
+            tabLoginBtn.classList.remove('bg-transparent', 'text-forest-400', 'hover:text-forest-800');
+            tabRegisterBtn.classList.add('bg-transparent', 'text-forest-400', 'hover:text-forest-800');
+            tabRegisterBtn.classList.remove('bg-white', 'shadow-sm', 'text-forest-950');
 
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
             if (paymentInfoStep) paymentInfoStep.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');
         } else {
-            tabRegisterBtn.classList.add('border-forest-500', 'text-forest-950');
-            tabRegisterBtn.classList.remove('border-transparent', 'text-forest-400', 'hover:text-forest-800');
-            tabLoginBtn.classList.add('border-transparent', 'text-forest-400', 'hover:text-forest-800');
-            tabLoginBtn.classList.remove('border-forest-500', 'text-forest-950');
+            tabRegisterBtn.classList.add('bg-white', 'shadow-sm', 'text-forest-950');
+            tabRegisterBtn.classList.remove('bg-transparent', 'text-forest-400', 'hover:text-forest-800');
+            tabLoginBtn.classList.add('bg-transparent', 'text-forest-400', 'hover:text-forest-800');
+            tabLoginBtn.classList.remove('bg-white', 'shadow-sm', 'text-forest-950');
 
             formLogin.classList.add('hidden');
             if (formResetPassword) formResetPassword.classList.add('hidden');

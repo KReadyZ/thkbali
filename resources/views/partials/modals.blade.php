@@ -3,27 +3,29 @@
    ========================================================================== -->
    
 <!-- 1. AUTH MODAL (Login / Register Tabs) -->
-<div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
-    <div class="modal-dialog bg-[#eaf4f0] border border-[#c6e1d7] w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(4,28,21,0.1)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
+<div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-forest-950/60 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
+    <div class="modal-dialog bg-white border border-forest-100/50 w-full max-w-lg rounded-[28px] overflow-hidden shadow-[0_25px_60px_-15px_rgba(4,28,21,0.25)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
         <!-- Close Button (Top Right) -->
-        <button id="auth-modal-close" class="absolute top-4 right-4 z-10 p-2 text-forest-400 hover:text-forest-950 hover:bg-forest-200/50 rounded-full transition cursor-pointer" aria-label="Tutup">
+        <button id="auth-modal-close" class="absolute top-5 right-5 z-20 p-2 text-forest-400 hover:text-forest-950 hover:bg-forest-50 rounded-full transition cursor-pointer" aria-label="Tutup">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
 
-        <!-- Modal Tabs Header -->
-        <div class="flex border-b border-[#c6e1d7] bg-[#dfeee8]">
-            <button id="tab-login" class="flex-1 py-5 text-center text-sm font-extrabold tracking-wider uppercase border-b-2 border-forest-500 text-forest-950 focus:outline-none transition cursor-pointer">
-                Masuk Akun
-            </button>
-            <button id="tab-register" class="flex-1 py-5 text-center text-sm font-extrabold tracking-wider uppercase border-b-2 border-transparent text-forest-400 hover:text-forest-800 focus:outline-none transition cursor-pointer">
-                Daftar Baru
-            </button>
+        <!-- Modal Tabs Header (Pill Style Segmented Control) -->
+        <div class="px-6 md:px-8 pt-8 pb-3">
+            <div class="flex p-1 bg-forest-900/5 backdrop-blur-sm rounded-[18px] border border-forest-900/10">
+                <button id="tab-login" class="flex-1 py-3 text-center text-xs font-bold tracking-wider uppercase rounded-[12px] bg-white shadow-sm text-forest-950 transition duration-300 focus:outline-none cursor-pointer">
+                    Masuk Akun
+                </button>
+                <button id="tab-register" class="flex-1 py-3 text-center text-xs font-bold tracking-wider uppercase rounded-[12px] bg-transparent text-forest-400 hover:text-forest-800 transition duration-300 focus:outline-none cursor-pointer">
+                    Daftar Baru
+                </button>
+            </div>
         </div>
         
         <!-- Modal Body content -->
-        <div class="p-6 md:p-8 space-y-6 overflow-y-auto flex-1">
+        <div class="p-6 md:p-8 pt-2 space-y-6 overflow-y-auto flex-1">
             <!-- Auth Alert Notice -->
             <div id="auth-alert" class="hidden p-4 rounded-2xl text-xs font-bold transition-all duration-300 transform scale-95 opacity-0 flex items-start gap-3">
                 <div class="shrink-0 mt-0.5" id="auth-alert-icon"></div>
@@ -33,83 +35,83 @@
             <!-- Login Form -->
             <form id="form-login" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="login-email">Alamat Email</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="login-email">Alamat Email</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="far fa-envelope text-sm"></i>
+                            <i class="far fa-envelope text-xs"></i>
                         </span>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="email" id="login-email" required placeholder="nama@email.com">
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="email" id="login-email" required placeholder="nama@email.com">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="login-pass">Kata Sandi</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="login-pass">Kata Sandi</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="fas fa-lock text-sm"></i>
+                            <i class="fas fa-lock text-xs"></i>
                         </span>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="password" id="login-pass" required placeholder="••••••••">
-                        <button type="button" id="toggle-login-pass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
-                            <i class="far fa-eye text-sm"></i>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="password" id="login-pass" required placeholder="••••••••">
+                        <button type="button" id="toggle-login-pass" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
+                            <i class="far fa-eye text-xs"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center gap-2 text-forest-700 hover:text-forest-900 cursor-pointer select-none">
-                        <input type="checkbox" class="accent-forest-500 cursor-pointer border-[#b8dad0]"> Ingat saya
+                        <input type="checkbox" class="accent-forest-500 cursor-pointer border-slate-300 rounded-md"> Ingat saya
                     </label>
-                    <a href="#" id="btn-forgot-password" class="text-forest-600 hover:text-forest-800 transition hover:underline">Lupa Password?</a>
+                    <a href="#" id="btn-forgot-password" class="text-forest-600 hover:text-forest-800 transition hover:underline font-medium">Lupa Password?</a>
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
+                <button type="submit" class="w-full py-3.5 bg-forest-500 hover:bg-forest-600 active:scale-[0.99] hover:scale-[1.01] text-white rounded-2xl transition-all duration-300 text-sm shadow-lg shadow-forest-500/10 hover:shadow-xl hover:shadow-forest-500/20 font-bold cursor-pointer mt-4">
                     Masuk Sekarang
                 </button>
             </form>
 
             <!-- Reset Password Form -->
             <form id="form-reset-password" class="space-y-4 hidden">
-                <div class="mb-2">
-                    <p class="text-xs text-forest-700 leading-relaxed">Masukkan alamat email terdaftar Anda dan kata sandi baru untuk mengatur ulang kata sandi Anda secara langsung.</p>
+                <div class="mb-2 bg-forest-50/50 p-4 border border-forest-100 rounded-2xl">
+                    <p class="text-xs text-forest-800 leading-relaxed">Masukkan alamat email terdaftar Anda dan kata sandi baru untuk mengatur ulang kata sandi Anda secara langsung.</p>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-email">Alamat Email</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-email">Alamat Email</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="far fa-envelope text-sm"></i>
+                            <i class="far fa-envelope text-xs"></i>
                         </span>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="email" id="reset-email" required placeholder="nama@email.com">
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="email" id="reset-email" required placeholder="nama@email.com">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass">Kata Sandi Baru</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass">Kata Sandi Baru</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="fas fa-lock text-sm"></i>
+                            <i class="fas fa-lock text-xs"></i>
                         </span>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="password" id="reset-pass" required placeholder="••••••••">
-                        <button type="button" id="toggle-reset-pass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
-                            <i class="far fa-eye text-sm"></i>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="password" id="reset-pass" required placeholder="••••••••">
+                        <button type="button" id="toggle-reset-pass" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
+                            <i class="far fa-eye text-xs"></i>
                         </button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass-confirm">Konfirmasi Kata Sandi Baru</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reset-pass-confirm">Konfirmasi Kata Sandi Baru</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="fas fa-lock text-sm"></i>
+                            <i class="fas fa-lock text-xs"></i>
                         </span>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition placeholder-forest-300" type="password" id="reset-pass-confirm" required placeholder="••••••••">
-                        <button type="button" id="toggle-reset-pass-confirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
-                            <i class="far fa-eye text-sm"></i>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="password" id="reset-pass-confirm" required placeholder="••••••••">
+                        <button type="button" id="toggle-reset-pass-confirm" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-400 hover:text-forest-950 cursor-pointer transition">
+                            <i class="far fa-eye text-xs"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="flex items-center justify-between text-xs pt-1">
-                    <button type="button" id="btn-back-to-login" class="text-forest-600 hover:text-forest-800 transition hover:underline">
+                    <button type="button" id="btn-back-to-login" class="text-forest-600 hover:text-forest-800 transition hover:underline font-medium">
                         Kembali ke Masuk
                     </button>
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
+                <button type="submit" class="w-full py-3.5 bg-forest-500 hover:bg-forest-600 active:scale-[0.99] hover:scale-[1.01] text-white rounded-2xl transition-all duration-300 text-sm shadow-lg shadow-forest-500/10 hover:shadow-xl hover:shadow-forest-500/20 font-bold cursor-pointer mt-4">
                     Ubah Kata Sandi
                 </button>
             </form>
@@ -117,12 +119,12 @@
             <!-- Register Form -->
             <form id="form-register" class="space-y-4 hidden" enctype="multipart/form-data">
                 <div>
-                    <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-role">Daftar Sebagai</label>
+                    <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-role">Daftar Sebagai</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-forest-500">
-                            <i class="fas fa-users-cog text-sm"></i>
+                            <i class="fas fa-users-cog text-xs"></i>
                         </span>
-                        <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-10 pr-8 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-1 focus:ring-forest-500/20 transition appearance-none cursor-pointer" id="reg-role" name="role" onchange="toggleRegisterFields()">
+                        <select class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-10 pr-8 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition appearance-none cursor-pointer" id="reg-role" name="role" onchange="toggleRegisterFields()">
                             <option value="peserta" selected>Peserta / Pendaftar THK Awards</option>
                             <option value="umum">Masyarakat Umum</option>
                         </select>
@@ -135,13 +137,13 @@
                 <!-- Fields for Peserta (Pendaftaran & Bukti Bayar) -->
                 <div id="register-fields-peserta" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-name">Nama Instansi / Perusahaan</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-name" name="institution_name" placeholder="Contoh: Hotel Grand Bali">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-name">Nama Instansi / Perusahaan</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-inst-name" name="institution_name" placeholder="Contoh: Hotel Grand Bali">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-cat">Kategori Penghargaan</label>
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-cat">Kategori Penghargaan</label>
                         <div class="relative">
-                            <select class="w-full bg-white border border-[#b8dad0] rounded-xl pl-4 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
+                            <select class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-4 pr-10 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition appearance-none cursor-pointer" id="reg-inst-cat" name="category">
                                 <option value="Akomodasi" selected>Akomodasi / Perhotelan</option>
                                 <option value="Destinasi">Destinasi Wisata</option>
                                 <option value="Restoran">Restoran / Kuliner</option>
@@ -155,28 +157,28 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-inst-address" name="address" placeholder="Contoh: Jl. Sunset Road No. 99, Kuta">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-address">Alamat Lengkap Perusahaan / Lembaga</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-inst-address" name="address" placeholder="Contoh: Jl. Sunset Road No. 99, Kuta">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="url" id="reg-inst-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-inst-gmaps">Link Google Maps <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="url" id="reg-inst-gmaps" name="gmaps_link" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-name">Nama Kontak Person (CP)</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-name" name="contact_name" placeholder="Nama Lengkap CP">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-name">Nama Kontak Person (CP)</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-cp-name" name="contact_name" placeholder="Nama Lengkap CP">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-wa">No. WhatsApp CP</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-cp-wa" name="contact_wa" placeholder="Contoh: 08123456789">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-wa">No. WhatsApp CP</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-cp-wa" name="contact_wa" placeholder="Contoh: 08123456789">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-email">Email CP</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-cp-email" name="contact_email" placeholder="nama.cp@email.com">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-cp-email">Email CP</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="email" id="reg-cp-email" name="contact_email" placeholder="nama.cp@email.com">
                     </div>
 
                     <!-- Struktur Tim THK -->
-                    <div class="border-t border-[#b8dad0] pt-4 mt-4 space-y-4">
+                    <div class="border-t border-slate-200 pt-5 mt-5 space-y-4">
                         <h4 class="text-xs font-bold text-forest-900 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fas fa-users text-gold-600"></i> Struktur Tim THK Perusahaan / Lembaga
                         </h4>
@@ -185,11 +187,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-thk-leader-name">Ketua Tim THK (Nama) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-thk-leader-name" name="thk_leader_name" placeholder="Nama Ketua Tim">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-thk-leader-name" name="thk_leader_name" placeholder="Nama Ketua Tim">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-thk-leader-wa">Ketua Tim THK (No. WA) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-thk-leader-wa" name="thk_leader_wa" placeholder="Contoh: 08123456789">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-thk-leader-wa" name="thk_leader_wa" placeholder="Contoh: 08123456789">
                             </div>
                         </div>
 
@@ -197,11 +199,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-parahyangan-name">PIC Parahyangan (Nama) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-parahyangan-name" name="pic_parahyangan_name" placeholder="Nama PIC Parahyangan">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-parahyangan-name" name="pic_parahyangan_name" placeholder="Nama PIC Parahyangan">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-parahyangan-wa">PIC Parahyangan (No. WA) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-parahyangan-wa" name="pic_parahyangan_wa" placeholder="Contoh: 08123456789">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-parahyangan-wa" name="pic_parahyangan_wa" placeholder="Contoh: 08123456789">
                             </div>
                         </div>
 
@@ -209,39 +211,39 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-pawongan-name">PIC Pawongan (Nama) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-pawongan-name" name="pic_pawongan_name" placeholder="Nama PIC Pawongan">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-pawongan-name" name="pic_pawongan_name" placeholder="Nama PIC Pawongan">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-pawongan-wa">PIC Pawongan (No. WA) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-pawongan-wa" name="pic_pawongan_wa" placeholder="Contoh: 08123456789">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-pawongan-wa" name="pic_pawongan_wa" placeholder="Contoh: 08123456789">
                             </div>
                         </div>
 
                         <!-- PIC Bidang Palemahan -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-b border-[#b8dad0] pb-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-b border-slate-200 pb-5">
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-palemahan-name">PIC Palemahan (Nama) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-palemahan-name" name="pic_palemahan_name" placeholder="Nama PIC Palemahan">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-palemahan-name" name="pic_palemahan_name" placeholder="Nama PIC Palemahan">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1" for="reg-pic-palemahan-wa">PIC Palemahan (No. WA) <span class="text-[8px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-pic-palemahan-wa" name="pic_palemahan_wa" placeholder="Contoh: 08123456789">
+                                <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-pic-palemahan-wa" name="pic_palemahan_wa" placeholder="Contoh: 08123456789">
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-prev-acc">Hasil Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-prev-acc">Hasil Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 cursor-pointer file:mr-4 file:py-1.5 file:px-3.5 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-forest-50 file:text-forest-700 hover:file:bg-forest-100 transition" type="file" id="reg-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
                     </div>
 
                     <!-- Tampilan Pembayaran -->
                     <div class="mt-4 space-y-2">
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase">Informasi Pembayaran Pendaftaran</label>
-                        <div class="bg-[#f4faf8] rounded-2xl border border-[#c6e1d7] p-5 space-y-4 text-center">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase">Informasi Pembayaran Pendaftaran</label>
+                        <div class="bg-forest-50/40 rounded-2xl border border-forest-100 p-5 space-y-4 text-center">
                             <!-- QR Code -->
                             <div id="pay-qr-container" class="hidden flex justify-center">
-                                <img id="pay-qr-img" src="" alt="QR Pembayaran" class="w-36 h-36 object-contain rounded-2xl border border-[#c6e1d7] shadow-sm bg-white">
+                                <img id="pay-qr-img" src="" alt="QR Pembayaran" class="w-36 h-36 object-contain rounded-2xl border border-forest-100 shadow-sm bg-white">
                             </div>
                             <div id="pay-qr-placeholder" class="flex flex-col items-center gap-1.5 text-forest-500/40">
                                 <i class="fas fa-spinner fa-spin text-xl"></i>
@@ -254,7 +256,7 @@
                                 <div id="pay-bank-name" class="text-lg font-black text-forest-900">-</div>
                                 <div id="pay-account-number" class="text-xl font-black text-gold-600 tracking-widest select-all">-</div>
                                 <div id="pay-account-name" class="text-xs font-semibold text-forest-700 font-sans">a/n -</div>
-                                <div class="mt-2 py-1.5 px-3.5 bg-[#dfeee8] rounded-xl border border-[#b8dad0] inline-block mx-auto">
+                                <div class="mt-2 py-1.5 px-3.5 bg-forest-100/50 rounded-xl border border-forest-200 inline-block mx-auto">
                                     <span class="text-xs font-bold text-forest-800">Biaya Pendaftaran: <span id="pay-amount" class="text-sm font-black text-forest-900">-</span></span>
                                 </div>
                             </div>
@@ -263,35 +265,34 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-payment-proof">Bukti Pembayaran Pendaftaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="reg-payment-proof" name="payment_proof" accept="image/*,.pdf">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-payment-proof">Bukti Pembayaran Pendaftaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-2.5 text-forest-950 text-xs outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 cursor-pointer file:mr-4 file:py-1.5 file:px-3.5 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-forest-50 file:text-forest-700 hover:file:bg-forest-100 transition" type="file" id="reg-payment-proof" name="payment_proof" accept="image/*,.pdf">
                     </div>
                 </div>
 
                 <!-- Fields for Umum -->
                 <div id="register-fields-umum" class="space-y-4 hidden">
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-name">Nama Lengkap</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="reg-name" name="name" placeholder="Nama Lengkap Anda">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-name">Nama Lengkap</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="text" id="reg-name" name="name" placeholder="Nama Lengkap Anda">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-email">Alamat Email</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="email" id="reg-email" name="email" placeholder="nama@email.com">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-email">Alamat Email</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="email" id="reg-email" name="email" placeholder="nama@email.com">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-pass">Kata Sandi Baru</label>
-                        <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="password" id="reg-pass" name="password" placeholder="Min. 8 karakter">
+                        <label class="block text-[10px] font-bold text-forest-900 tracking-wider uppercase mb-1.5" for="reg-pass">Kata Sandi Baru</label>
+                        <input class="w-full bg-slate-50/50 border border-slate-200 rounded-2xl px-4 py-3 text-forest-950 text-sm outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/5 transition placeholder-slate-300" type="password" id="reg-pass" name="password" placeholder="Min. 8 karakter">
                     </div>
                 </div>
 
-                <button type="submit" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4">
+                <button type="submit" class="w-full py-3.5 bg-forest-500 hover:bg-forest-600 active:scale-[0.99] hover:scale-[1.01] text-white rounded-2xl transition-all duration-300 text-sm shadow-lg shadow-forest-500/10 hover:shadow-xl hover:shadow-forest-500/20 font-bold cursor-pointer mt-4">
                     Kirim Pendaftaran
                 </button>
             </form>
         </div>
     </div>
 </div>
-
 <!-- 2. CONTACT / HUBUNGI KAMI MODAL -->
 <div id="contact-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
     <div class="modal-dialog bg-forest-900 border border-gold-500/30 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl scale-95 opacity-0 transition-all duration-300">

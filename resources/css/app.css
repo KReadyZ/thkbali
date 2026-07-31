@@ -355,6 +355,37 @@ html[lang="jv"] .lang-jv-text {
     display: inline !important;
 }
 
+/* News Card Wrapper for smooth filtering */
+.news-card-wrapper {
+    transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1),
+                padding 400ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 400ms cubic-bezier(0.4, 0, 0.2, 1),
+                transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    opacity: 1;
+    transform: scale(1);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .news-card-wrapper {
+        width: 33.3333%;
+    }
+}
+
+.news-card-wrapper.card-hidden {
+    width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    opacity: 0 !important;
+    transform: scale(0) !important;
+    pointer-events: none !important;
+    margin: 0 !important;
+}
+
 
 
 

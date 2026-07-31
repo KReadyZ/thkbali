@@ -517,9 +517,9 @@ document.addEventListener('DOMContentLoaded', () => {
        5. Penyaringan Kategori Berita (News Filter)
        ========================================================================== */
     const filterButtons = document.querySelectorAll('.news-filter-btn');
-    const newsCards = document.querySelectorAll('.news-card');
+    const newsCardWrappers = document.querySelectorAll('.news-card-wrapper');
 
-    if (filterButtons.length > 0 && newsCards.length > 0) {
+    if (filterButtons.length > 0 && newsCardWrappers.length > 0) {
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const filter = btn.getAttribute('data-filter');
@@ -532,56 +532,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('bg-forest-500', 'text-white', 'border-transparent');
                 btn.classList.remove('border-beige-300', 'text-forest-700/80', 'bg-transparent');
 
-                // Filter cards with animations
+                // Filter card wrappers with smooth CSS transitions
                 const showAllBtn = document.getElementById('show-all-news-btn');
                 const showAllActive = showAllBtn ? showAllBtn.classList.contains('hidden') : true;
 
-                newsCards.forEach(card => {
-                    const category = card.getAttribute('data-category');
+                newsCardWrappers.forEach(wrapper => {
+                    const category = wrapper.getAttribute('data-category');
                     const isMatch = (filter === 'Semua' || category === filter);
-                    const isExtra = card.classList.contains('extra-news');
-                    const shouldShow = isMatch && (!isExtra || showAllActive);
+                    const isExtra = wrapper.classList.contains('extra-news');
 
-                    // Clear any previous running fade timeouts for this card to prevent animation conflict
-                    if (card.fadeTimeout) {
-                        clearTimeout(card.fadeTimeout);
-                        card.fadeTimeout = null;
-                    }
-
-                    if (shouldShow) {
-                        if (card.classList.contains('hidden')) {
-                            // 1. Prepare start state for new entering card (invisible and offset down)
-                            card.style.transition = 'none';
-                            card.style.opacity = '0';
-                            card.style.transform = 'translateY(12px) scale(0.97)';
-                            
-                            // 2. Remove hidden display to place card in layout flow
-                            card.classList.remove('hidden');
-                            
-                            // 3. Trigger reflow to let browser register start state
-                            void card.offsetWidth;
-                            
-                            // 4. Smoothly transition to final state (fully visible at natural position)
-                            card.style.transition = 'opacity 350ms cubic-bezier(0.16, 1, 0.3, 1), transform 350ms cubic-bezier(0.16, 1, 0.3, 1)';
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0) scale(1)';
-                        } else {
-                            // Card is already visible, ensure transition is active and keep it stable
-                            card.style.transition = 'opacity 350ms cubic-bezier(0.16, 1, 0.3, 1), transform 350ms cubic-bezier(0.16, 1, 0.3, 1)';
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0) scale(1)';
-                        }
+                    if (isMatch && (!isExtra || showAllActive)) {
+                        wrapper.classList.remove('hidden');
+                        // Trigger reflow to run transition
+                        void wrapper.offsetWidth;
+                        wrapper.classList.remove('card-hidden');
                     } else {
-                        // Card is leaving, animate fade out and scale down
-                        card.style.transition = 'opacity 250ms cubic-bezier(0.16, 1, 0.3, 1), transform 250ms cubic-bezier(0.16, 1, 0.3, 1)';
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(12px) scale(0.97)';
+                        wrapper.classList.add('card-hidden');
                         
-                        // Set layout hide after transition ends
-                        card.fadeTimeout = setTimeout(() => {
-                            card.classList.add('hidden');
-                            card.fadeTimeout = null;
-                        }, 250);
+                        // Wait for transition to complete before setting display none (hidden)
+                        setTimeout(() => {
+                            if (wrapper.classList.contains('card-hidden')) {
+                                wrapper.classList.add('hidden');
+                            }
+                        }, 400);
                     }
                 });
             });
@@ -2164,12 +2137,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (showAllNewsBtn) {
         showAllNewsBtn.addEventListener('click', () => {
             const extraNews = document.querySelectorAll('.extra-news');
-            extraNews.forEach((card, idx) => {
-                card.classList.remove('hidden');
-                setTimeout(() => {
-                    card.classList.add('opacity-100');
-                    card.classList.remove('opacity-0');
-                }, idx * 100);
+            extraNews.forEach((wrapper) => {
+                wrapper.classList.remove('hidden');
+                // Trigger reflow to apply transition
+                void wrapper.offsetWidth;
+                wrapper.classList.remove('card-hidden');
             });
             showAllNewsBtn.classList.add('hidden');
         });

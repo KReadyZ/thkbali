@@ -46,41 +46,43 @@
         </div>
         
         <!-- News Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex flex-wrap -mx-3">
             @foreach($news as $index => $n)
-                <div class="news-card bg-white rounded-3xl overflow-hidden shadow-md border border-beige-200/50 hover:shadow-xl hover:scale-[1.01] transition-all duration-300 scroll-reveal cursor-pointer flex flex-col h-full {{ $index >= 3 ? 'hidden extra-news' : '' }}" 
-                     data-category="{{ $n->category_id }}" 
-                     data-news-id="{{ $n->id }}">
-                    <div class="relative overflow-hidden h-48 shrink-0">
-                        <img src="{{ $n->image }}" alt="{{ $n->title_id }}" class="w-full h-full object-cover">
-                        <!-- Badges -->
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-3 py-1 bg-forest-950/80 text-white text-[10px] uppercase font-bold tracking-wider rounded-full">{{ $n->category_id }}</span>
-                        </div>
-                        @if($n->is_verified)
-                            <div class="absolute top-4 right-4">
-                                <span class="px-2.5 py-1 bg-gold-500 text-forest-950 text-[10px] font-bold rounded-full flex items-center gap-1 shadow-md">
-                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a.75.75 0 00-.708.522L4.547 7.222a.75.75 0 00.193.772l1.625 1.488a.75.75 0 00.865.042l2.36-1.573a.75.75 0 00.322-.84L9.123 3.977a.75.75 0 00-.737-.522H6.267zm5.556 0a.75.75 0 00-.737.522l-.79 3.136a.75.75 0 00.322.84l2.36 1.573a.75.75 0 00.865-.042l1.625-1.488a.75.75 0 00.193-.772l-1.012-3.245a.75.75 0 00-.708-.522h-2.126zM4.364 9.387A.75.75 0 003.5 10v6a1 1 0 001 1h11a1 1 0 001-1v-6a.75.75 0 00-.864-.613L10 10.59 4.364 9.387z" clip-rule="evenodd"/></svg>
-                                    Terverifikasi
-                                </span>
+                <div class="news-card-wrapper px-3 py-3 flex flex-col {{ $index >= 3 ? 'hidden extra-news card-hidden' : '' }}" 
+                     data-category="{{ $n->category_id }}">
+                    <div class="news-card bg-white rounded-3xl overflow-hidden shadow-md border border-beige-200/50 hover:shadow-xl hover:scale-[1.01] transition-all duration-300 scroll-reveal cursor-pointer flex flex-col h-full" 
+                         data-news-id="{{ $n->id }}">
+                        <div class="relative overflow-hidden h-48 shrink-0">
+                            <img src="{{ $n->image }}" alt="{{ $n->title_id }}" class="w-full h-full object-cover">
+                            <!-- Badges -->
+                            <div class="absolute top-4 left-4 flex gap-2">
+                                <span class="px-3 py-1 bg-forest-950/80 text-white text-[10px] uppercase font-bold tracking-wider rounded-full">{{ $n->category_id }}</span>
                             </div>
-                        @endif
-                    </div>
-                    <div class="p-6 flex flex-col justify-between flex-1">
-                        <div>
-                            <h3 class="font-serif text-forest-700 text-lg font-bold mb-2 hover:text-gold-600 transition line-clamp-2">
-                                <a href="#" class="open-news-btn" data-news-id="{{ $n->id }}">{{ $n->title_id }}</a>
-                            </h3>
-                            <p class="text-forest-700/75 text-xs md:text-sm leading-relaxed mb-4 font-light line-clamp-3">
-                                {{ isset($n->content_id[0]) ? $n->content_id[0] : '' }}
-                            </p>
+                            @if($n->is_verified)
+                                <div class="absolute top-4 right-4">
+                                    <span class="px-2.5 py-1 bg-gold-500 text-forest-950 text-[10px] font-bold rounded-full flex items-center gap-1 shadow-md">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a.75.75 0 00-.708.522L4.547 7.222a.75.75 0 00.193.772l1.625 1.488a.75.75 0 00.865.042l2.36-1.573a.75.75 0 00.322-.84L9.123 3.977a.75.75 0 00-.737-.522H6.267zm5.556 0a.75.75 0 00-.737.522l-.79 3.136a.75.75 0 00.322.84l2.36 1.573a.75.75 0 00.865-.042l1.625-1.488a.75.75 0 00.193-.772l-1.012-3.245a.75.75 0 00-.708-.522h-2.126zM4.364 9.387A.75.75 0 003.5 10v6a1 1 0 001 1h11a1 1 0 001-1v-6a.75.75 0 00-.864-.613L10 10.59 4.364 9.387z" clip-rule="evenodd"/></svg>
+                                        Terverifikasi
+                                    </span>
+                                </div>
+                            @endif
                         </div>
-                        <div class="flex items-center justify-between border-t border-beige-200/50 pt-3">
-                            <span class="text-forest-700/50 text-[11px] font-medium">{{ $n->date }}</span>
-                            <a href="#" class="open-news-btn text-gold-600 hover:text-gold-500 font-bold text-xs flex items-center gap-0.5 transition" data-news-id="{{ $n->id }}">
-                                Baca Detail
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                            </a>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="font-serif text-forest-700 text-lg font-bold mb-2 hover:text-gold-600 transition line-clamp-2">
+                                    <a href="#" class="open-news-btn" data-news-id="{{ $n->id }}">{{ $n->title_id }}</a>
+                                </h3>
+                                <p class="text-forest-700/75 text-xs md:text-sm leading-relaxed mb-4 font-light line-clamp-3">
+                                    {{ isset($n->content_id[0]) ? $n->content_id[0] : '' }}
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-beige-200/50 pt-3">
+                                <span class="text-forest-700/50 text-[11px] font-medium">{{ $n->date }}</span>
+                                <a href="#" class="open-news-btn text-gold-600 hover:text-gold-500 font-bold text-xs flex items-center gap-0.5 transition" data-news-id="{{ $n->id }}">
+                                    Baca Detail
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

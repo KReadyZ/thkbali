@@ -533,22 +533,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.remove('border-beige-300', 'text-forest-700/80', 'bg-transparent');
 
                 // Filter cards with animations
+                // 1. Fade out all cards first to prevent visible layout jumping/jittering
                 newsCards.forEach(card => {
-                    const category = card.getAttribute('data-category');
-                    if (filter === 'Semua' || category === filter) {
-                        card.classList.remove('hidden');
-                        setTimeout(() => {
+                    card.style.transition = 'opacity 200ms cubic-bezier(0.4, 0, 0.2, 1), transform 200ms cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                });
+
+                // 2. Wait for fade-out to finish, update layouts, then fade-in matching cards smoothly
+                setTimeout(() => {
+                    const showAllBtn = document.getElementById('show-all-news-btn');
+                    const showAllActive = showAllBtn ? showAllBtn.classList.contains('hidden') : true;
+
+                    newsCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        const isMatch = (filter === 'Semua' || category === filter);
+                        const isExtra = card.classList.contains('extra-news');
+
+                        if (isMatch && (!isExtra || showAllActive)) {
+                            card.classList.remove('hidden');
+                            // Trigger reflow to apply opacity/scale transition
+                            void card.offsetWidth;
                             card.style.opacity = '1';
                             card.style.transform = 'scale(1)';
-                        }, 50);
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.transform = 'scale(0.95)';
-                        setTimeout(() => {
+                        } else {
                             card.classList.add('hidden');
-                        }, 300);
-                    }
-                });
+                        }
+                    });
+                }, 200);
             });
         });
     }

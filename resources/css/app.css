@@ -333,12 +333,25 @@ html body .goog-text-highlight {
 .lang-en-text {
     display: none !important;
 }
+.lang-jv-text {
+    display: none !important;
+}
 
 /* When translated to any other language (Google Translate changes html lang tag) */
 html:not([lang="id"]) .lang-id-text {
     display: none !important;
 }
 html:not([lang="id"]) .lang-en-text {
+    display: inline !important;
+}
+
+/* Specific overrides for Javanese (Jawa Krama) */
+html[lang="jw"] .lang-en-text,
+html[lang="jv"] .lang-en-text {
+    display: none !important;
+}
+html[lang="jw"] .lang-jv-text,
+html[lang="jv"] .lang-jv-text {
     display: inline !important;
 }
 

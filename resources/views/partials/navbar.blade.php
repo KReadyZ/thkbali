@@ -21,12 +21,36 @@
         <!-- Desktop Menu Column (Perfectly Centered) -->
         <div class="hidden lg:block lg:mx-6 xl:mx-10">
             <nav class="flex items-center gap-5 xl:gap-8 text-white/90 font-medium">
-                <a href="#home" class="nav-link hover:text-gold-400 transition text-sm">Beranda</a>
-                <a href="#tentang-thk" class="nav-link hover:text-gold-400 transition text-sm">Tentang THK</a>
-                <a href="#thk-awards" class="nav-link hover:text-gold-400 transition text-sm">THK Awards</a>
-                <a href="#berita" class="nav-link hover:text-gold-400 transition text-sm">Berita</a>
-                <a href="#agenda" class="nav-link hover:text-gold-400 transition text-sm">Agenda</a>
-                <a href="#galeri" class="nav-link hover:text-gold-400 transition text-sm">Galeri</a>
+                <a href="#home" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">Beranda</span>
+                    <span class="lang-en-text">Home</span>
+                    <span class="lang-jv-text notranslate">Beranda</span>
+                </a>
+                <a href="#tentang-thk" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">Tentang THK</span>
+                    <span class="lang-en-text">About THK</span>
+                    <span class="lang-jv-text notranslate">Babagan THK</span>
+                </a>
+                <a href="#thk-awards" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">THK Awards</span>
+                    <span class="lang-en-text">THK Awards</span>
+                    <span class="lang-jv-text notranslate">THK Awards</span>
+                </a>
+                <a href="#berita" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">Berita</span>
+                    <span class="lang-en-text">News</span>
+                    <span class="lang-jv-text notranslate">Pawarta</span>
+                </a>
+                <a href="#agenda" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">Agenda</span>
+                    <span class="lang-en-text">Agenda</span>
+                    <span class="lang-jv-text notranslate">Agenda</span>
+                </a>
+                <a href="#galeri" class="nav-link hover:text-gold-400 transition text-sm">
+                    <span class="lang-id-text">Galeri</span>
+                    <span class="lang-en-text">Gallery</span>
+                    <span class="lang-jv-text notranslate">Galeri</span>
+                </a>
             </nav>
         </div>
 
@@ -71,6 +95,7 @@
                         <i class="fas fa-sign-out-alt mr-1"></i>
                         <span class="lang-id-text">Keluar</span>
                         <span class="lang-en-text">Logout</span>
+                        <span class="lang-jv-text notranslate">Medal</span>
                     </a>
                 </div>
             @else
@@ -78,10 +103,12 @@
                     <button class="open-login-btn px-6 py-2 rounded-full border border-white/30 text-white text-sm font-medium hover:border-gold-500 hover:text-gold-400 transition duration-300 bg-black/10 backdrop-blur-sm">
                         <span class="lang-id-text">Masuk</span>
                         <span class="lang-en-text">Login</span>
+                        <span class="lang-jv-text notranslate">Mlebet</span>
                     </button>
                     <button class="open-register-btn px-6 py-2 rounded-full bg-gold-500 text-forest-950 text-sm font-bold hover:bg-gold-400 hover:shadow-lg hover:shadow-gold-500/20 transition duration-300">
                         <span class="lang-id-text">Daftar</span>
                         <span class="lang-en-text">Register</span>
+                        <span class="lang-jv-text notranslate">Daftar</span>
                     </button>
                 </div>
             @endauth
@@ -124,12 +151,36 @@
         </div>
         
         <nav class="flex flex-col gap-6 py-8 text-xl font-serif text-center">
-            <a href="#home" class="nav-scroll-link hover:text-gold-400 transition">Beranda</a>
-            <a href="#tentang-thk" class="nav-scroll-link hover:text-gold-400 transition">Tentang THK</a>
-            <a href="#thk-awards" class="nav-scroll-link hover:text-gold-400 transition">THK Awards</a>
-            <a href="#berita" class="nav-scroll-link hover:text-gold-400 transition">Berita</a>
-            <a href="#agenda" class="nav-scroll-link hover:text-gold-400 transition">Agenda</a>
-            <a href="#galeri" class="nav-scroll-link hover:text-gold-400 transition">Galeri</a>
+            <a href="#home" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">Beranda</span>
+                <span class="lang-en-text">Home</span>
+                <span class="lang-jv-text notranslate">Beranda</span>
+            </a>
+            <a href="#tentang-thk" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">Tentang THK</span>
+                <span class="lang-en-text">About THK</span>
+                <span class="lang-jv-text notranslate">Babagan THK</span>
+            </a>
+            <a href="#thk-awards" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">THK Awards</span>
+                <span class="lang-en-text">THK Awards</span>
+                <span class="lang-jv-text notranslate">THK Awards</span>
+            </a>
+            <a href="#berita" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">Berita</span>
+                <span class="lang-en-text">News</span>
+                <span class="lang-jv-text notranslate">Pawarta</span>
+            </a>
+            <a href="#agenda" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">Agenda</span>
+                <span class="lang-en-text">Agenda</span>
+                <span class="lang-jv-text notranslate">Agenda</span>
+            </a>
+            <a href="#galeri" class="nav-scroll-link hover:text-gold-400 transition">
+                <span class="lang-id-text">Galeri</span>
+                <span class="lang-en-text">Gallery</span>
+                <span class="lang-jv-text notranslate">Galeri</span>
+            </a>
         </nav>
 
         <div class="flex flex-col gap-4 border-t border-white/10 pt-6">
@@ -173,16 +224,19 @@
                     <a href="{{ route('logout') }}" class="block w-full py-3 text-center rounded-full border border-red-500/30 text-red-400 font-bold hover:bg-red-500/10 transition">
                         <span class="lang-id-text">Keluar</span>
                         <span class="lang-en-text">Logout</span>
+                        <span class="lang-jv-text notranslate">Medal</span>
                     </a>
                 </div>
             @else
                 <button class="open-login-btn w-full py-3 rounded-full border border-white/30 text-white font-medium hover:border-gold-500 hover:text-gold-400 transition">
                     <span class="lang-id-text">Masuk</span>
                     <span class="lang-en-text">Login</span>
+                    <span class="lang-jv-text notranslate">Mlebet</span>
                 </button>
                 <button class="open-register-btn w-full py-3 rounded-full bg-gold-500 text-forest-950 font-bold hover:bg-gold-400 transition">
                     <span class="lang-id-text">Daftar</span>
                     <span class="lang-en-text">Register</span>
+                    <span class="lang-jv-text notranslate">Daftar</span>
                 </button>
             @endauth
         </div>

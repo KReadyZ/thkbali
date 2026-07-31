@@ -39,20 +39,31 @@
                 autoDisplay: false
             }, 'google_translate_element');
 
-            function renameFirstOption() {
+            function renameLanguages() {
                 const selectEl = document.querySelector('.goog-te-combo');
                 if (selectEl && selectEl.options && selectEl.options.length > 0) {
+                    let updated = false;
                     if (selectEl.options[0].textContent !== 'Indonesia') {
                         selectEl.options[0].textContent = 'Indonesia';
+                        updated = true;
                     }
-                    return true;
+                    for (let i = 0; i < selectEl.options.length; i++) {
+                        const opt = selectEl.options[i];
+                        if (opt.value === 'jw' || opt.value === 'jv' || opt.textContent.toLowerCase() === 'jawa' || opt.textContent.toLowerCase() === 'javanese') {
+                            if (opt.textContent !== 'Jawa (Krama)') {
+                                opt.textContent = 'Jawa (Krama)';
+                                updated = true;
+                            }
+                        }
+                    }
+                    return updated;
                 }
                 return false;
             }
 
             // Always observe changes to the translate element to re-rename option 0 back to "Indonesia"
             const observer = new MutationObserver(function(mutations) {
-                renameFirstOption();
+                renameLanguages();
             });
             const target = document.getElementById('google_translate_element');
             if (target) {
@@ -81,10 +92,10 @@
             }
 
             // Run immediately and also set up a safety timer to verify rename state periodically during load
-            renameFirstOption();
+            renameLanguages();
             let checkCounts = 0;
             const interval = setInterval(() => {
-                renameFirstOption();
+                renameLanguages();
                 checkCounts++;
                 if (checkCounts > 12) clearInterval(interval); // check for 6 seconds
             }, 500);

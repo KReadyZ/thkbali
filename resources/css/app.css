@@ -298,10 +298,28 @@ body {
     display: none !important;
 }
 
-.goog-text-highlight {
+.goog-text-highlight,
+font.goog-text-highlight,
+body .goog-text-highlight,
+html body font.goog-text-highlight,
+html body .goog-text-highlight {
     background-color: transparent !important;
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-te-tooltip,
+.goog-te-tooltip-bag,
+.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+#goog-gt-tt {
+    pointer-events: none !important;
 }
 
 /* Dynamic language text display based on translation state */

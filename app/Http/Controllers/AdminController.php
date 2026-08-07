@@ -519,6 +519,49 @@ class AdminController extends Controller
         return back()->with('success', 'Informasi pembayaran pendaftaran berhasil diperbarui.');
     }
 
+    // Website Logo Settings
+    public function updateLogoSetting(Request $request)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $request->validate([
+            'logo_image' => 'required|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
+        ]);
+
+        $setting = PaymentSetting::first() ?? new PaymentSetting();
+
+        if ($request->hasFile('logo_image')) {
+            // Delete old logo if exists
+            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
+                @unlink(public_path($setting->logo_path));
+            }
+            $file = $request->file('logo_image');
+            $filename = 'website_logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $setting->logo_path = 'images/' . $filename;
+        }
+
+        $setting->save();
+
+        return back()->with('success', 'Logo utama website berhasil diperbarui.');
+    }
+
+    public function resetLogoSetting()
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $setting = PaymentSetting::first();
+        if ($setting) {
+            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
+                @unlink(public_path($setting->logo_path));
+            }
+            $setting->logo_path = null;
+            $setting->save();
+        }
+
+        return back()->with('success', 'Logo utama website berhasil di-reset ke SVG bawaan.');
+    }
+
     // Public API to expose payment settings for frontend
     public function getPaymentSetting()
     {

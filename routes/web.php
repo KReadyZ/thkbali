@@ -55,6 +55,10 @@ Route::prefix('admin')->group(function () {
 
         // Payment Settings
         Route::post('/payment-setting', [AdminController::class, 'updatePaymentSetting'])->name('admin.payment.update');
+
+        // Logo Settings
+        Route::post('/logo/update', [AdminController::class, 'updateLogoSetting'])->name('admin.logo.update');
+        Route::get('/logo/reset', [AdminController::class, 'resetLogoSetting'])->name('admin.logo.reset');
     });
 });
 

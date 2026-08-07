@@ -10,14 +10,21 @@
 </head>
 <body class="bg-beige-100 text-forest-950 h-screen flex flex-col font-sans overflow-hidden">
 
+@php
+    $paymentSetting = \App\Models\PaymentSetting::first();
+@endphp
     <!-- Top Navigation Header -->
     <header class="bg-forest-950 text-white py-4 px-6 lg:px-12 flex items-center justify-between border-b border-gold-500/20 shrink-0 sticky top-0 z-30">
         <div class="flex items-center gap-3">
-            <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                <circle cx="16" cy="15" r="6" stroke="currentColor" />
-            </svg>
+            @if(isset($paymentSetting->logo_path) && $paymentSetting->logo_path)
+                <img src="{{ asset($paymentSetting->logo_path) }}" class="w-8 h-8 object-contain rounded-full border border-gold-500/20" alt="Logo">
+            @else
+                <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                    <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                    <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                </svg>
+            @endif
             <div>
                 <span class="font-serif font-bold text-base block tracking-wide">THK Bali Back Office</span>
                 <span class="text-[9px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Asesor Panel</span>

@@ -12,7 +12,7 @@
         <!-- Gallery Slider Wrapper -->
         <div class="relative w-full scroll-reveal">
             <!-- Left Arrow Button -->
-            <button id="gallery-scroll-left" class="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-forest-900/90 border border-gold-500/30 rounded-full flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-xl cursor-pointer">
+            <button id="gallery-scroll-left" class="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-forest-900/90 border border-gold-500/30 rounded-full hidden md:flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-xl cursor-pointer">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -35,7 +35,7 @@
             </div>
 
             <!-- Right Arrow Button -->
-            <button id="gallery-scroll-right" class="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-forest-900/90 border border-gold-500/30 rounded-full flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-xl cursor-pointer">
+            <button id="gallery-scroll-right" class="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-forest-900/90 border border-gold-500/30 rounded-full hidden md:flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-xl cursor-pointer">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>

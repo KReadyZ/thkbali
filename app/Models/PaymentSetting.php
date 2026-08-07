@@ -15,5 +15,6 @@ class PaymentSetting extends Model
         'amount',
         'description',
         'qr_image',
+        'logo_path',
     ];
 }

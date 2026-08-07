@@ -7,19 +7,13 @@
         <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-white/10">
             <!-- Left: Logo -->
             <div class="flex items-center gap-3">
-                @if(isset($webSetting) && $webSetting->logo_path)
-                    <div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 flex items-center justify-center">
-                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                @else
-                    <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                    </svg>
-                @endif
+                <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                    <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                    <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                </svg>
                 <div>
-                    <span class="font-serif font-bold text-white text-base tracking-wide block leading-tight">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
+                    <span class="font-serif font-bold text-white text-base tracking-wide block leading-tight">THK Bali</span>
                     <span class="text-[9px] text-white/50 font-semibold tracking-wider uppercase block">Tri Hita Karana</span>
                 </div>
             </div>
@@ -60,7 +54,7 @@
         
         <!-- Bottom copyrights bar -->
         <div class="text-center text-xs text-white/40 font-light">
-            &copy; 2026 {{ $webSetting->website_name ?? 'THK Bali' }} — Hak Cipta Dilindungi
+            &copy; 2026 THK Bali — Hak Cipta Dilindungi
         </div>
     </div>
 </footer>

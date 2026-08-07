@@ -532,33 +532,4 @@ class AdminController extends Controller
             'qr_image'       => null,
         ]);
     }
-
-    // Web Settings
-    public function updateWebSetting(Request $request)
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $request->validate([
-            'website_name' => 'required|string|max:255',
-            'logo'         => 'nullable|image|mimes:jpeg,jpg,png,svg,webp|max:2048',
-        ]);
-
-        $setting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
-        $setting->website_name = $request->website_name;
-
-        if ($request->hasFile('logo')) {
-            // Delete old logo if exists
-            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
-                @unlink(public_path($setting->logo_path));
-            }
-            $file = $request->file('logo');
-            $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $setting->logo_path = 'images/' . $filename;
-        }
-
-        $setting->save();
-
-        return back()->with('success', 'Pengaturan website berhasil diperbarui.');
-    }
 }

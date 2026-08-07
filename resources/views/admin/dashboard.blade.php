@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — {{ $webSetting->website_name ?? 'THK Bali' }}</title>
+    <title>Admin Dashboard — THK Bali</title>
     @vite(['resources/css/app.css'])
     <!-- FontAwesome for Dashboard icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -20,24 +20,13 @@
     <!-- Top Navigation Header -->
     <header class="bg-forest-950 text-white py-4 px-6 lg:px-12 flex items-center justify-between border-b border-gold-500/20 shrink-0 sticky top-0 z-30">
         <div class="flex items-center gap-3">
-            <button id="admin-sidebar-toggle" class="lg:hidden text-white hover:text-gold-400 focus:outline-none p-1 mr-1 cursor-pointer" aria-label="Toggle Sidebar">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-            <div class="relative w-8 h-8 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
-                @if(isset($webSetting) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
-                @else
-                    <svg class="w-6 h-6 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                    </svg>
-                @endif
-            </div>
+            <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                <circle cx="16" cy="15" r="6" stroke="currentColor" />
+            </svg>
             <div>
-                <span class="font-serif font-bold text-base block tracking-wide">{{ $webSetting->website_name ?? 'THK Bali' }} Back Office</span>
+                <span class="font-serif font-bold text-base block tracking-wide">THK Bali Back Office</span>
                 <span class="text-[9px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Administrator Panel</span>
             </div>
         </div>
@@ -50,11 +39,8 @@
     </header>
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
-        <!-- Sidebar Backdrop (Mobile only) -->
-        <div id="admin-sidebar-backdrop" class="fixed inset-0 z-30 bg-black/50 lg:hidden hidden opacity-0 transition-opacity duration-300"></div>
-
         <!-- Sidebar Navigation -->
-        <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-forest-900 text-white shrink-0 border-r border-white/5 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto">
+        <aside class="w-full lg:w-64 bg-forest-900 text-white shrink-0 border-r border-white/5 flex flex-col overflow-y-auto">
             <nav class="p-4 space-y-1">
                 <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer active-tab-btn" data-tab-id="stats">
                     <i class="fas fa-chart-line w-5 text-center text-gold-500"></i> Statistik Homepage
@@ -82,9 +68,6 @@
                 </button>
                 <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="payment">
                     <i class="fas fa-university w-5 text-center text-gold-500"></i> Info Pembayaran
-                </button>
-                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="web-setting">
-                    <i class="fas fa-cog w-5 text-center text-gold-500"></i> Pengaturan Web
                 </button>
             </nav>
             <div class="mt-auto p-4 border-t border-white/5">
@@ -697,62 +680,6 @@
                                 @if($paymentSetting->description)
                                     <p class="text-[10px] text-forest-700/60 leading-snug">{{ $paymentSetting->description }}</p>
                                 @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ==================== TAB: WEB SETTINGS ==================== -->
-            <section id="tab-content-web-setting" class="tab-pane hidden">
-                <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
-                    <div class="mb-6">
-                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Website</h2>
-                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur nama website dan logo kustom yang akan ditampilkan di navigasi atas (Navbar) dan kaki halaman (Footer).</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Left: Edit Form -->
-                        <div>
-                            <form action="{{ route('admin.web.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
-                                @csrf
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Website</label>
-                                    <input type="text" name="website_name" value="{{ $webSetting->website_name ?? 'THK Bali' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: THK Bali">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(PNG/JPG/SVG max 2MB)</span></label>
-                                    <input type="file" name="logo" accept="image/*" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
-                                </div>
-                                <div class="pt-2">
-                                    <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full text-sm shadow-sm cursor-pointer transition">
-                                        <i class="fas fa-save mr-1.5"></i> Simpan Pengaturan Web
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Right: Preview -->
-                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center gap-5 justify-center min-h-[250px]">
-                            <h3 class="text-sm font-bold text-forest-900 uppercase tracking-wider text-center">Preview Logo Website</h3>
-
-                            <div class="flex items-center gap-4 bg-forest-950 p-6 rounded-2xl border border-gold-500/20 w-full max-w-sm justify-center shadow-lg">
-                                <div class="relative w-12 h-12 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
-                                    @if(isset($webSetting) && $webSetting->logo_path)
-                                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
-                                    @else
-                                        <!-- Triquetra SVG symbol -->
-                                        <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                                            <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                                            <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                                        </svg>
-                                    @endif
-                                </div>
-                                <div class="text-left">
-                                    <span class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
-                                    <span class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Tri Hita Karana</span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1599,54 +1526,6 @@
                     modal.classList.add('hidden');
                 }, 300);
             }
-        }
-
-        // Admin Sidebar Toggle (Mobile)
-        const sidebarToggle = document.getElementById('admin-sidebar-toggle');
-        const adminSidebar = document.getElementById('admin-sidebar');
-        const adminSidebarBackdrop = document.getElementById('admin-sidebar-backdrop');
-
-        if (sidebarToggle && adminSidebar) {
-            function toggleSidebar() {
-                const isHidden = adminSidebar.classList.contains('-translate-x-full');
-                if (isHidden) {
-                    adminSidebar.classList.remove('-translate-x-full');
-                    adminSidebar.classList.add('translate-x-0');
-                    if (adminSidebarBackdrop) {
-                        adminSidebarBackdrop.classList.remove('hidden');
-                        void adminSidebarBackdrop.offsetWidth;
-                        adminSidebarBackdrop.classList.remove('opacity-0');
-                        adminSidebarBackdrop.classList.add('opacity-100');
-                    }
-                } else {
-                    adminSidebar.classList.add('-translate-x-full');
-                    adminSidebar.classList.remove('translate-x-0');
-                    if (adminSidebarBackdrop) {
-                        adminSidebarBackdrop.classList.remove('opacity-100');
-                        adminSidebarBackdrop.classList.add('opacity-0');
-                        setTimeout(() => {
-                            if (adminSidebar.classList.contains('-translate-x-full')) {
-                                adminSidebarBackdrop.classList.add('hidden');
-                            }
-                        }, 300);
-                    }
-                }
-            }
-
-            sidebarToggle.addEventListener('click', toggleSidebar);
-            if (adminSidebarBackdrop) {
-                adminSidebarBackdrop.addEventListener('click', toggleSidebar);
-            }
-
-            // Close sidebar on mobile when tab button is clicked
-            const sidebarTabButtons = adminSidebar.querySelectorAll('.tab-btn');
-            sidebarTabButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (window.innerWidth < 1024) {
-                        toggleSidebar();
-                    }
-                });
-            });
         }
     </script>
 

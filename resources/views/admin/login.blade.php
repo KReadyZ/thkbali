@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login — {{ $webSetting->website_name ?? 'THK Bali' }}</title>
+    <title>Admin Login — THK Bali</title>
     @vite(['resources/css/app.css'])
 </head>
 <body class="bg-forest-950 text-white min-h-screen flex items-center justify-center p-6 bg-cover bg-center relative" 
@@ -12,18 +12,14 @@
     <div class="w-full max-w-md bg-forest-900/80 backdrop-blur-md border border-gold-500/30 rounded-3xl p-8 shadow-2xl">
         <!-- Logo and Heading -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-gold-500/10 rounded-full border border-gold-500/20 mb-4 overflow-hidden shrink-0">
-                @if(isset($webSetting) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
-                @else
-                    <svg class="w-9 h-9 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                    </svg>
-                @endif
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gold-500/10 rounded-full border border-gold-500/20 mb-4">
+                <svg class="w-9 h-9 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                    <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                    <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                </svg>
             </div>
-            <h1 class="font-serif text-2xl font-bold text-white mb-1">Back Office {{ $webSetting->website_name ?? 'THK Bali' }}</h1>
+            <h1 class="font-serif text-2xl font-bold text-white mb-1">Back Office THK Bali</h1>
             <p class="text-xs text-gold-400 font-semibold tracking-widest uppercase">Admin Authentication</p>
         </div>
 

@@ -55,9 +55,6 @@ Route::prefix('admin')->group(function () {
 
         // Payment Settings
         Route::post('/payment-setting', [AdminController::class, 'updatePaymentSetting'])->name('admin.payment.update');
-
-        // Web Settings
-        Route::post('/web-setting', [AdminController::class, 'updateWebSetting'])->name('admin.web.update');
     });
 });
 

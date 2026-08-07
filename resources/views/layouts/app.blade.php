@@ -43,10 +43,21 @@
                 const selectEl = document.querySelector('.goog-te-combo');
                 if (selectEl && selectEl.options && selectEl.options.length > 0) {
                     let updated = false;
-                    if (selectEl.options[0].textContent !== 'Indonesia') {
-                        selectEl.options[0].textContent = 'Indonesia';
+                    
+                    // Find the default prompt option (value="")
+                    let promptOpt = null;
+                    for (let i = 0; i < selectEl.options.length; i++) {
+                        if (selectEl.options[i].value === '') {
+                            promptOpt = selectEl.options[i];
+                            break;
+                        }
+                    }
+
+                    if (promptOpt && promptOpt.textContent !== 'Indonesia') {
+                        promptOpt.textContent = 'Indonesia';
                         updated = true;
                     }
+
                     for (let i = 0; i < selectEl.options.length; i++) {
                         const opt = selectEl.options[i];
                         if (opt.value === 'jw' || opt.value === 'jv' || opt.textContent.toLowerCase() === 'jawa' || opt.textContent.toLowerCase() === 'javanese') {

@@ -69,6 +69,9 @@
                 <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="payment">
                     <i class="fas fa-university w-5 text-center text-gold-500"></i> Info Pembayaran
                 </button>
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="web-setting">
+                    <i class="fas fa-cog w-5 text-center text-gold-500"></i> Pengaturan Web
+                </button>
             </nav>
             <div class="mt-auto p-4 border-t border-white/5">
                 <a href="{{ route('home') }}" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition text-xs font-bold">
@@ -685,6 +688,85 @@
                     </div>
                 </div>
             </section>
+
+            <!-- ==================== TAB: WEB SETTING ==================== -->
+            <section id="tab-content-web-setting" class="tab-pane hidden">
+                <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
+                    <div class="mb-6">
+                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Website</h2>
+                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider mt-1">Edit nama, tagline, dan logo website yang tampil di seluruh halaman.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Form -->
+                        <div>
+                            <form action="{{ route('admin.web.setting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                                @csrf
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2" for="ws-site-name">Nama Website</label>
+                                    <input type="text" id="ws-site-name" name="site_name" value="{{ $webSetting->site_name ?? 'THK Bali' }}" required maxlength="100"
+                                           class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition"
+                                           placeholder="Contoh: THK Bali">
+                                    <p class="text-[11px] text-forest-700/50 mt-1">Nama ini tampil di navbar dan judul browser.</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2" for="ws-tagline">Tagline / Sub-nama</label>
+                                    <input type="text" id="ws-tagline" name="site_tagline" value="{{ $webSetting->site_tagline ?? 'Tri Hita Karana' }}" maxlength="150"
+                                           class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition"
+                                           placeholder="Contoh: Tri Hita Karana">
+                                    <p class="text-[11px] text-forest-700/50 mt-1">Tagline tampil di bawah nama di navbar dan judul halaman.</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2" for="ws-logo">Logo Website <span class="text-forest-700/40 font-normal normal-case">(opsional · PNG / JPG / SVG, maks. 2MB)</span></label>
+                                    @if(isset($webSetting) && $webSetting->logo_path)
+                                        <div class="flex items-center gap-3 mb-3 p-3 bg-beige-50 rounded-xl border border-beige-200">
+                                            <img src="{{ asset($webSetting->logo_path) }}" alt="Logo saat ini" class="w-14 h-14 object-contain rounded-xl border border-beige-200 bg-white">
+                                            <div>
+                                                <p class="text-xs font-semibold text-forest-700">Logo saat ini</p>
+                                                <p class="text-[11px] text-forest-700/50 break-all">{{ $webSetting->logo_path }}</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <input type="file" id="ws-logo" name="logo" accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml"
+                                           class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2.5 text-sm text-forest-700 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gold-100 file:text-gold-700 hover:file:bg-gold-200 transition cursor-pointer outline-none">
+                                </div>
+
+                                <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full transition shadow-md cursor-pointer flex items-center gap-2">
+                                    <i class="fas fa-save"></i> Simpan Pengaturan Web
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Preview Panel -->
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-forest-700 mb-4">Preview Navbar</h3>
+                            <div class="bg-forest-950 rounded-2xl p-4 flex items-center gap-3">
+                                <div id="ws-preview-logo-wrap" class="relative w-10 h-10 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
+                                    @if(isset($webSetting) && $webSetting->logo_path)
+                                        <img id="ws-preview-logo-img" src="{{ asset($webSetting->logo_path) }}" alt="Logo preview" class="w-full h-full object-cover rounded-full">
+                                        <svg id="ws-preview-logo-svg" class="w-7 h-7 text-gold-500 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="12" cy="9" r="6"/><circle cx="8" cy="15" r="6"/><circle cx="16" cy="15" r="6"/>
+                                        </svg>
+                                    @else
+                                        <img id="ws-preview-logo-img" src="" alt="Logo preview" class="w-full h-full object-cover rounded-full hidden">
+                                        <svg id="ws-preview-logo-svg" class="w-7 h-7 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="12" cy="9" r="6"/><circle cx="8" cy="15" r="6"/><circle cx="16" cy="15" r="6"/>
+                                        </svg>
+                                    @endif
+                                </div>
+                                <div>
+                                    <span id="ws-preview-name" class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">{{ $webSetting->site_name ?? 'THK Bali' }}</span>
+                                    <span id="ws-preview-tagline" class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block">{{ $webSetting->site_tagline ?? 'Tri Hita Karana' }}</span>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-forest-700/50 mt-3">Preview ini diperbarui secara realtime saat Anda mengetik di form di atas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 
@@ -1106,6 +1188,40 @@
                     });
                 });
             });
+
+            // ── Real-time Preview for Web Settings Tab ──
+            const wsSiteName  = document.getElementById('ws-site-name');
+            const wsTagline   = document.getElementById('ws-tagline');
+            const wsLogo      = document.getElementById('ws-logo');
+            const previewName = document.getElementById('ws-preview-name');
+            const previewTag  = document.getElementById('ws-preview-tagline');
+            const previewImg  = document.getElementById('ws-preview-logo-img');
+            const previewSvg  = document.getElementById('ws-preview-logo-svg');
+
+            if (wsSiteName && previewName) {
+                wsSiteName.addEventListener('input', () => {
+                    previewName.textContent = wsSiteName.value || 'THK Bali';
+                });
+            }
+            if (wsTagline && previewTag) {
+                wsTagline.addEventListener('input', () => {
+                    previewTag.textContent = wsTagline.value || 'Tri Hita Karana';
+                });
+            }
+            if (wsLogo && previewImg && previewSvg) {
+                wsLogo.addEventListener('change', () => {
+                    const file = wsLogo.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            previewImg.src = e.target.result;
+                            previewImg.classList.remove('hidden');
+                            previewSvg.classList.add('hidden');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
 
             // Initialize Summernote Lite on textareas
             $('#news-content-id').summernote({

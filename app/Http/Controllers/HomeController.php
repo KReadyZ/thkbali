@@ -8,6 +8,7 @@ use App\Models\Assessor;
 use App\Models\Agenda;
 use App\Models\Gallery;
 use App\Models\AwardCategory;
+use App\Models\WebSetting;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -115,6 +116,7 @@ class HomeController extends Controller
 
         $awardees = \App\Models\Awardee::orderBy('name', 'asc')->get();
         $userProposal = auth()->check() ? auth()->user()->proposal : null;
+        $webSetting = WebSetting::first();
 
         return view('welcome', compact(
             'statistics',
@@ -124,7 +126,8 @@ class HomeController extends Controller
             'galleries',
             'awardCategories',
             'awardees',
-            'userProposal'
+            'userProposal',
+            'webSetting'
         ));
     }
 

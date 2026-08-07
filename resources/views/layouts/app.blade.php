@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ isset($webSetting) && $webSetting?->site_name ? $webSetting->site_name . ' — ' . ($webSetting->site_tagline ?? 'Tri Hita Karana') : 'THK Bali — Tri Hita Karana' }}</title>
+    <title>THK Bali — Tri Hita Karana</title>
     
     <meta name="description" content="Filosofi hidup masyarakat Bali yang menjaga harmoni dan keseimbangan antara manusia, alam, dan Tuhan demi kebahagiaan dari generasi ke generasi.">
     <meta name="keywords" content="Tri Hita Karana, Bali, Parahyangan, Pawongan, Palemahan, THK Awards, Subak">

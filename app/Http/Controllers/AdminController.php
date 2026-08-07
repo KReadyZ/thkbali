@@ -12,7 +12,6 @@ use App\Models\Awardee;
 use App\Models\User;
 use App\Models\Proposal;
 use App\Models\PaymentSetting;
-use App\Models\WebSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +77,6 @@ class AdminController extends Controller
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
         $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
-        $webSetting = WebSetting::first() ?? new WebSetting(['site_name' => 'THK Bali', 'site_tagline' => 'Tri Hita Karana']);
 
         return view('admin.dashboard', compact(
             'statistics',
@@ -89,8 +87,7 @@ class AdminController extends Controller
             'awardCategories',
             'awardees',
             'proposals',
-            'paymentSetting',
-            'webSetting'
+            'paymentSetting'
         ));
     }
 
@@ -534,36 +531,5 @@ class AdminController extends Controller
             'description'    => 'Transfer dengan mencantumkan nama instansi sebagai berita transfer.',
             'qr_image'       => null,
         ]);
-    }
-
-    // Web Settings: update site name, tagline, and logo
-    public function updateWebSetting(Request $request)
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
-
-        $request->validate([
-            'site_name'    => 'required|string|max:100',
-            'site_tagline' => 'nullable|string|max:150',
-            'logo'         => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
-        ]);
-
-        $setting = WebSetting::first() ?? new WebSetting();
-        $setting->site_name    = $request->site_name;
-        $setting->site_tagline = $request->site_tagline;
-
-        if ($request->hasFile('logo')) {
-            // Delete old logo if exists and is not a URL
-            if ($setting->logo_path && !str_starts_with($setting->logo_path, 'http') && file_exists(public_path($setting->logo_path))) {
-                @unlink(public_path($setting->logo_path));
-            }
-            $file = $request->file('logo');
-            $filename = 'site_logo_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/site'), $filename);
-            $setting->logo_path = 'images/site/' . $filename;
-        }
-
-        $setting->save();
-
-        return back()->with('success', 'Pengaturan website berhasil diperbarui.');
     }
 }

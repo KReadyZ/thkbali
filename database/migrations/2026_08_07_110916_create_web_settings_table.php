@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('web_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('site_name')->default('THK Bali');
-            $table->string('site_tagline')->nullable()->default('Tri Hita Karana');
-            $table->string('logo_path')->nullable();
             $table->timestamps();
         });
     }

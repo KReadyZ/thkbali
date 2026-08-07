@@ -12,6 +12,7 @@ use App\Models\Awardee;
 use App\Models\User;
 use App\Models\Proposal;
 use App\Models\PaymentSetting;
+use App\Models\WebSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,7 @@ class AdminController extends Controller
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
         $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
+        $webSetting = WebSetting::first() ?? new WebSetting();
 
         return view('admin.dashboard', compact(
             'statistics',
@@ -87,7 +89,8 @@ class AdminController extends Controller
             'awardCategories',
             'awardees',
             'proposals',
-            'paymentSetting'
+            'paymentSetting',
+            'webSetting'
         ));
     }
 
@@ -519,49 +522,6 @@ class AdminController extends Controller
         return back()->with('success', 'Informasi pembayaran pendaftaran berhasil diperbarui.');
     }
 
-    // Website Logo Settings
-    public function updateLogoSetting(Request $request)
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $request->validate([
-            'logo_image' => 'required|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
-        ]);
-
-        $setting = PaymentSetting::first() ?? new PaymentSetting();
-
-        if ($request->hasFile('logo_image')) {
-            // Delete old logo if exists
-            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
-                @unlink(public_path($setting->logo_path));
-            }
-            $file = $request->file('logo_image');
-            $filename = 'website_logo_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $setting->logo_path = 'images/' . $filename;
-        }
-
-        $setting->save();
-
-        return back()->with('success', 'Logo utama website berhasil diperbarui.');
-    }
-
-    public function resetLogoSetting()
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $setting = PaymentSetting::first();
-        if ($setting) {
-            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
-                @unlink(public_path($setting->logo_path));
-            }
-            $setting->logo_path = null;
-            $setting->save();
-        }
-
-        return back()->with('success', 'Logo utama website berhasil di-reset ke SVG bawaan.');
-    }
-
     // Public API to expose payment settings for frontend
     public function getPaymentSetting()
     {
@@ -574,5 +534,35 @@ class AdminController extends Controller
             'description'    => 'Transfer dengan mencantumkan nama instansi sebagai berita transfer.',
             'qr_image'       => null,
         ]);
+    }
+
+    public function updateWebSetting(Request $request)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $request->validate([
+            'logo_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
+            'website_name' => 'nullable|string|max:255',
+        ]);
+
+        $setting = WebSetting::first() ?? new WebSetting();
+        if ($request->has('website_name')) {
+            $setting->website_name = $request->website_name;
+        }
+
+        if ($request->hasFile('logo_image')) {
+            // Delete old logo file if exists
+            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
+                @unlink(public_path($setting->logo_path));
+            }
+            $file = $request->file('logo_image');
+            $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/logo'), $filename);
+            $setting->logo_path = 'images/logo/' . $filename;
+        }
+
+        $setting->save();
+
+        return back()->with('success', 'Pengaturan website berhasil diperbarui.');
     }
 }

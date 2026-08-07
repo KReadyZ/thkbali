@@ -16,7 +16,8 @@ class AssessorDashboardController extends Controller
     public function index()
     {
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->get();
-        return view('assessor.dashboard', compact('proposals'));
+        $webSetting = \App\Models\WebSetting::first();
+        return view('assessor.dashboard', compact('proposals', 'webSetting'));
     }
 
     public function updateStatus(Request $request, $id)

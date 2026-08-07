@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payment_settings', function (Blueprint $table) {
-            //
+        Schema::create('web_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('logo_path')->nullable();
+            $table->string('website_name')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payment_settings', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('web_settings');
     }
 };

@@ -20,8 +20,8 @@
     <!-- Top Navigation Header -->
     <header class="bg-forest-950 text-white py-4 px-6 lg:px-12 flex items-center justify-between border-b border-gold-500/20 shrink-0 sticky top-0 z-30">
         <div class="flex items-center gap-3">
-            @if(isset($paymentSetting->logo_path) && $paymentSetting->logo_path)
-                <img src="{{ asset($paymentSetting->logo_path) }}" class="w-8 h-8 object-contain rounded-full border border-gold-500/20" alt="Logo">
+            @if(isset($webSetting) && $webSetting->logo_path)
+                <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-8 h-8 object-contain">
             @else
                 <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <circle cx="12" cy="9" r="6" stroke="currentColor" />
@@ -30,7 +30,7 @@
                 </svg>
             @endif
             <div>
-                <span class="font-serif font-bold text-base block tracking-wide">THK Bali Back Office</span>
+                <span class="font-serif font-bold text-base block tracking-wide">{{ $webSetting->website_name ?? 'THK Bali' }} Back Office</span>
                 <span class="text-[9px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Administrator Panel</span>
             </div>
         </div>
@@ -44,37 +44,44 @@
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
         <!-- Sidebar Navigation -->
-        <aside class="w-full lg:w-64 bg-forest-900 text-white shrink-0 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col">
-            <nav class="p-4 flex flex-row overflow-x-auto gap-2 scrollbar-hidden lg:flex-col lg:space-y-1 lg:overflow-x-visible">
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer active-tab-btn" data-tab-id="stats">
+        <aside class="w-full lg:w-64 bg-forest-900 text-white shrink-0 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col min-w-0">
+            <nav class="p-4 flex flex-row lg:flex-col gap-2 lg:gap-0 lg:space-y-1 overflow-x-auto lg:overflow-y-auto scrollbar-hidden w-full shrink-0">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer active-tab-btn whitespace-nowrap shrink-0" data-tab-id="stats">
                     <i class="fas fa-chart-line w-5 text-center text-gold-500"></i> Statistik Homepage
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="news">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="news">
                     <i class="far fa-newspaper w-5 text-center text-gold-500"></i> Kelola Berita
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="categories">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="categories">
                     <i class="fas fa-award w-5 text-center text-gold-500"></i> Kategori THK Awards
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="assessors">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="assessors">
                     <i class="fas fa-users-cog w-5 text-center text-gold-500"></i> Kelola Asesor
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="agendas">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="agendas">
                     <i class="far fa-calendar-alt w-5 text-center text-gold-500"></i> Kelola Agenda
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="gallery">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="gallery">
                     <i class="far fa-images w-5 text-center text-gold-500"></i> Galeri Foto
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="awardees">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="awardees">
                     <i class="fas fa-medal w-5 text-center text-gold-500"></i> Penerima Awards
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="proposals">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="proposals">
                     <i class="fas fa-file-invoice w-5 text-center text-gold-500"></i> Kelola Pendaftaran
                 </button>
-                <button class="tab-btn shrink-0 w-auto whitespace-nowrap lg:w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="payment">
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="payment">
+                    <i class="fas fa-university w-5 text-center text-gold-500"></i> Info Pembayaran
+                </button>
+                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="websetting">
                     <i class="fas fa-cog w-5 text-center text-gold-500"></i> Pengaturan Web
                 </button>
+                
+                <a href="{{ route('home') }}" target="_blank" class="lg:hidden flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition whitespace-nowrap shrink-0">
+                    <i class="fas fa-external-link-alt text-center w-5"></i> Buka Website
+                </a>
             </nav>
-            <div class="mt-auto p-4 border-t border-white/5 hidden lg:block">
+            <div class="hidden lg:block mt-auto p-4 border-t border-white/5">
                 <a href="{{ route('home') }}" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition text-xs font-bold">
                     <i class="fas fa-external-link-alt"></i> Buka Website
                 </a>
@@ -687,57 +694,57 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <hr class="my-8 border-beige-200">
-
+            <!-- ==================== TAB: WEB SETTINGS ==================== -->
+            <section id="tab-content-websetting" class="tab-pane hidden">
+                <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
                     <div class="mb-6">
-                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Identitas & Logo Website</h2>
-                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur logo utama website yang ditampilkan pada bagian navigasi (Navbar) dan Footer.</p>
+                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Web</h2>
+                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur logo website dan nama instansi/organisasi utama.</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Left: Form Edit Logo -->
+                        <!-- Left: Edit Form -->
                         <div>
-                            <form action="{{ route('admin.logo.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                            <form action="{{ route('admin.websetting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                                 @csrf
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(PNG/JPG/SVG max 2MB)</span></label>
-                                    <input type="file" name="logo_image" accept="image/*,.svg" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2.5 text-xs cursor-pointer">
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Website / Organisasi</label>
+                                    <input type="text" name="website_name" value="{{ $webSetting->website_name ?? 'THK Bali' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: THK Bali">
                                 </div>
-                                <div class="pt-2 flex gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(JPG/PNG/SVG max 2MB)</span></label>
+                                    <input type="file" name="logo_image" accept="image/*,.svg" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
+                                </div>
+                                <div class="pt-2">
                                     <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full text-sm shadow-sm cursor-pointer transition">
-                                        <i class="fas fa-upload mr-1.5"></i> Unggah Logo Baru
+                                        <i class="fas fa-save mr-1.5"></i> Simpan Pengaturan Web
                                     </button>
-                                    @if(isset($paymentSetting->logo_path) && $paymentSetting->logo_path)
-                                        <a href="{{ route('admin.logo.reset') }}" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-full text-sm cursor-pointer transition text-center flex items-center justify-center">
-                                            <i class="fas fa-undo mr-1.5"></i> Reset Default SVG
-                                        </a>
-                                    @endif
                                 </div>
                             </form>
                         </div>
 
-                        <!-- Right: Preview Logo -->
-                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center justify-center gap-4 min-h-[150px]">
-                            <h3 class="text-xs font-bold text-forest-900 uppercase tracking-wider text-center mb-2">Logo Terpasang Saat Ini</h3>
-                            
-                            @if(isset($paymentSetting->logo_path) && $paymentSetting->logo_path)
-                                <div class="bg-forest-900 rounded-2xl p-4 shadow-sm border border-beige-200 flex items-center justify-center w-32 h-32">
-                                    <img src="{{ asset($paymentSetting->logo_path) }}" alt="Logo Website" class="w-20 h-20 object-contain">
+                        <!-- Right: Preview -->
+                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center justify-center gap-5 min-h-[300px]">
+                            <h3 class="text-sm font-bold text-forest-900 uppercase tracking-wider text-center">Preview Logo Website Terpasang</h3>
+
+                            @if($webSetting->logo_path)
+                                <div class="bg-white rounded-2xl p-4 shadow-sm border border-beige-200 flex items-center justify-center">
+                                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo Website" class="max-w-[150px] max-h-[150px] object-contain rounded-xl">
                                 </div>
-                                <span class="text-xs text-forest-600 font-medium">Logo Kustom</span>
+                                <div class="text-xs text-forest-500 font-medium">Path: <code class="bg-beige-100 px-2 py-1 rounded text-forest-950">{{ $webSetting->logo_path }}</code></div>
                             @else
-                                <div class="bg-forest-900 rounded-2xl p-4 border border-beige-200 flex items-center justify-center w-32 h-32">
-                                    <div class="relative w-12 h-12 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20">
-                                        <!-- Triquetra SVG symbol -->
-                                        <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                                            <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                                            <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                                        </svg>
-                                    </div>
+                                <div class="bg-white rounded-2xl p-4 border-2 border-dashed border-beige-300 flex flex-col items-center justify-center w-36 h-36 text-center">
+                                    <!-- Fallback svg -->
+                                    <svg class="w-16 h-16 text-gold-500 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                                    </svg>
+                                    <span class="text-[10px] text-beige-500">Logo Bawaan (SVG)</span>
                                 </div>
-                                <span class="text-xs text-forest-600 font-medium">Logo Default (SVG Triquetra)</span>
                             @endif
                         </div>
                     </div>
@@ -1591,18 +1598,17 @@
         .active-tab-btn {
             background-color: rgba(255, 255, 255, 0.08);
             color: var(--color-gold-400);
-            border-bottom: 4px solid var(--color-gold-500);
+            border-left: 4px solid var(--color-gold-500);
+            border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
-            border-left: none;
         }
-        @media (min-width: 1024px) {
+        @media (max-width: 1023px) {
             .active-tab-btn {
-                border-bottom: none;
-                border-left: 4px solid var(--color-gold-500);
-                border-top-left-radius: 0px;
-                border-bottom-left-radius: 0px;
-                border-bottom-right-radius: 12px;
+                border-left-width: 0px !important;
+                border-bottom: 3px solid var(--color-gold-500) !important;
+                border-radius: 0.75rem !important;
+                border-bottom-left-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
             }
         }
         .scrollbar-hidden::-webkit-scrollbar {

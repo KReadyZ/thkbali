@@ -3,15 +3,12 @@
    ========================================================================== -->
 <footer class="bg-forest-950 text-white pt-16 pb-8 px-6 lg:px-12 border-t-2 border-gold-500/20">
     <div class="max-w-6xl mx-auto flex flex-col gap-12">
-@php
-    $webSetting = \App\Models\PaymentSetting::first();
-@endphp
         <!-- Top Footer Bar -->
         <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-white/10">
             <!-- Left: Logo -->
             <div class="flex items-center gap-3">
-                @if(isset($webSetting->logo_path) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" class="w-8 h-8 object-contain rounded-full border border-gold-500/20" alt="Logo">
+                @if(isset($webSetting) && $webSetting->logo_path)
+                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="h-8 object-contain">
                 @else
                     <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <circle cx="12" cy="9" r="6" stroke="currentColor" />
@@ -20,7 +17,7 @@
                     </svg>
                 @endif
                 <div>
-                    <span class="font-serif font-bold text-white text-base tracking-wide block leading-tight">THK Bali</span>
+                    <span class="font-serif font-bold text-white text-base tracking-wide block leading-tight">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
                     <span class="text-[9px] text-white/50 font-semibold tracking-wider uppercase block">Tri Hita Karana</span>
                 </div>
             </div>

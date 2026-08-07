@@ -12,14 +12,14 @@
         <!-- Horizontal Slide Bar for Category Tabs -->
         <div class="relative w-full mb-8 scroll-reveal">
             <!-- Left Navigation Button -->
-            <button id="award-scroll-left" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-forest-900/80 border border-gold-500/30 rounded-full hidden md:flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-lg cursor-pointer">
+            <button id="award-scroll-left" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-forest-900/80 border border-gold-500/30 rounded-full flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-lg cursor-pointer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
 
             <!-- Scroll Container -->
-            <div id="award-tabs-container" class="overflow-x-auto scrollbar-hidden flex gap-4 px-4 md:px-12 py-2 scroll-smooth">
+            <div id="award-tabs-container" class="overflow-x-auto scrollbar-hidden flex gap-4 px-12 py-2 scroll-smooth">
                 @foreach($awardCategories as $index => $cat)
                     <button class="award-tab flex items-center gap-3 px-5 py-3 rounded-2xl border transition duration-300 shrink-0 select-none cursor-pointer {{ $index === 0 ? 'border-gold-500 bg-forest-800/80' : 'border-transparent bg-forest-800/30 hover:bg-forest-800/50' }}" 
                             data-tab="{{ $cat->key }}">
@@ -34,7 +34,7 @@
             </div>
 
             <!-- Right Navigation Button -->
-            <button id="award-scroll-right" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-forest-900/80 border border-gold-500/30 rounded-full hidden md:flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-lg cursor-pointer">
+            <button id="award-scroll-right" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-forest-900/80 border border-gold-500/30 rounded-full flex items-center justify-center text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition duration-300 shadow-lg cursor-pointer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>

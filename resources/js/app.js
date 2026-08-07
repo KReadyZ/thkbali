@@ -959,6 +959,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             alertEl.classList.remove('scale-95', 'opacity-0');
             alertEl.classList.add('scale-100', 'opacity-100');
+
+            // Scroll parent modal container to top smoothly to ensure user sees the alert
+            const scrollContainer = alertEl.closest('.overflow-y-auto');
+            if (scrollContainer) {
+                scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }, 10);
     }
 

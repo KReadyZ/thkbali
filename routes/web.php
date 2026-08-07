@@ -58,6 +58,7 @@ Route::prefix('admin')->group(function () {
 
         // Web Settings
         Route::post('/web-setting', [AdminController::class, 'updateWebSetting'])->name('admin.websetting.update');
+        Route::get('/web-setting/reset', [AdminController::class, 'resetWebSettingLogo'])->name('admin.websetting.reset');
     });
 });
 

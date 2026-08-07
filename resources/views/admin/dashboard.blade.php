@@ -1,3 +1,6 @@
+@php
+    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -718,10 +721,15 @@
                                     <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(JPG/PNG/SVG max 2MB)</span></label>
                                     <input type="file" name="logo_image" accept="image/*,.svg" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
                                 </div>
-                                <div class="pt-2">
+                                <div class="pt-2 flex gap-3">
                                     <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full text-sm shadow-sm cursor-pointer transition">
                                         <i class="fas fa-save mr-1.5"></i> Simpan Pengaturan Web
                                     </button>
+                                    @if(isset($webSetting->logo_path) && $webSetting->logo_path)
+                                        <a href="{{ route('admin.websetting.reset') }}" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-full text-sm cursor-pointer transition text-center flex items-center justify-center">
+                                            <i class="fas fa-undo mr-1.5"></i> Reset Default SVG
+                                        </a>
+                                    @endif
                                 </div>
                             </form>
                         </div>

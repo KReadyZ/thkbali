@@ -1,3 +1,6 @@
+@php
+    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
+@endphp
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 lg:px-12 bg-transparent">
     <div class="flex items-center justify-between w-full">
         <!-- Logo Column -->

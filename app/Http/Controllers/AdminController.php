@@ -565,4 +565,20 @@ class AdminController extends Controller
 
         return back()->with('success', 'Pengaturan website berhasil diperbarui.');
     }
+
+    public function resetWebSettingLogo()
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $setting = WebSetting::first();
+        if ($setting) {
+            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
+                @unlink(public_path($setting->logo_path));
+            }
+            $setting->logo_path = null;
+            $setting->save();
+        }
+
+        return back()->with('success', 'Logo website telah disetel kembali ke default SVG.');
+    }
 }

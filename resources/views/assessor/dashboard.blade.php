@@ -1,3 +1,6 @@
+@php
+    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -1,12 +1,9 @@
-@php
-    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
-@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asesor Panel — THK Bali</title>
+    <title>Asesor Panel — {{ $webSetting->website_name ?? 'THK Bali' }}</title>
     @vite(['resources/css/app.css'])
     <!-- FontAwesome for Dashboard icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -16,15 +13,22 @@
     <!-- Top Navigation Header -->
     <header class="bg-forest-950 text-white py-4 px-6 lg:px-12 flex items-center justify-between border-b border-gold-500/20 shrink-0 sticky top-0 z-30">
         <div class="flex items-center gap-3">
-            @if(isset($webSetting) && $webSetting->logo_path)
-                <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-8 h-8 object-contain">
-            @else
-                <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                    <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                    <circle cx="16" cy="15" r="6" stroke="currentColor" />
+            <button id="assessor-sidebar-toggle" class="lg:hidden text-white hover:text-gold-400 focus:outline-none p-1 mr-1 cursor-pointer" aria-label="Toggle Sidebar">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
-            @endif
+            </button>
+            <div class="relative w-8 h-8 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
+                @if(isset($webSetting) && $webSetting->logo_path)
+                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                @else
+                    <svg class="w-6 h-6 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                    </svg>
+                @endif
+            </div>
             <div>
                 <span class="font-serif font-bold text-base block tracking-wide">{{ $webSetting->website_name ?? 'THK Bali' }} Back Office</span>
                 <span class="text-[9px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Asesor Panel</span>
@@ -39,8 +43,11 @@
     </header>
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
+        <!-- Sidebar Backdrop (Mobile only) -->
+        <div id="assessor-sidebar-backdrop" class="fixed inset-0 z-30 bg-black/50 lg:hidden hidden opacity-0 transition-opacity duration-300"></div>
+
         <!-- Sidebar Navigation -->
-        <aside class="w-full lg:w-64 bg-forest-900 text-white shrink-0 border-r border-white/5 flex flex-col overflow-y-auto">
+        <aside id="assessor-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-forest-900 text-white shrink-0 border-r border-white/5 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto">
             <nav class="p-4 space-y-1">
                 <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-white/10 text-gold-400 border-l-4 border-gold-500 transition text-left cursor-pointer">
                     <i class="fas fa-file-invoice w-5 text-center text-gold-500"></i> Evaluasi Pendaftaran
@@ -401,6 +408,44 @@
             if (!modalAssessorPropDetail) return;
             modalAssessorPropDetail.classList.add('hidden');
             modalAssessorPropDetail.classList.remove('flex');
+        }
+
+        // Assessor Sidebar Toggle (Mobile)
+        const sidebarToggle = document.getElementById('assessor-sidebar-toggle');
+        const assessorSidebar = document.getElementById('assessor-sidebar');
+        const assessorSidebarBackdrop = document.getElementById('assessor-sidebar-backdrop');
+
+        if (sidebarToggle && assessorSidebar) {
+            function toggleSidebar() {
+                const isHidden = assessorSidebar.classList.contains('-translate-x-full');
+                if (isHidden) {
+                    assessorSidebar.classList.remove('-translate-x-full');
+                    assessorSidebar.classList.add('translate-x-0');
+                    if (assessorSidebarBackdrop) {
+                        assessorSidebarBackdrop.classList.remove('hidden');
+                        void assessorSidebarBackdrop.offsetWidth;
+                        assessorSidebarBackdrop.classList.remove('opacity-0');
+                        assessorSidebarBackdrop.classList.add('opacity-100');
+                    }
+                } else {
+                    assessorSidebar.classList.add('-translate-x-full');
+                    assessorSidebar.classList.remove('translate-x-0');
+                    if (assessorSidebarBackdrop) {
+                        assessorSidebarBackdrop.classList.remove('opacity-100');
+                        assessorSidebarBackdrop.classList.add('opacity-0');
+                        setTimeout(() => {
+                            if (assessorSidebar.classList.contains('-translate-x-full')) {
+                                assessorSidebarBackdrop.classList.add('hidden');
+                            }
+                        }, 300);
+                    }
+                }
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            if (assessorSidebarBackdrop) {
+                assessorSidebarBackdrop.addEventListener('click', toggleSidebar);
+            }
         }
     </script>
 </body>

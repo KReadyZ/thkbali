@@ -115,7 +115,6 @@ class HomeController extends Controller
 
         $awardees = \App\Models\Awardee::orderBy('name', 'asc')->get();
         $userProposal = auth()->check() ? auth()->user()->proposal : null;
-        $webSetting = \App\Models\WebSetting::first();
 
         return view('welcome', compact(
             'statistics',
@@ -125,8 +124,7 @@ class HomeController extends Controller
             'galleries',
             'awardCategories',
             'awardees',
-            'userProposal',
-            'webSetting'
+            'userProposal'
         ));
     }
 

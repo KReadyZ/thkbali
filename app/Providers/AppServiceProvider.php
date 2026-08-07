@@ -39,6 +39,13 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
             }
+        // Share webSetting globally across all views
+        if (!\App::runningInConsole() && \Illuminate\Support\Facades\Schema::hasTable('web_settings')) {
+            $webSetting = \App\Models\WebSetting::first() ?? \App\Models\WebSetting::create([
+                'website_name' => 'THK Bali',
+                'logo_path' => null
+            ]);
+            view()->share('webSetting', $webSetting);
         }
     }
 }

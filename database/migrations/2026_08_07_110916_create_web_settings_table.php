@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('web_settings', function (Blueprint $table) {
             $table->id();
             $table->string('logo_path')->nullable();
-            $table->string('website_name')->nullable();
+            $table->string('website_name')->default('THK Bali');
             $table->timestamps();
         });
     }

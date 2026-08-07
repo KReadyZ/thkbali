@@ -1,6 +1,3 @@
-@php
-    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
-@endphp
 <!-- ==========================================================================
    FOOTER
    ========================================================================== -->
@@ -11,7 +8,9 @@
             <!-- Left: Logo -->
             <div class="flex items-center gap-3">
                 @if(isset($webSetting) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="h-8 object-contain">
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 flex items-center justify-center">
+                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                    </div>
                 @else
                     <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <circle cx="12" cy="9" r="6" stroke="currentColor" />
@@ -61,7 +60,7 @@
         
         <!-- Bottom copyrights bar -->
         <div class="text-center text-xs text-white/40 font-light">
-            &copy; 2026 THK Bali — Hak Cipta Dilindungi
+            &copy; 2026 {{ $webSetting->website_name ?? 'THK Bali' }} — Hak Cipta Dilindungi
         </div>
     </div>
 </footer>

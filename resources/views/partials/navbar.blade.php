@@ -1,23 +1,20 @@
-@php
-    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
-@endphp
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 lg:px-12 bg-transparent">
     <div class="flex items-center justify-between w-full">
         <!-- Logo Column -->
         <div class="flex-1 flex justify-start">
             <a href="#home" class="flex items-center gap-3 group">
-                @if(isset($webSetting) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="h-10 object-contain">
-                @else
-                    <div class="relative w-10 h-10 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 group-hover:border-gold-500/50 transition duration-300">
+                <div class="relative w-10 h-10 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 group-hover:border-gold-500/50 transition duration-300 overflow-hidden">
+                    @if(isset($webSetting) && $webSetting->logo_path)
+                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                    @else
                         <!-- Triquetra SVG symbol -->
                         <svg class="w-7 h-7 text-gold-500 transition-transform duration-500 group-hover:rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <circle cx="12" cy="9" r="6" stroke="currentColor" />
                             <circle cx="8" cy="15" r="6" stroke="currentColor" />
                             <circle cx="16" cy="15" r="6" stroke="currentColor" />
                         </svg>
-                    </div>
-                @endif
+                    @endif
+                </div>
                 <div>
                     <span class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
                     <span class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block">Tri Hita Karana</span>
@@ -143,15 +140,18 @@
     <div class="flex flex-col h-full p-6 justify-between">
         <div class="flex items-center justify-between border-b border-white/10 pb-4">
             <div class="flex items-center gap-3">
-                @if(isset($webSetting) && $webSetting->logo_path)
-                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="h-8 object-contain">
-                @else
-                    <svg class="w-7 h-7 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                    </svg>
-                @endif
+                <div class="relative w-8 h-8 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
+                    @if(isset($webSetting) && $webSetting->logo_path)
+                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                    @else
+                        <!-- Triquetra SVG symbol -->
+                        <svg class="w-6 h-6 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                            <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                            <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                        </svg>
+                    @endif
+                </div>
                 <span class="font-serif font-bold text-white text-lg">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
             </div>
             <button id="mobile-menu-close-btn" class="text-white hover:text-gold-400 focus:outline-none p-2" aria-label="Close Mobile Menu">

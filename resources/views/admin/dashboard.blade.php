@@ -1,12 +1,9 @@
-@php
-    $webSetting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
-@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — THK Bali</title>
+    <title>Admin Dashboard — {{ $webSetting->website_name ?? 'THK Bali' }}</title>
     @vite(['resources/css/app.css'])
     <!-- FontAwesome for Dashboard icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -23,15 +20,22 @@
     <!-- Top Navigation Header -->
     <header class="bg-forest-950 text-white py-4 px-6 lg:px-12 flex items-center justify-between border-b border-gold-500/20 shrink-0 sticky top-0 z-30">
         <div class="flex items-center gap-3">
-            @if(isset($webSetting) && $webSetting->logo_path)
-                <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-8 h-8 object-contain">
-            @else
-                <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                    <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                    <circle cx="16" cy="15" r="6" stroke="currentColor" />
+            <button id="admin-sidebar-toggle" class="lg:hidden text-white hover:text-gold-400 focus:outline-none p-1 mr-1 cursor-pointer" aria-label="Toggle Sidebar">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
-            @endif
+            </button>
+            <div class="relative w-8 h-8 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
+                @if(isset($webSetting) && $webSetting->logo_path)
+                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                @else
+                    <svg class="w-6 h-6 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                    </svg>
+                @endif
+            </div>
             <div>
                 <span class="font-serif font-bold text-base block tracking-wide">{{ $webSetting->website_name ?? 'THK Bali' }} Back Office</span>
                 <span class="text-[9px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Administrator Panel</span>
@@ -46,45 +50,44 @@
     </header>
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
+        <!-- Sidebar Backdrop (Mobile only) -->
+        <div id="admin-sidebar-backdrop" class="fixed inset-0 z-30 bg-black/50 lg:hidden hidden opacity-0 transition-opacity duration-300"></div>
+
         <!-- Sidebar Navigation -->
-        <aside class="w-full lg:w-64 bg-forest-900 text-white shrink-0 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col min-w-0">
-            <nav class="p-4 flex flex-row lg:flex-col gap-2 lg:gap-0 lg:space-y-1 overflow-x-auto lg:overflow-y-auto scrollbar-hidden w-full shrink-0">
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer active-tab-btn whitespace-nowrap shrink-0" data-tab-id="stats">
+        <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-forest-900 text-white shrink-0 border-r border-white/5 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto">
+            <nav class="p-4 space-y-1">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer active-tab-btn" data-tab-id="stats">
                     <i class="fas fa-chart-line w-5 text-center text-gold-500"></i> Statistik Homepage
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="news">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="news">
                     <i class="far fa-newspaper w-5 text-center text-gold-500"></i> Kelola Berita
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="categories">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="categories">
                     <i class="fas fa-award w-5 text-center text-gold-500"></i> Kategori THK Awards
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="assessors">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="assessors">
                     <i class="fas fa-users-cog w-5 text-center text-gold-500"></i> Kelola Asesor
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="agendas">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="agendas">
                     <i class="far fa-calendar-alt w-5 text-center text-gold-500"></i> Kelola Agenda
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="gallery">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="gallery">
                     <i class="far fa-images w-5 text-center text-gold-500"></i> Galeri Foto
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="awardees">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="awardees">
                     <i class="fas fa-medal w-5 text-center text-gold-500"></i> Penerima Awards
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="proposals">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="proposals">
                     <i class="fas fa-file-invoice w-5 text-center text-gold-500"></i> Kelola Pendaftaran
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="payment">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="payment">
                     <i class="fas fa-university w-5 text-center text-gold-500"></i> Info Pembayaran
                 </button>
-                <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer whitespace-nowrap shrink-0" data-tab-id="websetting">
+                <button class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 hover:text-gold-400 transition text-left cursor-pointer" data-tab-id="web-setting">
                     <i class="fas fa-cog w-5 text-center text-gold-500"></i> Pengaturan Web
                 </button>
-                
-                <a href="{{ route('home') }}" target="_blank" class="lg:hidden flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition whitespace-nowrap shrink-0">
-                    <i class="fas fa-external-link-alt text-center w-5"></i> Buka Website
-                </a>
             </nav>
-            <div class="hidden lg:block mt-auto p-4 border-t border-white/5">
+            <div class="mt-auto p-4 border-t border-white/5">
                 <a href="{{ route('home') }}" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gold-500/30 text-gold-500 hover:bg-gold-500 hover:text-forest-950 transition text-xs font-bold">
                     <i class="fas fa-external-link-alt"></i> Buka Website
                 </a>
@@ -701,59 +704,56 @@
             </section>
 
             <!-- ==================== TAB: WEB SETTINGS ==================== -->
-            <section id="tab-content-websetting" class="tab-pane hidden">
+            <section id="tab-content-web-setting" class="tab-pane hidden">
                 <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
                     <div class="mb-6">
-                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Web</h2>
-                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur logo website dan nama instansi/organisasi utama.</p>
+                        <h2 class="font-serif text-2xl font-bold text-forest-900">Pengaturan Website</h2>
+                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Atur nama website dan logo kustom yang akan ditampilkan di navigasi atas (Navbar) dan kaki halaman (Footer).</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Left: Edit Form -->
                         <div>
-                            <form action="{{ route('admin.websetting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                            <form action="{{ route('admin.web.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                                 @csrf
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Website / Organisasi</label>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Nama Website</label>
                                     <input type="text" name="website_name" value="{{ $webSetting->website_name ?? 'THK Bali' }}" required class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-3 text-sm focus:border-gold-500 focus:ring-1 focus:ring-gold-500/20 outline-none transition" placeholder="Contoh: THK Bali">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(JPG/PNG/SVG max 2MB)</span></label>
-                                    <input type="file" name="logo_image" accept="image/*,.svg" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-forest-700 mb-2">Unggah / Ganti Logo Website <span class="text-[10px] text-forest-700/50 font-normal">(PNG/JPG/SVG max 2MB)</span></label>
+                                    <input type="file" name="logo" accept="image/*" class="w-full bg-beige-50 border border-beige-300 rounded-2xl px-4 py-2 text-xs cursor-pointer">
                                 </div>
-                                <div class="pt-2 flex gap-3">
+                                <div class="pt-2">
                                     <button type="submit" class="px-6 py-3 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold rounded-full text-sm shadow-sm cursor-pointer transition">
                                         <i class="fas fa-save mr-1.5"></i> Simpan Pengaturan Web
                                     </button>
-                                    @if(isset($webSetting->logo_path) && $webSetting->logo_path)
-                                        <a href="{{ route('admin.websetting.reset') }}" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-full text-sm cursor-pointer transition text-center flex items-center justify-center">
-                                            <i class="fas fa-undo mr-1.5"></i> Reset Default SVG
-                                        </a>
-                                    @endif
                                 </div>
                             </form>
                         </div>
 
                         <!-- Right: Preview -->
-                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center justify-center gap-5 min-h-[300px]">
-                            <h3 class="text-sm font-bold text-forest-900 uppercase tracking-wider text-center">Preview Logo Website Terpasang</h3>
+                        <div class="bg-beige-50 rounded-3xl border border-beige-200 p-6 flex flex-col items-center gap-5 justify-center min-h-[250px]">
+                            <h3 class="text-sm font-bold text-forest-900 uppercase tracking-wider text-center">Preview Logo Website</h3>
 
-                            @if($webSetting->logo_path)
-                                <div class="bg-white rounded-2xl p-4 shadow-sm border border-beige-200 flex items-center justify-center">
-                                    <img src="{{ asset($webSetting->logo_path) }}" alt="Logo Website" class="max-w-[150px] max-h-[150px] object-contain rounded-xl">
+                            <div class="flex items-center gap-4 bg-forest-950 p-6 rounded-2xl border border-gold-500/20 w-full max-w-sm justify-center shadow-lg">
+                                <div class="relative w-12 h-12 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 overflow-hidden shrink-0">
+                                    @if(isset($webSetting) && $webSetting->logo_path)
+                                        <img src="{{ asset($webSetting->logo_path) }}" alt="Logo" class="w-full h-full object-cover">
+                                    @else
+                                        <!-- Triquetra SVG symbol -->
+                                        <svg class="w-8 h-8 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                                            <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                                            <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                                        </svg>
+                                    @endif
                                 </div>
-                                <div class="text-xs text-forest-500 font-medium">Path: <code class="bg-beige-100 px-2 py-1 rounded text-forest-950">{{ $webSetting->logo_path }}</code></div>
-                            @else
-                                <div class="bg-white rounded-2xl p-4 border-2 border-dashed border-beige-300 flex flex-col items-center justify-center w-36 h-36 text-center">
-                                    <!-- Fallback svg -->
-                                    <svg class="w-16 h-16 text-gold-500 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                                    </svg>
-                                    <span class="text-[10px] text-beige-500">Logo Bawaan (SVG)</span>
+                                <div class="text-left">
+                                    <span class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">{{ $webSetting->website_name ?? 'THK Bali' }}</span>
+                                    <span class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block leading-none">Tri Hita Karana</span>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1600,6 +1600,54 @@
                 }, 300);
             }
         }
+
+        // Admin Sidebar Toggle (Mobile)
+        const sidebarToggle = document.getElementById('admin-sidebar-toggle');
+        const adminSidebar = document.getElementById('admin-sidebar');
+        const adminSidebarBackdrop = document.getElementById('admin-sidebar-backdrop');
+
+        if (sidebarToggle && adminSidebar) {
+            function toggleSidebar() {
+                const isHidden = adminSidebar.classList.contains('-translate-x-full');
+                if (isHidden) {
+                    adminSidebar.classList.remove('-translate-x-full');
+                    adminSidebar.classList.add('translate-x-0');
+                    if (adminSidebarBackdrop) {
+                        adminSidebarBackdrop.classList.remove('hidden');
+                        void adminSidebarBackdrop.offsetWidth;
+                        adminSidebarBackdrop.classList.remove('opacity-0');
+                        adminSidebarBackdrop.classList.add('opacity-100');
+                    }
+                } else {
+                    adminSidebar.classList.add('-translate-x-full');
+                    adminSidebar.classList.remove('translate-x-0');
+                    if (adminSidebarBackdrop) {
+                        adminSidebarBackdrop.classList.remove('opacity-100');
+                        adminSidebarBackdrop.classList.add('opacity-0');
+                        setTimeout(() => {
+                            if (adminSidebar.classList.contains('-translate-x-full')) {
+                                adminSidebarBackdrop.classList.add('hidden');
+                            }
+                        }, 300);
+                    }
+                }
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            if (adminSidebarBackdrop) {
+                adminSidebarBackdrop.addEventListener('click', toggleSidebar);
+            }
+
+            // Close sidebar on mobile when tab button is clicked
+            const sidebarTabButtons = adminSidebar.querySelectorAll('.tab-btn');
+            sidebarTabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        toggleSidebar();
+                    }
+                });
+            });
+        }
     </script>
 
     <style>
@@ -1609,15 +1657,6 @@
             border-left: 4px solid var(--color-gold-500);
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
-        }
-        @media (max-width: 1023px) {
-            .active-tab-btn {
-                border-left-width: 0px !important;
-                border-bottom: 3px solid var(--color-gold-500) !important;
-                border-radius: 0.75rem !important;
-                border-bottom-left-radius: 0px !important;
-                border-bottom-right-radius: 0px !important;
-            }
         }
         .scrollbar-hidden::-webkit-scrollbar {
             display: none;

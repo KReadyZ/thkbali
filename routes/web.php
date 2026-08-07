@@ -57,8 +57,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/payment-setting', [AdminController::class, 'updatePaymentSetting'])->name('admin.payment.update');
 
         // Web Settings
-        Route::post('/web-setting', [AdminController::class, 'updateWebSetting'])->name('admin.websetting.update');
-        Route::get('/web-setting/reset', [AdminController::class, 'resetWebSettingLogo'])->name('admin.websetting.reset');
+        Route::post('/web-setting', [AdminController::class, 'updateWebSetting'])->name('admin.web.update');
     });
 });
 

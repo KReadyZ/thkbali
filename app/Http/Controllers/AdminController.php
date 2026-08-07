@@ -12,7 +12,6 @@ use App\Models\Awardee;
 use App\Models\User;
 use App\Models\Proposal;
 use App\Models\PaymentSetting;
-use App\Models\WebSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +77,6 @@ class AdminController extends Controller
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
         $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
         $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
-        $webSetting = WebSetting::first() ?? new WebSetting();
 
         return view('admin.dashboard', compact(
             'statistics',
@@ -89,8 +87,7 @@ class AdminController extends Controller
             'awardCategories',
             'awardees',
             'proposals',
-            'paymentSetting',
-            'webSetting'
+            'paymentSetting'
         ));
     }
 
@@ -536,49 +533,32 @@ class AdminController extends Controller
         ]);
     }
 
+    // Web Settings
     public function updateWebSetting(Request $request)
     {
         if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
 
         $request->validate([
-            'logo_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
-            'website_name' => 'nullable|string|max:255',
+            'website_name' => 'required|string|max:255',
+            'logo'         => 'nullable|image|mimes:jpeg,jpg,png,svg,webp|max:2048',
         ]);
 
-        $setting = WebSetting::first() ?? new WebSetting();
-        if ($request->has('website_name')) {
-            $setting->website_name = $request->website_name;
-        }
+        $setting = \App\Models\WebSetting::first() ?? new \App\Models\WebSetting();
+        $setting->website_name = $request->website_name;
 
-        if ($request->hasFile('logo_image')) {
-            // Delete old logo file if exists
+        if ($request->hasFile('logo')) {
+            // Delete old logo if exists
             if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
                 @unlink(public_path($setting->logo_path));
             }
-            $file = $request->file('logo_image');
+            $file = $request->file('logo');
             $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/logo'), $filename);
-            $setting->logo_path = 'images/logo/' . $filename;
+            $file->move(public_path('images'), $filename);
+            $setting->logo_path = 'images/' . $filename;
         }
 
         $setting->save();
 
         return back()->with('success', 'Pengaturan website berhasil diperbarui.');
-    }
-
-    public function resetWebSettingLogo()
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $setting = WebSetting::first();
-        if ($setting) {
-            if ($setting->logo_path && file_exists(public_path($setting->logo_path))) {
-                @unlink(public_path($setting->logo_path));
-            }
-            $setting->logo_path = null;
-            $setting->save();
-        }
-
-        return back()->with('success', 'Logo website telah disetel kembali ke default SVG.');
     }
 }

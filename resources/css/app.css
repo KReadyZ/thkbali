@@ -385,9 +385,15 @@ html[lang="jv"] .lang-jv-text {
     pointer-events: none !important;
     margin: 0 !important;
 }
-
-
-
-
-
-
+/* Sidebar responsive fallback classes */
+#admin-sidebar, #assessor-sidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (max-width: 1023px) {
+    #admin-sidebar.-translate-x-full, #assessor-sidebar.-translate-x-full {
+        transform: translateX(-100%) !important;
+    }
+    #admin-sidebar.translate-x-0, #assessor-sidebar.translate-x-0 {
+        transform: translateX(0) !important;
+    }
+}

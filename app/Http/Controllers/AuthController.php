@@ -160,11 +160,11 @@ class AuthController extends Controller
             $user = Auth::user();
             if ($user->role === 'peserta') {
                 $proposal = Proposal::where('user_id', $user->id)->first();
-                if (!$proposal || $proposal->status === 'Pengajuan') {
+                if (!$proposal) {
                     Auth::logout();
                     return response()->json([
                         'success' => false,
-                        'message' => 'Pendaftaran Anda sedang diproses oleh admin. Akun Anda akan aktif setelah verifikasi pembayaran.'
+                        'message' => 'Akun pendaftaran Anda tidak valid.'
                     ], 403);
                 }
             }
@@ -211,7 +211,10 @@ class AuthController extends Controller
             ], 403);
         }
 
-        $validator = Validator::make($request->all(), [
+        $proposal = Proposal::where('user_id', $user->id)->first();
+        $isPendingPayment = ($proposal && $proposal->status === 'Pengajuan');
+
+        $rules = [
             'institution_name' => 'required|string|max:255',
             'category' => 'required|string',
             'address' => 'required|string',
@@ -219,13 +222,20 @@ class AuthController extends Controller
             'contact_name' => 'required|string|max:255',
             'contact_wa' => 'required|string|max:50',
             'contact_email' => 'required|email|max:255',
-            'proposal_file' => 'required|file|mimes:pdf,zip|max:10240', // max 10MB
-            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
-            'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120', // max 5MB
-            'link_parahyangan' => 'required|string|max:1000',
-            'link_pawongan' => 'required|string|max:1000',
-            'link_palemahan' => 'required|string|max:1000',
-        ], [
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'prev_accreditation' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+        ];
+
+        // Require proposal file and bit.ly links only if payment is verified (not in Pengajuan state)
+        if (!$isPendingPayment) {
+            $proposalFileRequired = (!$proposal || $proposal->file_path === '-') ? 'required' : 'nullable';
+            $rules['proposal_file'] = $proposalFileRequired . '|file|mimes:pdf,zip|max:10240';
+            $rules['link_parahyangan'] = 'required|string|max:1000';
+            $rules['link_pawongan'] = 'required|string|max:1000';
+            $rules['link_palemahan'] = 'required|string|max:1000';
+        }
+
+        $validator = Validator::make($request->all(), $rules, [
             'proposal_file.required' => 'Berkas pendaftaran sertifikasi wajib diunggah.',
             'proposal_file.mimes' => 'Berkas sertifikasi harus berupa dokumen format PDF atau ZIP.',
             'proposal_file.max' => 'Ukuran berkas sertifikasi maksimal adalah 10 MB.',
@@ -250,11 +260,19 @@ class AuthController extends Controller
             'contact_name' => $request->contact_name,
             'contact_wa' => $request->contact_wa,
             'contact_email' => $request->contact_email,
-            'link_parahyangan' => $request->link_parahyangan,
-            'link_pawongan' => $request->link_pawongan,
-            'link_palemahan' => $request->link_palemahan,
-            'status' => 'Pengajuan',
         ];
+
+        // Only save bitly links if payment is verified
+        if (!$isPendingPayment) {
+            $data['link_parahyangan'] = $request->link_parahyangan;
+            $data['link_pawongan'] = $request->link_pawongan;
+            $data['link_palemahan'] = $request->link_palemahan;
+        }
+
+        // Set default status to 'Pengajuan' only if it's a new proposal record
+        if (!$proposal) {
+            $data['status'] = 'Pengajuan';
+        }
 
         // 1. Handle proposal file
         if ($request->hasFile('proposal_file')) {
@@ -298,9 +316,13 @@ class AuthController extends Controller
             $data
         );
 
+        $successMsg = $isPendingPayment 
+            ? 'Bukti pembayaran dan informasi instansi berhasil diperbarui! Silakan tunggu verifikasi pembayaran oleh Admin.'
+            : 'Berkas pendaftaran sertifikasi dan detail instansi Anda berhasil diunggah!';
+
         return response()->json([
             'success' => true,
-            'message' => 'Berkas pendaftaran dan detail instansi Anda berhasil diunggah! Status Anda saat ini adalah: Pengajuan.'
+            'message' => $successMsg
         ]);
     }
 

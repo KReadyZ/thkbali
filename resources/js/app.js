@@ -717,6 +717,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(r => r.json())
             .then(data => {
                 paymentInfoLoaded = true;
+                
+                // 1. Populate Register Form payment nodes
                 const placeholder = document.getElementById('pay-qr-placeholder');
                 if (placeholder) placeholder.classList.add('hidden');
 
@@ -742,10 +744,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     qrContainer.classList.remove('hidden');
                     qrContainer.classList.add('flex');
                 }
+
+                // 2. Populate Upload Proposal Modal payment nodes
+                const upPlaceholder = document.getElementById('upload-pay-qr-placeholder');
+                if (upPlaceholder) upPlaceholder.classList.add('hidden');
+
+                const upBankName = document.getElementById('upload-pay-bank-name');
+                const upAccNum = document.getElementById('upload-pay-account-number');
+                const upAccName = document.getElementById('upload-pay-account-name');
+                const upAmount = document.getElementById('upload-pay-amount');
+                const upDesc = document.getElementById('upload-pay-description');
+                const upQrContainer = document.getElementById('upload-pay-qr-container');
+                const upQrImg = document.getElementById('upload-pay-qr-img');
+
+                if (upBankName) upBankName.textContent = data.bank_name || '-';
+                if (upAccNum) upAccNum.textContent = data.account_number || '-';
+                if (upAccName) upAccName.textContent = 'a/n ' + (data.account_name || '-');
+                if (upAmount) upAmount.textContent = data.amount || '-';
+
+                if (upDesc && data.description) {
+                    upDesc.textContent = data.description;
+                    upDesc.classList.remove('hidden');
+                }
+                if (upQrImg && upQrContainer && data.qr_image) {
+                    upQrImg.src = '/' + data.qr_image;
+                    upQrContainer.classList.remove('hidden');
+                    upQrContainer.classList.add('flex');
+                }
             })
             .catch(() => {
                 const placeholder = document.getElementById('pay-qr-placeholder');
                 if (placeholder) { placeholder.innerHTML = '<span class="text-xs text-red-400">Gagal memuat info pembayaran.</span>'; }
+                const upPlaceholder = document.getElementById('upload-pay-qr-placeholder');
+                if (upPlaceholder) { upPlaceholder.innerHTML = '<span class="text-xs text-red-400">Gagal memuat info pembayaran.</span>'; }
             });
     }
 
@@ -989,6 +1020,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openUploadBtn.addEventListener('click', (e) => {
             e.preventDefault();
             openModal(uploadModal);
+            loadPaymentInfo();
         });
     }
 
@@ -997,6 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             closeMobileMenu();
             openModal(uploadModal);
+            loadPaymentInfo();
         });
     }
 

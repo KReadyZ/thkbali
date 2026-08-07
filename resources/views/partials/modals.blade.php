@@ -1034,6 +1034,7 @@
     </div>
 </div>
 
+
 <!-- 4. UPLOAD PROPOSAL MODAL (Peserta Only) -->
 <div id="upload-proposal-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md opacity-100 transition-opacity duration-300 px-4">
     <div class="modal-dialog bg-[#eaf4f0] border border-[#c6e1d7] w-full max-w-2xl rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(4,28,21,0.1)] scale-95 opacity-0 transition-all duration-300 relative flex flex-col max-h-[90vh]">
@@ -1046,8 +1047,13 @@
 
         <!-- Modal Header -->
         <div class="p-6 border-b border-[#c6e1d7] bg-[#dfeee8]">
-            <h3 class="font-serif text-lg font-bold text-forest-950">Unggah Berkas Sertifikasi & Data Instansi</h3>
-            <p class="text-xs text-forest-600">Lengkapi formulir registrasi dan dokumen pendukung sertifikasi Tri Hita Karana Awards Anda</p>
+            @if(isset($userProposal) && $userProposal->status === 'Pengajuan')
+                <h3 class="font-serif text-lg font-bold text-forest-950">Selesaikan Pembayaran Pendaftaran</h3>
+                <p class="text-xs text-forest-600">Unggah bukti pembayaran untuk verifikasi administrasi agar akun Anda aktif sepenuhnya.</p>
+            @else
+                <h3 class="font-serif text-lg font-bold text-forest-950">Unggah Berkas Sertifikasi & Data Instansi</h3>
+                <p class="text-xs text-forest-600">Lengkapi formulir registrasi dan dokumen pendukung sertifikasi Tri Hita Karana Awards Anda</p>
+            @endif
         </div>
         
         <!-- Modal Body content -->
@@ -1120,68 +1126,112 @@
                     </div>
                 </div>
 
-                <!-- Section 3: Unggah Dokumen & Hasil Akreditasi -->
-                <div class="border-b border-[#c6e1d7] pb-4">
-                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                        <i class="fas fa-file-archive text-gold-600"></i> Unggahan Berkas
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas <span class="text-[9px] text-red-500 font-bold">(PDF/ZIP)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" {{ (!isset($userProposal) || $userProposal->file_path === '-') ? 'required' : '' }}>
-                            @if(isset($userProposal) && $userProposal->file_path !== '-')
-                                <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                    <a href="{{ $userProposal->file_path }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-pdf"></i> Lihat Berkas Terunggah</a>
-                                </p>
-                            @else
-                                <p class="text-[9px] text-forest-600/70 mt-1">Proposal (Maks. 10MB)</p>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-payment">Bukti Pembayaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-payment" name="payment_proof" accept="image/*,.pdf">
-                            @if(isset($userProposal) && $userProposal->payment_proof)
-                                <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                    <a href="{{ $userProposal->payment_proof }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Terunggah</a>
-                                </p>
-                            @else
-                                <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-prev-acc">Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
-                            @if(isset($userProposal) && $userProposal->prev_accreditation)
-                                <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                    <a href="{{ $userProposal->prev_accreditation }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-medal"></i> Lihat Hasil Terunggah</a>
-                                </p>
-                            @else
-                                <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                @if(isset($userProposal) && $userProposal->status === 'Pengajuan')
+                    <!-- Section 3: Pembayaran & Bukti Bayar Only (For Pengajuan state) -->
+                    <div class="border-b border-[#c6e1d7] pb-4">
+                        <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                            <i class="fas fa-university text-gold-600"></i> Informasi Pembayaran & Bukti Transfer
+                        </h4>
+                        <!-- Bank Info Display -->
+                        <div class="bg-[#f4faf8] rounded-2xl border border-[#c6e1d7] p-5 mb-4 text-center space-y-4">
+                            <!-- QR Code -->
+                            <div id="upload-pay-qr-container" class="hidden flex justify-center">
+                                <img id="upload-pay-qr-img" src="" alt="QR Pembayaran" class="w-36 h-36 object-contain rounded-2xl border border-[#c6e1d7] shadow-sm bg-white">
+                            </div>
+                            <div id="upload-pay-qr-placeholder" class="flex flex-col items-center gap-1.5 text-forest-500/40">
+                                <i class="fas fa-spinner fa-spin text-xl"></i>
+                                <span class="text-[10px]">Memuat info pembayaran...</span>
+                            </div>
 
-                <!-- Section 4: Link Dokumen Pilar Tri Hita Karana -->
-                <div>
-                    <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                        <i class="fas fa-link text-gold-600"></i> Tautan Dokumen Pilar Filosofis (Cloud Drive/Bitly)
-                    </h4>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-parahyangan">Link Dokumen Bidang Parahyangan</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-parahyangan" name="link_parahyangan" required placeholder="Contoh: bit.ly/parahyangan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_parahyangan !== '-' ? $userProposal->link_parahyangan : '' }}">
+                            <!-- Bank Info -->
+                            <div class="space-y-1.5" id="upload-pay-bank-info">
+                                <div class="text-[10px] font-bold text-forest-700/60 uppercase tracking-widest">Transfer ke:</div>
+                                <div id="upload-pay-bank-name" class="text-lg font-black text-forest-900">-</div>
+                                <div id="upload-pay-account-number" class="text-xl font-black text-gold-600 tracking-widest select-all">-</div>
+                                <div id="upload-pay-account-name" class="text-xs font-semibold text-forest-700 font-sans">a/n -</div>
+                                <div class="mt-2 py-1.5 px-3.5 bg-[#dfeee8] rounded-xl border border-[#b8dad0] inline-block mx-auto">
+                                    <span class="text-xs font-bold text-forest-800">Biaya Pendaftaran: <span id="upload-pay-amount" class="text-sm font-black text-forest-900">-</span></span>
+                                </div>
+                            </div>
+                            <p id="upload-pay-description" class="text-[10px] text-forest-700/70 leading-relaxed hidden"></p>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-pawongan">Link Dokumen Bidang Pawongan</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-pawongan" name="link_pawongan" required placeholder="Contoh: bit.ly/pawongan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_pawongan !== '-' ? $userProposal->link_pawongan : '' }}">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-palemahan">Link Dokumen Bidang Palemahan</label>
-                            <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-palemahan" name="link_palemahan" required placeholder="Contoh: bit.ly/palemahan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_palemahan !== '-' ? $userProposal->link_palemahan : '' }}">
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-payment">Bukti Pembayaran <span class="text-[9px] text-red-500 font-bold">(Wajib untuk verifikasi)</span></label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-2 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-payment" name="payment_proof" accept="image/*,.pdf">
+                                @if($userProposal->payment_proof)
+                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
+                                        <a href="{{ $userProposal->payment_proof }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Terunggah</a>
+                                    </p>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
+                @else
+                    <!-- Section 3: Unggah Dokumen & Hasil Akreditasi -->
+                    <div class="border-b border-[#c6e1d7] pb-4">
+                        <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                            <i class="fas fa-file-archive text-gold-600"></i> Unggahan Berkas
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas <span class="text-[9px] text-red-500 font-bold">(PDF/ZIP)</span></label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" {{ (!isset($userProposal) || $userProposal->file_path === '-') ? 'required' : '' }}>
+                                @if(isset($userProposal) && $userProposal->file_path !== '-')
+                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
+                                        <a href="{{ $userProposal->file_path }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-pdf"></i> Lihat Berkas Terunggah</a>
+                                    </p>
+                                @else
+                                    <p class="text-[9px] text-forest-600/70 mt-1">Proposal (Maks. 10MB)</p>
+                                @endif
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-payment">Bukti Pembayaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-payment" name="payment_proof" accept="image/*,.pdf">
+                                @if(isset($userProposal) && $userProposal->payment_proof)
+                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
+                                        <a href="{{ $userProposal->payment_proof }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Terunggah</a>
+                                    </p>
+                                @else
+                                    <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
+                                @endif
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-prev-acc">Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
+                                @if(isset($userProposal) && $userProposal->prev_accreditation)
+                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
+                                        <a href="{{ $userProposal->prev_accreditation }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-medal"></i> Lihat Hasil Terunggah</a>
+                                    </p>
+                                @else
+                                    <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Link Dokumen Pilar Tri Hita Karana -->
+                    <div>
+                        <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                            <i class="fas fa-link text-gold-600"></i> Tautan Dokumen Pilar Filosofis (Cloud Drive/Bitly)
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-parahyangan">Link Dokumen Bidang Parahyangan</label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-parahyangan" name="link_parahyangan" required placeholder="Contoh: bit.ly/parahyangan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_parahyangan !== '-' ? $userProposal->link_parahyangan : '' }}">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-pawongan">Link Dokumen Bidang Pawongan</label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-pawongan" name="link_pawongan" required placeholder="Contoh: bit.ly/pawongan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_pawongan !== '-' ? $userProposal->link_pawongan : '' }}">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-link-palemahan">Link Dokumen Bidang Palemahan</label>
+                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-4 py-2.5 text-forest-950 text-sm outline-none focus:border-forest-500 transition placeholder-forest-300" type="text" id="upload-link-palemahan" name="link_palemahan" required placeholder="Contoh: bit.ly/palemahan-nama-instansi" value="{{ isset($userProposal) && $userProposal->link_palemahan !== '-' ? $userProposal->link_palemahan : '' }}">
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <!-- Progress Bar -->
                 <div id="upload-progress-container" class="hidden space-y-1.5 pt-2">
@@ -1195,7 +1245,7 @@
                 </div>
 
                 <button type="submit" id="btn-submit-proposal" class="w-full py-3.5 bg-forest-500 text-white hover:bg-forest-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm shadow-md font-bold cursor-pointer mt-4 flex items-center justify-center gap-2">
-                    <span id="btn-submit-text">Unggah Sekarang</span>
+                    <span id="btn-submit-text">{{ (isset($userProposal) && $userProposal->status === 'Pengajuan') ? 'Kirim Bukti Pembayaran' : 'Unggah Sekarang' }}</span>
                     <svg id="upload-spinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

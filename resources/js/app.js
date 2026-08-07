@@ -1076,26 +1076,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(data => {
-                // Show a persistent success notice with a login button — no auto redirect
-                const alertContainer = document.getElementById('auth-alert');
-                if (alertContainer) {
-                    alertContainer.innerHTML = `
-                        <div class="flex flex-col gap-2 w-full">
-                            <div class="flex items-start gap-2">
-                                <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-emerald-800 text-sm font-medium leading-snug">${data.message}</span>
-                            </div>
-                            <button id="go-to-login-btn" type="button" class="self-start mt-1 px-4 py-1.5 bg-forest-900 text-white rounded-full text-xs font-bold hover:bg-forest-950 transition cursor-pointer">
-                                Masuk Sekarang &rarr;
-                            </button>
-                        </div>
-                    `;
-                    alertContainer.classList.remove('hidden');
-                    alertContainer.classList.add('bg-emerald-50', 'border', 'border-emerald-200', 'rounded-2xl', 'p-3');
+                showAuthAlert('auth-alert', data.message, 'success');
+                
+                // Add the "Masuk Sekarang" button inside the message container dynamically
+                const msgEl = document.getElementById('auth-alert-msg');
+                if (msgEl) {
+                    // Remove old button if already exists
+                    const oldBtn = document.getElementById('go-to-login-btn');
+                    if (oldBtn) oldBtn.remove();
 
-                    document.getElementById('go-to-login-btn')?.addEventListener('click', () => {
+                    const btn = document.createElement('button');
+                    btn.id = 'go-to-login-btn';
+                    btn.type = 'button';
+                    btn.className = 'mt-2 px-4 py-1.5 bg-forest-900 hover:bg-forest-950 text-white rounded-full text-xs font-bold transition cursor-pointer block';
+                    btn.innerHTML = 'Masuk Sekarang &rarr;';
+                    
+                    msgEl.appendChild(btn);
+
+                    btn.addEventListener('click', () => {
                         switchTab('login');
                         document.getElementById('login-email').value = data.email || '';
                         document.getElementById('login-pass').value = '';
@@ -1104,9 +1102,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (typeof toggleRegisterFields === 'function') {
                             toggleRegisterFields();
                         }
-                        alertContainer.classList.add('hidden');
-                        alertContainer.innerHTML = '';
-                        alertContainer.classList.remove('bg-emerald-50', 'border', 'border-emerald-200', 'rounded-2xl', 'p-3');
+                        hideAuthAlert('auth-alert');
+                        btn.remove();
                     });
                 }
             })

@@ -3,17 +3,21 @@
         <!-- Logo Column -->
         <div class="flex-1 flex justify-start">
             <a href="#home" class="flex items-center gap-3 group">
-                <div class="relative w-10 h-10 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 group-hover:border-gold-500/50 transition duration-300">
-                    <!-- Triquetra SVG symbol -->
-                    <svg class="w-7 h-7 text-gold-500 transition-transform duration-500 group-hover:rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="6" stroke="currentColor" />
-                        <circle cx="8" cy="15" r="6" stroke="currentColor" />
-                        <circle cx="16" cy="15" r="6" stroke="currentColor" />
-                    </svg>
+                <div class="relative w-10 h-10 flex items-center justify-center bg-gold-500/10 rounded-full border border-gold-500/20 group-hover:border-gold-500/50 transition duration-300 overflow-hidden">
+                    @if(isset($webSetting) && $webSetting?->logo_path)
+                        <img src="{{ asset($webSetting->logo_path) }}" alt="{{ $webSetting->site_name ?? 'THK Bali' }} Logo" class="w-full h-full object-cover rounded-full">
+                    @else
+                        <!-- Triquetra SVG symbol (default) -->
+                        <svg class="w-7 h-7 text-gold-500 transition-transform duration-500 group-hover:rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="9" r="6" stroke="currentColor" />
+                            <circle cx="8" cy="15" r="6" stroke="currentColor" />
+                            <circle cx="16" cy="15" r="6" stroke="currentColor" />
+                        </svg>
+                    @endif
                 </div>
                 <div>
-                    <span class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">THK Bali</span>
-                    <span class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block">Tri Hita Karana</span>
+                    <span class="font-serif font-bold text-white text-lg tracking-wide block leading-tight">{{ isset($webSetting) && $webSetting?->site_name ? $webSetting->site_name : 'THK Bali' }}</span>
+                    <span class="text-[10px] text-gold-400 font-semibold tracking-widest uppercase block">{{ isset($webSetting) && $webSetting?->site_tagline ? $webSetting->site_tagline : 'Tri Hita Karana' }}</span>
                 </div>
             </a>
         </div>

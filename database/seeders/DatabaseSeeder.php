@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@thkbali.com'],
             [
                 'name' => 'Admin THK Bali',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('thkbalisukses369'),
                 'role' => 'admin',
             ]
         );
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'asesor@thkbali.com'],
             [
                 'name' => 'Asesor THK Bali',
-                'password' => Hash::make('asesor123'),
+                'password' => Hash::make('asesorthkbali369'),
                 'role' => 'asesor',
             ]
         );

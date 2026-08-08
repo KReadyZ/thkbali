@@ -26,6 +26,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // 1b. Seed Default Assessor User
+        User::updateOrCreate(
+            ['email' => 'asesor@thkbali.com'],
+            [
+                'name' => 'Asesor THK Bali',
+                'password' => Hash::make('asesor123'),
+                'role' => 'asesor',
+            ]
+        );
+
         // 2. Seed default statistics counters
         Statistic::updateOrCreate(
             ['id' => 1],

@@ -337,29 +337,29 @@
 </div>
 
 <!-- 3. GALLERY LIGHTBOX MODAL -->
-<div id="gallery-lightbox" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+<div id="gallery-lightbox" class="fixed inset-0 z-[100] hidden bg-black/95 items-center justify-center p-4 transition-opacity duration-300 opacity-0">
     <!-- Close button top-right -->
-    <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-gold-400 p-2 focus:outline-none" aria-label="Close Lightbox">
+    <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-gold-400 p-2 focus:outline-none z-20 cursor-pointer" aria-label="Close Lightbox">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
         </svg>
     </button>
 
     <!-- Left Nav Arrow Button -->
-    <button id="lightbox-prev" class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-gold-400 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition z-10" aria-label="Previous Image">
+    <button id="lightbox-prev" class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-gold-400 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition z-10 cursor-pointer" aria-label="Previous Image">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
         </svg>
     </button>
 
     <!-- Main Media Container -->
-    <div class="max-w-4xl w-full flex flex-col items-center select-none">
-        <img id="lightbox-image" src="" alt="Lightbox image" class="max-h-[75vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/5">
-        <p id="lightbox-caption" class="text-white/90 text-sm md:text-base font-medium font-serif mt-6 text-center tracking-wide"></p>
+    <div class="max-w-5xl w-full flex flex-col items-center select-none px-4">
+        <img id="lightbox-image" src="" alt="Lightbox image" class="max-h-[80vh] max-w-[92vw] md:max-w-4xl rounded-2xl object-contain shadow-2xl border border-white/10 bg-black/40">
+        <p id="lightbox-caption" class="text-white/90 text-sm md:text-base font-medium font-serif mt-5 text-center tracking-wide px-4 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10"></p>
     </div>
 
     <!-- Right Nav Arrow Button -->
-    <button id="lightbox-next" class="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-gold-400 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition z-10" aria-label="Next Image">
+    <button id="lightbox-next" class="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-gold-400 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition z-10 cursor-pointer" aria-label="Next Image">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
         </svg>
@@ -909,19 +909,19 @@
 
             <!-- Information Card (Populated Dynamically via JS) -->
             <div id="awardee-village-detail" class="hidden space-y-5 text-left">
-                <div id="awardee-image-container" class="relative rounded-2xl overflow-hidden h-48 sm:h-52 border border-white/10 group cursor-pointer shadow-lg select-none" title="Klik untuk melihat foto ukuran penuh">
-                    <img id="awardee-detail-image" src="" alt="Penerima Penghargaan" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-transparent pointer-events-none"></div>
+                <div id="awardee-image-container" class="relative rounded-2xl overflow-hidden aspect-[16/10] w-full bg-forest-900 border border-white/10 group cursor-pointer shadow-lg select-none flex items-center justify-center" title="Klik untuk melihat foto utuh & lengkap tanpa terpotong">
+                    <img id="awardee-detail-image" src="" alt="Penerima Penghargaan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/70 via-transparent to-transparent pointer-events-none"></div>
                     
                     <!-- Medal Badge -->
                     <span id="awardee-detail-medal" class="absolute top-3 right-3 px-3.5 py-1.5 bg-gold-500 text-forest-950 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-md"></span>
                     
-                    <!-- Click to zoom hint badge -->
-                    <div class="absolute bottom-3 right-3 px-3 py-1.5 bg-black/70 backdrop-blur-md rounded-full text-[11px] text-white/90 flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-gold-500 group-hover:text-forest-950 transition-all duration-300 shadow-md">
+                    <!-- Click to view full object hint badge -->
+                    <div class="absolute bottom-3 right-3 px-3 py-1.5 bg-black/75 backdrop-blur-md rounded-full text-[11px] text-white/95 flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-gold-500 group-hover:text-forest-950 transition-all duration-300 shadow-md">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
                         </svg>
-                        <span class="font-medium tracking-wide">Perbesar Foto</span>
+                        <span class="font-medium tracking-wide">Lihat Foto Utuh</span>
                     </div>
                 </div>
 

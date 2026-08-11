@@ -594,12 +594,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (lightbox && lightboxImage && lightboxClose) {
         function openLightbox() {
+            if (lightboxPrev) lightboxPrev.classList.remove('hidden');
+            if (lightboxNext) lightboxNext.classList.remove('hidden');
             currentLang = getCurrentLang();
             updateLightboxContent();
             lightbox.classList.remove('hidden', 'opacity-0');
             lightbox.classList.add('flex');
             document.body.style.overflow = 'hidden'; // Lock scrolling
         }
+
+        function showSingleImageLightbox(src, caption) {
+            lightboxImage.src = src;
+            lightboxCaption.textContent = caption || '';
+            if (lightboxPrev) lightboxPrev.classList.add('hidden');
+            if (lightboxNext) lightboxNext.classList.add('hidden');
+            lightbox.classList.remove('hidden', 'opacity-0');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.showSingleImageLightbox = showSingleImageLightbox;
 
         function closeLightbox() {
             lightbox.classList.add('opacity-0');
@@ -1633,6 +1647,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (awardeeVillagePlaceholder) awardeeVillagePlaceholder.classList.add('hidden');
                 if (awardeeVillageDetail) awardeeVillageDetail.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Awardee image click-to-zoom listener
+    const awardeeImageContainer = document.getElementById('awardee-image-container');
+    if (awardeeImageContainer) {
+        awardeeImageContainer.addEventListener('click', () => {
+            const img = document.getElementById('awardee-detail-image');
+            const name = document.getElementById('awardee-detail-name')?.textContent || '';
+            const medal = document.getElementById('awardee-detail-medal')?.textContent || '';
+            const year = document.getElementById('awardee-detail-year')?.textContent || '';
+            if (img && img.src && window.showSingleImageLightbox) {
+                window.showSingleImageLightbox(img.src, `${name} — ${medal} (${year})`);
+            }
+        });
+    }
+
+    // Award category showcase image click-to-zoom listener
+    const awardShowcaseImageWrap = document.getElementById('award-showcase-image-wrap');
+    if (awardShowcaseImageWrap) {
+        awardShowcaseImageWrap.addEventListener('click', () => {
+            const img = document.getElementById('award-showcase-image');
+            const title = document.getElementById('award-showcase-title')?.textContent || 'Kategori THK Awards';
+            if (img && img.src && window.showSingleImageLightbox) {
+                window.showSingleImageLightbox(img.src, `${title} — Sorotan Kategori Tri Hita Karana Awards`);
             }
         });
     }

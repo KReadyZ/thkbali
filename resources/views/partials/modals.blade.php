@@ -909,11 +909,20 @@
 
             <!-- Information Card (Populated Dynamically via JS) -->
             <div id="awardee-village-detail" class="hidden space-y-5 text-left">
-                <div class="relative rounded-2xl overflow-hidden h-40 border border-white/10">
-                    <img id="awardee-detail-image" src="" alt="Desa Adat" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-transparent to-transparent"></div>
+                <div id="awardee-image-container" class="relative rounded-2xl overflow-hidden h-48 sm:h-52 border border-white/10 group cursor-pointer shadow-lg select-none" title="Klik untuk melihat foto ukuran penuh">
+                    <img id="awardee-detail-image" src="" alt="Penerima Penghargaan" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-transparent pointer-events-none"></div>
+                    
                     <!-- Medal Badge -->
-                    <span id="awardee-detail-medal" class="absolute top-3 right-3 px-3 py-1 bg-gold-500 text-forest-950 text-[10px] font-bold rounded-full uppercase tracking-wider"></span>
+                    <span id="awardee-detail-medal" class="absolute top-3 right-3 px-3.5 py-1.5 bg-gold-500 text-forest-950 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-md"></span>
+                    
+                    <!-- Click to zoom hint badge -->
+                    <div class="absolute bottom-3 right-3 px-3 py-1.5 bg-black/70 backdrop-blur-md rounded-full text-[11px] text-white/90 flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-gold-500 group-hover:text-forest-950 transition-all duration-300 shadow-md">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                        </svg>
+                        <span class="font-medium tracking-wide">Perbesar Foto</span>
+                    </div>
                 </div>
 
                 <div class="space-y-4">

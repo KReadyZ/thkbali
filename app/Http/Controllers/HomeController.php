@@ -23,7 +23,7 @@ class HomeController extends Controller
             'desa_adat_penerima' => 8,
         ]);
         $news = News::all();
-        $assessors = Assessor::paginate(4)->fragment('asesor-seksi');
+        $assessors = Assessor::paginate(4);
         $agendas = Agenda::all();
         $galleries = Gallery::all();
         $awardCategories = AwardCategory::all();

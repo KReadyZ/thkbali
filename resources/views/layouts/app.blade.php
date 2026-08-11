@@ -83,23 +83,16 @@
                     subtree: true
                 });
 
-                // Listen to change events on the select dropdown to instantly restore original state if 'Indonesia' is selected
+                // Clear cookie quietly in background when selecting original Indonesian without forcing any page reload or scroll jump
                 target.addEventListener('change', function(e) {
                     if (e.target && e.target.classList.contains('goog-te-combo')) {
                         if (e.target.value === '' || e.target.value === 'id') {
-                            // Prevent Google Translate from receiving this event and triggering a duplicate reload
-                            e.stopPropagation();
-                            
-                            // Erase Google Translate cookies
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname + ";";
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.replace(/^www\./, '') + ";";
-                            
-                            // Reload page to restore clean original Indonesian layout
-                            window.location.reload();
                         }
                     }
-                }, true);
+                });
             }
 
             // Run immediately and also set up a safety timer to verify rename state periodically during load

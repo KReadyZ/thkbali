@@ -1178,44 +1178,59 @@
                         </div>
                     </div>
                 @else
-                    <!-- Section 3: Unggah Dokumen & Hasil Akreditasi -->
-                    <div class="border-b border-[#c6e1d7] pb-4">
-                        <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
-                            <i class="fas fa-file-archive text-gold-600"></i> Unggahan Berkas
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas <span class="text-[9px] text-red-500 font-bold">(PDF/ZIP)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" {{ (!isset($userProposal) || $userProposal->file_path === '-') ? 'required' : '' }}>
-                                @if(isset($userProposal) && $userProposal->file_path !== '-')
-                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                        <a href="{{ $userProposal->file_path }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-pdf"></i> Lihat Berkas Terunggah</a>
-                                    </p>
-                                @else
-                                    <p class="text-[9px] text-forest-600/70 mt-1">Proposal (Maks. 10MB)</p>
-                                @endif
+                    <!-- Section 3: Unggah Dokumen Sertifikasi & Hasil Akreditasi -->
+                    <div class="border-b border-[#c6e1d7] pb-4 space-y-4">
+                        <!-- Status Pembayaran Terverifikasi Banner -->
+                        <div class="p-4 bg-emerald-50/90 border border-emerald-200/80 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <i class="fas fa-check-circle text-base"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-emerald-950">Status Pembayaran:</span>
+                                        <span class="px-2.5 py-0.5 bg-emerald-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider shadow-xs">Terverifikasi (Lunas)</span>
+                                    </div>
+                                    <p class="text-[11px] text-emerald-700 font-medium">Biaya pendaftaran Anda telah divalidasi oleh Tim Admin THK Bali.</p>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-payment">Bukti Pembayaran <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-payment" name="payment_proof" accept="image/*,.pdf">
-                                @if(isset($userProposal) && $userProposal->payment_proof)
-                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                        <a href="{{ $userProposal->payment_proof }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Terunggah</a>
-                                    </p>
-                                @else
-                                    <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                                @endif
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-prev-acc">Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
-                                <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-2 py-1.5 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
-                                @if(isset($userProposal) && $userProposal->prev_accreditation)
-                                    <p class="text-[9px] text-forest-750 font-semibold mt-1">
-                                        <a href="{{ $userProposal->prev_accreditation }}" target="_blank" class="hover:underline text-gold-600"><i class="fas fa-medal"></i> Lihat Hasil Terunggah</a>
-                                    </p>
-                                @else
-                                    <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
-                                @endif
+                            @if(isset($userProposal) && $userProposal->payment_proof)
+                                <a href="{{ $userProposal->payment_proof }}" target="_blank" class="px-3.5 py-1.5 bg-white border border-emerald-300 hover:border-emerald-500 text-emerald-800 hover:text-emerald-950 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs shrink-0 cursor-pointer">
+                                    <i class="fas fa-receipt text-emerald-600"></i>
+                                    <span>Lihat Bukti Transfer</span>
+                                </a>
+                            @endif
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-black uppercase text-forest-900 tracking-widest mb-3 flex items-center gap-1.5">
+                                <i class="fas fa-file-archive text-gold-600"></i> Unggahan Dokumen Sertifikasi
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-file">Dokumen Berkas Proposal <span class="text-[9px] text-red-500 font-bold">(Wajib • PDF/ZIP)</span></label>
+                                    <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-3 py-2 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-file" name="proposal_file" accept=".pdf,.zip" {{ (!isset($userProposal) || $userProposal->file_path === '-') ? 'required' : '' }}>
+                                    @if(isset($userProposal) && $userProposal->file_path !== '-')
+                                        <p class="text-[10px] text-forest-750 font-semibold mt-1 flex items-center gap-1">
+                                            <i class="fas fa-file-pdf text-red-500"></i>
+                                            <a href="{{ $userProposal->file_path }}" target="_blank" class="hover:underline text-gold-700 font-bold">Lihat Proposal Terunggah</a>
+                                        </p>
+                                    @else
+                                        <p class="text-[9px] text-forest-600/70 mt-1">Dokumen proposal lengkap (Maks. 10MB)</p>
+                                    @endif
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-forest-800 uppercase mb-1" for="upload-prev-acc">Sertifikat Akreditasi Sebelumnya <span class="text-[9px] text-forest-600/70 font-normal">(Opsional)</span></label>
+                                    <input class="w-full bg-white border border-[#b8dad0] rounded-xl px-3 py-2 text-forest-950 text-xs outline-none focus:border-forest-500 cursor-pointer" type="file" id="upload-prev-acc" name="prev_accreditation" accept="image/*,.pdf">
+                                    @if(isset($userProposal) && $userProposal->prev_accreditation)
+                                        <p class="text-[10px] text-forest-750 font-semibold mt-1 flex items-center gap-1">
+                                            <i class="fas fa-medal text-gold-600"></i>
+                                            <a href="{{ $userProposal->prev_accreditation }}" target="_blank" class="hover:underline text-gold-700 font-bold">Lihat Hasil Akreditasi Terunggah</a>
+                                        </p>
+                                    @else
+                                        <p class="text-[9px] text-forest-600/70 mt-1">Format: JPG, PNG, PDF (Maks. 5MB)</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

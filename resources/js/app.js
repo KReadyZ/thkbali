@@ -615,12 +615,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.showSingleImageLightbox = showSingleImageLightbox;
 
-        function closeLightbox() {
+        function closeLightbox(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
             lightbox.classList.add('opacity-0');
             setTimeout(() => {
                 lightbox.classList.add('hidden');
                 lightbox.classList.remove('flex');
-                document.body.style.overflow = '';
+                
+                // Only unlock document body overflow if no drawers or modal dialogs are active
+                const awardDrawerEl = document.getElementById('award-drawer');
+                const pilarDrawerEl = document.getElementById('pilar-drawer');
+                const isDrawerActive = (awardDrawerEl && !awardDrawerEl.classList.contains('translate-x-full')) ||
+                                       (pilarDrawerEl && !pilarDrawerEl.classList.contains('translate-x-full'));
+                if (!isDrawerActive) {
+                    document.body.style.overflow = '';
+                }
             }, 300);
         }
 

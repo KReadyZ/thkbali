@@ -10,7 +10,28 @@
     <meta name="description" content="Filosofi hidup masyarakat Bali yang menjaga harmoni dan keseimbangan antara manusia, alam, dan Tuhan demi kebahagiaan dari generasi ke generasi.">
     <meta name="keywords" content="Tri Hita Karana, Bali, Parahyangan, Pawongan, Palemahan, THK Awards, Subak">
     
-    <script>document.documentElement.classList.replace('no-js', 'js');</script>
+    <script>
+        document.documentElement.classList.replace('no-js', 'js');
+        // Instantly restore exact scroll position if returning from language reset
+        (function() {
+            var savedPos = sessionStorage.getItem('restore_scroll_pos');
+            if (savedPos !== null) {
+                sessionStorage.removeItem('restore_scroll_pos');
+                window.addEventListener('DOMContentLoaded', function() {
+                    window.scrollTo({
+                        top: parseInt(savedPos, 10),
+                        behavior: 'instant'
+                    });
+                    setTimeout(function() {
+                        window.scrollTo({
+                            top: parseInt(savedPos, 10),
+                            behavior: 'instant'
+                        });
+                    }, 50);
+                });
+            }
+        })();
+    </script>
 
     <!-- Fonts, CSS & Scripts via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -83,13 +104,15 @@
                     subtree: true
                 });
 
-                // Clear cookie quietly in background when selecting original Indonesian without forcing any page reload or scroll jump
+                // When selecting Indonesia (resetting translation), preserve exact scroll position and reset state cleanly
                 target.addEventListener('change', function(e) {
                     if (e.target && e.target.classList.contains('goog-te-combo')) {
                         if (e.target.value === '' || e.target.value === 'id') {
+                            sessionStorage.setItem('restore_scroll_pos', window.scrollY || window.pageYOffset);
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname + ";";
                             document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.replace(/^www\./, '') + ";";
+                            window.location.href = window.location.pathname + window.location.search;
                         }
                     }
                 });

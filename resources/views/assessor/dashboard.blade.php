@@ -58,9 +58,31 @@
 
             <section class="tab-pane active-tab-pane">
                 <div class="bg-white rounded-3xl border border-beige-200 p-6 md:p-8 shadow-sm">
-                    <div class="mb-6">
-                        <h2 class="font-serif text-2xl font-bold text-forest-900">Evaluasi Pendaftaran & Berkas Peserta</h2>
-                        <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Periksa berkas dokumen pendaftar dan lakukan pembaharuan status kemajuan evaluasi lapangan secara berkala.</p>
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-beige-50/50 p-4 rounded-2xl border border-beige-200/60 shadow-2xs">
+                        <div>
+                            <h2 class="font-serif text-2xl font-bold text-forest-900">Evaluasi Pendaftaran & Berkas Peserta</h2>
+                            <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider">Periksa berkas portofolio 3 pilar pendaftar dan berikan nilai evaluasi lapangan secara objektif.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-forest-800">Spesialisasi Anda:</span>
+                            @if(isset($currentAssessor) && $currentAssessor->pillar_specialization === 'parahyangan')
+                                <span class="px-3 py-1 bg-blue-100 border border-blue-300 text-blue-900 font-bold text-xs rounded-full flex items-center gap-1.5 shadow-2xs">
+                                    <i class="fas fa-pray text-blue-600"></i> Asesor Parahyangan
+                                </span>
+                            @elseif(isset($currentAssessor) && $currentAssessor->pillar_specialization === 'pawongan')
+                                <span class="px-3 py-1 bg-green-100 border border-green-300 text-green-900 font-bold text-xs rounded-full flex items-center gap-1.5 shadow-2xs">
+                                    <i class="fas fa-users text-green-600"></i> Asesor Pawongan
+                                </span>
+                            @elseif(isset($currentAssessor) && $currentAssessor->pillar_specialization === 'palemahan')
+                                <span class="px-3 py-1 bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold text-xs rounded-full flex items-center gap-1.5 shadow-2xs">
+                                    <i class="fas fa-leaf text-emerald-600"></i> Asesor Palemahan
+                                </span>
+                            @else
+                                <span class="px-3 py-1 bg-gold-100 border border-gold-300 text-gold-900 font-bold text-xs rounded-full flex items-center gap-1.5 shadow-2xs">
+                                    <i class="fas fa-star text-gold-600"></i> Semua Pilar (Umum)
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Proposals Table -->
@@ -68,11 +90,11 @@
                         <table class="w-full text-left text-sm border-collapse">
                             <thead>
                                 <tr class="border-b border-beige-200 text-forest-700/60 uppercase text-[10px] tracking-wider font-semibold">
-                                    <th class="py-3 px-4">Nama Peserta / Akun</th>
-                                    <th class="py-3 px-4">Nama Lembaga / Instansi</th>
-                                    <th class="py-3 px-4">Kategori Pendaftaran</th>
-                                    <th class="py-3 px-4">Berkas Dokumen</th>
-                                    <th class="py-3 px-4">Ubah Status Evaluasi</th>
+                                    <th class="py-3 px-4">Instansi & Peserta</th>
+                                    <th class="py-3 px-4">Kategori & Berkas</th>
+                                    <th class="py-3 px-4">Tautan 3 Pilar THK</th>
+                                    <th class="py-3 px-4">Nilai Evaluasi</th>
+                                    <th class="py-3 px-4">Status Evaluasi</th>
                                     <th class="py-3 px-4 text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -80,23 +102,70 @@
                                 @forelse($proposals as $prop)
                                     <tr class="hover:bg-beige-50/50 transition">
                                         <td class="py-3 px-4">
-                                            <div class="font-semibold text-forest-900">{{ $prop->user ? $prop->user->name : 'N/A' }}</div>
-                                            <div class="text-[10px] text-forest-700/50">{{ $prop->user ? $prop->user->email : 'N/A' }}</div>
-                                        </td>
-                                        <td class="py-3 px-4 font-medium text-forest-800">{{ $prop->institution_name }}</td>
-                                        <td class="py-3 px-4 text-xs text-forest-700">
-                                            <span class="bg-beige-50 border border-beige-300 rounded-md px-2 py-0.5 inline-block">
-                                                {{ $prop->category }}
-                                            </span>
+                                            <div class="font-bold text-forest-900">{{ $prop->institution_name }}</div>
+                                            <div class="text-[11px] text-forest-700/60">{{ $prop->user ? $prop->user->name : 'N/A' }} ({{ $prop->user ? $prop->user->email : 'N/A' }})</div>
                                         </td>
                                         <td class="py-3 px-4 text-xs">
-                                            @if($prop->file_path && $prop->file_path !== '-')
-                                                <a href="{{ $prop->file_path }}" target="_blank" class="inline-flex items-center gap-1.5 text-gold-600 hover:text-gold-500 font-bold">
-                                                    <i class="fas fa-file-pdf"></i> Lihat Berkas
-                                                </a>
-                                            @else
-                                                <span class="text-red-500 font-medium">Belum Unggah</span>
-                                            @endif
+                                            <span class="bg-beige-50 border border-beige-300 rounded-md px-2 py-0.5 inline-block font-semibold text-forest-800 mb-1">
+                                                {{ $prop->category }}
+                                            </span>
+                                            <div>
+                                                @if($prop->file_path && $prop->file_path !== '-')
+                                                    <a href="{{ $prop->file_path }}" target="_blank" class="inline-flex items-center gap-1 text-gold-600 hover:text-gold-500 font-bold text-[11px]">
+                                                        <i class="fas fa-file-pdf"></i> Proposal
+                                                    </a>
+                                                @else
+                                                    <span class="text-red-500 text-[10px] font-medium">Belum Unggah</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs space-y-1">
+                                            <div>
+                                                <span class="text-[10px] font-bold text-blue-900">Parahyangan:</span>
+                                                @if($prop->link_parahyangan && $prop->link_parahyangan !== '-')
+                                                    <a href="{{ str_starts_with($prop->link_parahyangan, 'http') ? $prop->link_parahyangan : 'https://'.$prop->link_parahyangan }}" target="_blank" class="text-gold-600 hover:underline font-bold text-[11px] ml-1">
+                                                        <i class="fas fa-external-link-alt text-[9px]"></i> Buka Link
+                                                    </a>
+                                                @else
+                                                    <span class="text-forest-700/50 text-[10px] ml-1">-</span>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-green-900">Pawongan:</span>
+                                                @if($prop->link_pawongan && $prop->link_pawongan !== '-')
+                                                    <a href="{{ str_starts_with($prop->link_pawongan, 'http') ? $prop->link_pawongan : 'https://'.$prop->link_pawongan }}" target="_blank" class="text-gold-600 hover:underline font-bold text-[11px] ml-1">
+                                                        <i class="fas fa-external-link-alt text-[9px]"></i> Buka Link
+                                                    </a>
+                                                @else
+                                                    <span class="text-forest-700/50 text-[10px] ml-1">-</span>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-emerald-900">Palemahan:</span>
+                                                @if($prop->link_palemahan && $prop->link_palemahan !== '-')
+                                                    <a href="{{ str_starts_with($prop->link_palemahan, 'http') ? $prop->link_palemahan : 'https://'.$prop->link_palemahan }}" target="_blank" class="text-gold-600 hover:underline font-bold text-[11px] ml-1">
+                                                        <i class="fas fa-external-link-alt text-[9px]"></i> Buka Link
+                                                    </a>
+                                                @else
+                                                    <span class="text-forest-700/50 text-[10px] ml-1">-</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs">
+                                            <div class="flex items-center gap-1.5 mb-1">
+                                                <span class="px-1.5 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 rounded text-[9px] font-bold" title="Nilai Parahyangan">
+                                                    Pra: {{ $prop->score_parahyangan ?? '-' }}
+                                                </span>
+                                                <span class="px-1.5 py-0.5 bg-green-50 text-green-800 border border-green-200 rounded text-[9px] font-bold" title="Nilai Pawongan">
+                                                    Pwo: {{ $prop->score_pawongan ?? '-' }}
+                                                </span>
+                                                <span class="px-1.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded text-[9px] font-bold" title="Nilai Palemahan">
+                                                    Plm: {{ $prop->score_palemahan ?? '-' }}
+                                                </span>
+                                            </div>
+                                            <div class="text-[11px] font-bold text-forest-900">
+                                                Rata-rata: <span class="text-gold-600 font-bold">{{ $prop->calculated_average_score ?? '-' }}</span>
+                                            </div>
                                         </td>
                                         <td class="py-3 px-4">
                                             <form action="{{ route('assessor.proposal.status', $prop->id) }}" method="POST" class="inline-block">
@@ -110,15 +179,20 @@
                                                 </select>
                                             </form>
                                         </td>
-                                        <td class="py-3 px-4 text-right flex items-center justify-end">
-                                            <button onclick="openAssessorProposalDetail({{ json_encode($prop) }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs cursor-pointer">
-                                                Detail
-                                            </button>
+                                        <td class="py-3 px-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button onclick="openEvaluateModal({{ json_encode($prop) }})" class="px-3 py-1 bg-gold-500 hover:bg-gold-400 text-forest-950 font-bold text-xs rounded-lg transition shadow-xs cursor-pointer flex items-center gap-1">
+                                                    <i class="fas fa-edit text-[10px]"></i> Beri Nilai
+                                                </button>
+                                                <button onclick="openAssessorProposalDetail({{ json_encode($prop) }})" class="px-2.5 py-1 bg-beige-100 hover:bg-beige-200 text-forest-800 font-semibold text-xs rounded-lg transition border border-beige-300 cursor-pointer">
+                                                    Detail
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="py-8 text-center text-sm text-forest-700/50 italic">Belum ada berkas pendaftaran peserta yang diajukan ke sistem.</td>
+                                        <td colspan="6" class="py-8 text-center text-sm text-forest-700/50 italic">Belum ada berkas pendaftaran peserta yang diajukan ke sistem.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -127,6 +201,73 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- ==================== MODAL EVALUASI ASESOR ==================== -->
+    <div id="modal-assessor-evaluate" class="fixed inset-0 bg-black/75 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-beige-200 max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto relative flex flex-col">
+            <button onclick="closeEvaluateModal()" class="absolute top-4 right-4 p-2 text-forest-400 hover:text-forest-950 rounded-full transition cursor-pointer" aria-label="Tutup">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="font-serif text-xl font-bold text-forest-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-star-half-alt text-gold-600"></i> Form Penilaian & Evaluasi Pilar
+            </h3>
+            <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider mb-6">Instansi: <strong id="eval-inst-name" class="text-forest-900">-</strong></p>
+
+            <form id="form-assessor-evaluate" method="POST" class="space-y-5 text-xs">
+                @csrf
+                <!-- Pilih Pilar yang dinilai -->
+                <div>
+                    <label class="block font-bold uppercase text-forest-900 text-[11px] mb-1.5">Pilar yang Dinilai</label>
+                    <select id="eval-pillar" name="pillar" onchange="updatePillarDocLink()" required class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-forest-950 text-xs font-bold outline-none focus:border-gold-500 cursor-pointer">
+                        <option value="parahyangan">1. Parahyangan (Spiritual / Ketuhanan)</option>
+                        <option value="pawongan">2. Pawongan (Sosial / Kemanusiaan)</option>
+                        <option value="palemahan">3. Palemahan (Lingkungan / Alam)</option>
+                    </select>
+                </div>
+
+                <!-- Tautan Dokumen Pendukung Peserta -->
+                <div class="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase text-blue-900 block">Tautan Dokumen Pilar Terpilih:</span>
+                        <a id="eval-doc-link" href="#" target="_blank" class="text-gold-600 font-bold hover:underline text-xs break-all">-</a>
+                    </div>
+                    <a id="eval-doc-btn" href="#" target="_blank" class="px-3 py-1.5 bg-blue-600 text-white font-bold rounded-lg text-[10px] hover:bg-blue-700 transition shrink-0">
+                        <i class="fas fa-external-link-alt"></i> Buka Link
+                    </a>
+                </div>
+
+                <!-- Skor Nilai (0 - 100) -->
+                <div>
+                    <label class="block font-bold uppercase text-forest-900 text-[11px] mb-1.5">
+                        Skor Nilai Evaluasi (0 - 100) <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="eval-score" name="score" min="0" max="100" required placeholder="Contoh: 85" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-base font-black text-forest-950 outline-none focus:border-gold-500">
+                        <span class="absolute right-4 top-2.5 text-xs text-forest-700/60 font-bold">/ 100</span>
+                    </div>
+                </div>
+
+                <!-- Catatan Evaluasi Lapangan -->
+                <div>
+                    <label class="block font-bold uppercase text-forest-900 text-[11px] mb-1.5">
+                        Catatan & Rekomendasi Evaluasi Lapangan <span class="text-[10px] text-forest-700/60 font-normal">(Wajib Diisi)</span>
+                    </label>
+                    <textarea id="eval-notes" name="notes" rows="4" required placeholder="Berikan evaluasi terhadap implementasi pilar pada instansi peserta (misal: kesesuaian SOP pura, partisipasi gotong royong, efisiensi instalasi pengolahan limbah)..." class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-xs text-forest-950 outline-none focus:border-gold-500 leading-relaxed"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t border-beige-200">
+                    <button type="button" onclick="closeEvaluateModal()" class="px-5 py-2 bg-beige-200 hover:bg-beige-300 text-forest-900 rounded-full font-semibold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-gold-500 hover:bg-gold-400 text-forest-950 rounded-full font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fas fa-paper-plane"></i> Kirim Nilai ke Admin
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
     <!-- ==================== ASSESSOR PROPOSAL DETAIL MODAL ==================== -->
     <div id="modal-assessor-proposal-detail" class="fixed inset-0 bg-black/75 z-40 hidden items-center justify-center p-4">
@@ -394,6 +535,82 @@
             if (!modalAssessorPropDetail) return;
             modalAssessorPropDetail.classList.add('hidden');
             modalAssessorPropDetail.classList.remove('flex');
+        }
+
+        // ==================== ASSESSOR EVALUATION MODAL JS ====================
+        const modalEvaluate = document.getElementById('modal-assessor-evaluate');
+        const formEvaluate = document.getElementById('form-assessor-evaluate');
+        let currentItemForEvaluation = null;
+
+        function openEvaluateModal(item) {
+            if (!modalEvaluate) return;
+            currentItemForEvaluation = item;
+            document.getElementById('eval-inst-name').textContent = item.institution_name || '-';
+            formEvaluate.action = `/assessor/proposal/evaluate/${item.id}`;
+
+            // Check current assessor's pillar specialization from blade
+            const userPillar = "{{ isset($currentAssessor) ? $currentAssessor->pillar_specialization : 'umum' }}";
+            const pillarSelect = document.getElementById('eval-pillar');
+            if (userPillar && userPillar !== 'umum') {
+                pillarSelect.value = userPillar;
+            } else {
+                pillarSelect.value = 'parahyangan';
+            }
+
+            // Populate current existing score and notes for this pillar
+            updatePillarDocLink();
+
+            modalEvaluate.classList.remove('hidden');
+            modalEvaluate.classList.add('flex');
+        }
+
+        function updatePillarDocLink() {
+            if (!currentItemForEvaluation) return;
+            const selectedPillar = document.getElementById('eval-pillar').value;
+            const scoreInput = document.getElementById('eval-score');
+            const notesInput = document.getElementById('eval-notes');
+            const docLinkEl = document.getElementById('eval-doc-link');
+            const docBtnEl = document.getElementById('eval-doc-btn');
+
+            let link = '';
+            let score = '';
+            let notes = '';
+
+            if (selectedPillar === 'parahyangan') {
+                link = currentItemForEvaluation.link_parahyangan;
+                score = currentItemForEvaluation.score_parahyangan;
+                notes = currentItemForEvaluation.notes_parahyangan;
+            } else if (selectedPillar === 'pawongan') {
+                link = currentItemForEvaluation.link_pawongan;
+                score = currentItemForEvaluation.score_pawongan;
+                notes = currentItemForEvaluation.notes_pawongan;
+            } else if (selectedPillar === 'palemahan') {
+                link = currentItemForEvaluation.link_palemahan;
+                score = currentItemForEvaluation.score_palemahan;
+                notes = currentItemForEvaluation.notes_palemahan;
+            }
+
+            scoreInput.value = (score !== null && score !== undefined) ? score : '';
+            notesInput.value = notes || '';
+
+            if (link && link !== '-') {
+                const fullLink = (!link.startsWith('http://') && !link.startsWith('https://')) ? 'https://' + link : link;
+                docLinkEl.href = fullLink;
+                docLinkEl.textContent = link;
+                docBtnEl.href = fullLink;
+                docBtnEl.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                docLinkEl.href = '#';
+                docLinkEl.textContent = 'Belum Ada Tautan Dokumen';
+                docBtnEl.href = '#';
+                docBtnEl.classList.add('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        function closeEvaluateModal() {
+            if (!modalEvaluate) return;
+            modalEvaluate.classList.add('hidden');
+            modalEvaluate.classList.remove('flex');
         }
     </script>
 </body>

@@ -51,6 +51,8 @@ Route::prefix('admin')->group(function () {
 
         // CRUD Proposals / Pendaftaran
         Route::post('/proposal/status/{id}', [AdminController::class, 'updateProposalStatus'])->name('admin.proposal.status');
+        Route::post('/proposal/assign/{id}', [AdminController::class, 'assignAssessors'])->name('admin.proposal.assign');
+        Route::post('/proposal/decision/{id}', [AdminController::class, 'updateFinalDecision'])->name('admin.proposal.decision');
         Route::any('/proposal/delete/{id}', [AdminController::class, 'deleteProposal'])->name('admin.proposal.delete');
 
         // Payment Settings
@@ -68,6 +70,7 @@ Route::get('/payment-info', [AdminController::class, 'getPaymentSetting'])->name
 Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\AssessorDashboardController::class, 'index'])->name('assessor.dashboard');
     Route::post('/proposal/status/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'updateStatus'])->name('assessor.proposal.status');
+    Route::post('/proposal/evaluate/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'submitEvaluation'])->name('assessor.proposal.evaluate');
 });
 
 // 4. View Increment Routes

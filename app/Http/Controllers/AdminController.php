@@ -76,7 +76,8 @@ class AdminController extends Controller
         $galleries = Gallery::orderBy('id', 'desc')->paginate(12, ['*'], 'page_galleries');
         $awardCategories = AwardCategory::orderBy('id', 'asc')->get();
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
-        $proposals = Proposal::with('user')->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
+        $proposals = Proposal::with(['user', 'assessorParahyangan', 'assessorPawongan', 'assessorPalemahan'])->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
+        $assessorUsers = User::where('role', 'asesor')->orderBy('name', 'asc')->get();
         $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
         $webSetting = WebSetting::first() ?? new WebSetting(['site_name' => 'THK Bali', 'site_tagline' => 'Tri Hita Karana']);
 
@@ -89,6 +90,7 @@ class AdminController extends Controller
             'awardCategories',
             'awardees',
             'proposals',
+            'assessorUsers',
             'paymentSetting',
             'webSetting'
         ));
@@ -462,6 +464,49 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Status pendaftaran peserta berhasil diperbarui.');
+    }
+
+    public function assignAssessors(Request $request, $id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $request->validate([
+            'assessor_parahyangan_id' => 'nullable|exists:users,id',
+            'assessor_pawongan_id' => 'nullable|exists:users,id',
+            'assessor_palemahan_id' => 'nullable|exists:users,id',
+        ]);
+
+        $proposal = Proposal::findOrFail($id);
+        $proposal->update([
+            'assessor_parahyangan_id' => $request->assessor_parahyangan_id,
+            'assessor_pawongan_id' => $request->assessor_pawongan_id,
+            'assessor_palemahan_id' => $request->assessor_palemahan_id,
+        ]);
+
+        // Auto update status to 'Penilaian Lapangan' if assessors are assigned and status is currently 'Verifikasi Admin'
+        if ($proposal->assessor_parahyangan_id && $proposal->assessor_pawongan_id && $proposal->assessor_palemahan_id && $proposal->status === 'Verifikasi Admin') {
+            $proposal->update(['status' => 'Penilaian Lapangan']);
+        }
+
+        return back()->with('success', 'Penugasan 3 Asesor (Parahyangan, Pawongan, Palemahan) berhasil disimpan.');
+    }
+
+    public function updateFinalDecision(Request $request, $id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
+
+        $request->validate([
+            'status' => 'required|string',
+            'award_recommendation' => 'nullable|string',
+        ]);
+
+        $proposal = Proposal::findOrFail($id);
+        $proposal->update([
+            'status' => $request->status,
+            'award_recommendation' => $request->award_recommendation,
+        ]);
+
+        return back()->with('success', 'Keputusan akhir penilaian peserta berhasil diperbarui oleh Admin.');
     }
 
     public function deleteProposal($id)

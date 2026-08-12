@@ -29,11 +29,68 @@ class Proposal extends Model
         'pic_pawongan_name',
         'pic_pawongan_wa',
         'pic_palemahan_name',
-        'pic_palemahan_wa'
+        'pic_palemahan_wa',
+        'assessor_parahyangan_id',
+        'assessor_pawongan_id',
+        'assessor_palemahan_id',
+        'score_parahyangan',
+        'notes_parahyangan',
+        'score_pawongan',
+        'notes_pawongan',
+        'score_palemahan',
+        'notes_palemahan',
+        'final_score',
+        'award_recommendation'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function assessorParahyangan()
+    {
+        return $this->belongsTo(User::class, 'assessor_parahyangan_id');
+    }
+
+    public function assessorPawongan()
+    {
+        return $this->belongsTo(User::class, 'assessor_pawongan_id');
+    }
+
+    public function assessorPalemahan()
+    {
+        return $this->belongsTo(User::class, 'assessor_palemahan_id');
+    }
+
+    /**
+     * Compute average score of 3 pillars
+     */
+    public function getCalculatedAverageScoreAttribute()
+    {
+        $scores = array_filter([
+            $this->score_parahyangan,
+            $this->score_pawongan,
+            $this->score_palemahan,
+        ], fn($s) => !is_null($s));
+
+        if (count($scores) === 0) {
+            return null;
+        }
+
+        return round(array_sum($scores) / count($scores), 1);
+    }
+
+    /**
+     * Automatically suggest award medal based on final score
+     */
+    public function getSuggestedMedalAttribute()
+    {
+        $avg = $this->calculated_average_score;
+        if (is_null($avg)) return 'Belum Lengkap';
+        if ($avg >= 85) return 'Gold Award';
+        if ($avg >= 70) return 'Silver Award';
+        if ($avg >= 55) return 'Bronze Award';
+        return 'Perlu Perbaikan';
     }
 }

@@ -549,11 +549,11 @@
                         <table class="w-full text-left text-sm border-collapse">
                             <thead>
                                 <tr class="border-b border-beige-200 text-forest-700/60 uppercase text-[10px] tracking-wider font-semibold">
-                                    <th class="py-3 px-4">Nama Peserta / Akun</th>
-                                    <th class="py-3 px-4">Nama Lembaga / Instansi</th>
-                                    <th class="py-3 px-4">Kategori Pendaftaran</th>
-                                    <th class="py-3 px-4">Berkas Dokumen</th>
-                                    <th class="py-3 px-4">Ubah Status Evaluasi</th>
+                                    <th class="py-3 px-4">Instansi & Peserta</th>
+                                    <th class="py-3 px-4">Kategori & Berkas</th>
+                                    <th class="py-3 px-4">Penugasan 3 Asesor</th>
+                                    <th class="py-3 px-4">Rekap Nilai 3 Pilar</th>
+                                    <th class="py-3 px-4">Status Evaluasi</th>
                                     <th class="py-3 px-4 text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -561,23 +561,60 @@
                                 @foreach($proposals as $prop)
                                     <tr class="hover:bg-beige-50/50 transition">
                                         <td class="py-3 px-4">
-                                            <div class="font-semibold text-forest-900">{{ $prop->user ? $prop->user->name : 'N/A' }}</div>
-                                            <div class="text-[10px] text-forest-700/50">{{ $prop->user ? $prop->user->email : 'N/A' }}</div>
-                                        </td>
-                                        <td class="py-3 px-4 font-medium text-forest-800">{{ $prop->institution_name }}</td>
-                                        <td class="py-3 px-4 text-xs text-forest-700">
-                                            <span class="bg-beige-50 border border-beige-300 rounded-md px-2 py-0.5 inline-block">
-                                                {{ $prop->category }}
-                                            </span>
+                                            <div class="font-bold text-forest-900">{{ $prop->institution_name }}</div>
+                                            <div class="text-[11px] text-forest-700/70">{{ $prop->user ? $prop->user->name : 'N/A' }} ({{ $prop->user ? $prop->user->email : 'N/A' }})</div>
                                         </td>
                                         <td class="py-3 px-4 text-xs">
-                                            @if($prop->file_path)
-                                                <a href="{{ $prop->file_path }}" target="_blank" class="inline-flex items-center gap-1.5 text-gold-600 hover:text-gold-500 font-bold">
-                                                    <i class="fas fa-file-pdf"></i> Lihat Berkas
-                                                </a>
-                                            @else
-                                                <span class="text-red-500 font-medium">Belum Unggah</span>
-                                            @endif
+                                            <span class="bg-beige-50 border border-beige-300 rounded-md px-2 py-0.5 inline-block font-semibold text-forest-800 mb-1">
+                                                {{ $prop->category }}
+                                            </span>
+                                            <div>
+                                                @if($prop->file_path && $prop->file_path !== '-')
+                                                    <a href="{{ $prop->file_path }}" target="_blank" class="inline-flex items-center gap-1 text-gold-600 hover:text-gold-500 font-bold text-[11px]">
+                                                        <i class="fas fa-file-pdf"></i> Proposal
+                                                    </a>
+                                                @else
+                                                    <span class="text-red-500 text-[10px] font-medium">Belum Unggah</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs space-y-1">
+                                            <div class="text-[10px] leading-tight">
+                                                <span class="font-bold text-forest-800">Parahyangan:</span> 
+                                                <span class="text-forest-600">{{ $prop->assessorParahyangan ? $prop->assessorParahyangan->name : 'Belum Ditugaskan' }}</span>
+                                            </div>
+                                            <div class="text-[10px] leading-tight">
+                                                <span class="font-bold text-forest-800">Pawongan:</span> 
+                                                <span class="text-forest-600">{{ $prop->assessorPawongan ? $prop->assessorPawongan->name : 'Belum Ditugaskan' }}</span>
+                                            </div>
+                                            <div class="text-[10px] leading-tight">
+                                                <span class="font-bold text-forest-800">Palemahan:</span> 
+                                                <span class="text-forest-600">{{ $prop->assessorPalemahan ? $prop->assessorPalemahan->name : 'Belum Ditugaskan' }}</span>
+                                            </div>
+                                            <button onclick="openAssignModal({{ json_encode($prop) }})" class="mt-1 inline-flex items-center gap-1 px-2.5 py-1 bg-forest-900 hover:bg-forest-950 text-gold-400 font-bold text-[10px] rounded-lg transition cursor-pointer">
+                                                <i class="fas fa-user-plus text-[9px]"></i> Atur Asesor
+                                            </button>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <span class="px-1.5 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 rounded text-[9px] font-bold" title="Nilai Parahyangan">
+                                                    Pra: {{ $prop->score_parahyangan ?? '-' }}
+                                                </span>
+                                                <span class="px-1.5 py-0.5 bg-green-50 text-green-800 border border-green-200 rounded text-[9px] font-bold" title="Nilai Pawongan">
+                                                    Pwo: {{ $prop->score_pawongan ?? '-' }}
+                                                </span>
+                                                <span class="px-1.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded text-[9px] font-bold" title="Nilai Palemahan">
+                                                    Plm: {{ $prop->score_palemahan ?? '-' }}
+                                                </span>
+                                            </div>
+                                            <div class="text-[11px] font-black text-forest-900">
+                                                Rata-rata: <span class="text-gold-600 font-bold">{{ $prop->calculated_average_score ?? '-' }}</span>
+                                                @if($prop->award_recommendation)
+                                                    <span class="ml-1 text-[9px] px-2 py-0.5 rounded-full bg-gold-100 text-gold-800 font-bold border border-gold-300">
+                                                        {{ $prop->award_recommendation }}
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="py-3 px-4">
                                             <form action="{{ route('admin.proposal.status', $prop->id) }}" method="POST" class="inline-block">
@@ -591,13 +628,15 @@
                                                 </select>
                                             </form>
                                         </td>
-                                        <td class="py-3 px-4 text-right flex items-center justify-end">
-                                            <button onclick="openAdminProposalDetail({{ json_encode($prop) }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs mr-3 cursor-pointer">
-                                                Detail
-                                            </button>
-                                            <a href="{{ route('admin.proposal.delete', $prop->id) }}" class="delete-confirm-btn text-red-500 hover:text-red-400 font-bold text-xs" data-message="PERHATIAN: Menghapus pendaftaran ini juga akan menghapus akun peserta (login) secara permanen di database. Apakah Anda yakin?">
-                                                Hapus
-                                            </a>
+                                        <td class="py-3 px-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button onclick="openAdminProposalDetail({{ json_encode($prop) }})" class="px-3 py-1 bg-gold-500/10 hover:bg-gold-500 text-gold-700 hover:text-forest-950 font-bold text-xs rounded-lg transition border border-gold-500/20 cursor-pointer">
+                                                    Detail & Rekap
+                                                </button>
+                                                <a href="{{ route('admin.proposal.delete', $prop->id) }}" class="delete-confirm-btn text-red-500 hover:text-red-400 font-bold text-xs p-1" data-message="PERHATIAN: Menghapus pendaftaran ini juga akan menghapus akun peserta (login) secara permanen di database. Apakah Anda yakin?">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -1154,6 +1193,104 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Section 5: Rekapitulasi Nilai & Catatan Evaluasi Asesor 3 Pilar -->
+                <div class="bg-gold-50/60 p-5 rounded-2xl border border-gold-200 shadow-xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-gold-200/80 pb-3">
+                        <h4 class="font-bold text-forest-950 uppercase tracking-wider text-xs flex items-center gap-2">
+                            <i class="fas fa-clipboard-check text-gold-600 text-sm"></i> Rekapitulasi Nilai & Evaluasi 3 Asesor
+                        </h4>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-forest-700 font-semibold">Rata-rata:</span>
+                            <span id="det-avg-score-badge" class="px-2.5 py-0.5 bg-forest-900 text-gold-400 text-xs font-black rounded-lg">-</span>
+                            <span id="det-medal-badge" class="px-2.5 py-0.5 bg-gold-500 text-forest-950 text-xs font-black rounded-lg uppercase tracking-wider">-</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Parahyangan -->
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200 shadow-2xs space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase text-blue-900">1. Parahyangan</span>
+                                <span id="det-score-parahyangan" class="px-2 py-0.5 bg-blue-100 text-blue-800 font-black rounded text-xs">-</span>
+                            </div>
+                            <div class="text-[10px] text-forest-600">
+                                Asesor: <strong id="det-asesor-parahyangan" class="text-forest-900">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-forest-700/60 block">Catatan Evaluasi:</span>
+                                <p id="det-notes-parahyangan" class="text-[11px] text-forest-800 italic bg-beige-50 p-2 rounded-lg border border-beige-200 mt-1 min-h-[40px]">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Pawongan -->
+                        <div class="bg-white p-3.5 rounded-xl border border-green-200 shadow-2xs space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase text-green-900">2. Pawongan</span>
+                                <span id="det-score-pawongan" class="px-2 py-0.5 bg-green-100 text-green-800 font-black rounded text-xs">-</span>
+                            </div>
+                            <div class="text-[10px] text-forest-600">
+                                Asesor: <strong id="det-asesor-pawongan" class="text-forest-900">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-forest-700/60 block">Catatan Evaluasi:</span>
+                                <p id="det-notes-pawongan" class="text-[11px] text-forest-800 italic bg-beige-50 p-2 rounded-lg border border-beige-200 mt-1 min-h-[40px]">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Palemahan -->
+                        <div class="bg-white p-3.5 rounded-xl border border-emerald-200 shadow-2xs space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase text-emerald-900">3. Palemahan</span>
+                                <span id="det-score-palemahan" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-black rounded text-xs">-</span>
+                            </div>
+                            <div class="text-[10px] text-forest-600">
+                                Asesor: <strong id="det-asesor-palemahan" class="text-forest-900">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-forest-700/60 block">Catatan Evaluasi:</span>
+                                <p id="det-notes-palemahan" class="text-[11px] text-forest-800 italic bg-beige-50 p-2 rounded-lg border border-beige-200 mt-1 min-h-[40px]">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Form Penetapan Keputusan Akhir oleh Admin / Pak Laba -->
+                <form id="form-admin-decision" method="POST" class="bg-forest-950 text-white p-5 rounded-2xl border border-gold-500/30 space-y-4">
+                    @csrf
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-gold-400 uppercase tracking-wider text-xs flex items-center gap-2">
+                            <i class="fas fa-gavel text-gold-400"></i> Penetapan Keputusan Akhir oleh Admin
+                        </h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-white/80 mb-1">Status Evaluasi Akhir</label>
+                            <select id="det-decision-status" name="status" class="w-full bg-forest-900 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-gold-500 cursor-pointer">
+                                <option value="Pengajuan">Pengajuan</option>
+                                <option value="Verifikasi Admin">Verifikasi Admin</option>
+                                <option value="Penilaian Lapangan">Penilaian Lapangan</option>
+                                <option value="Hasil Penilaian">Hasil Penilaian</option>
+                                <option value="Penghargaan">Penghargaan (Lolos Award)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-white/80 mb-1">Keputusan Predikat Penghargaan</label>
+                            <select id="det-decision-medal" name="award_recommendation" class="w-full bg-forest-900 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-gold-500 cursor-pointer">
+                                <option value="">-- Pilih Predikat Medali --</option>
+                                <option value="Gold Award">Gold Award (Skor >= 85)</option>
+                                <option value="Silver Award">Silver Award (Skor 70 - 84)</option>
+                                <option value="Bronze Award">Bronze Award (Skor 55 - 69)</option>
+                                <option value="Perlu Perbaikan">Perlu Perbaikan (Skor < 55)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-forest-950 text-xs font-bold rounded-xl shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                            <i class="fas fa-save"></i> Simpan Keputusan Akhir
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div class="flex justify-end mt-6">
@@ -1161,6 +1298,78 @@
                     Tutup
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL ASSIGN 3 ASESORS ==================== -->
+    <div id="modal-admin-assign-assessors" class="fixed inset-0 bg-black/75 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-beige-200 max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto relative flex flex-col">
+            <button onclick="closeAssignModal()" class="absolute top-4 right-4 p-2 text-forest-400 hover:text-forest-950 rounded-full transition cursor-pointer" aria-label="Tutup">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="font-serif text-xl font-bold text-forest-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-user-shield text-gold-600"></i> Penugasan 3 Asesor Spesialis
+            </h3>
+            <p class="text-xs text-forest-700/60 font-medium uppercase tracking-wider mb-6">Pilih asesor penilai untuk masing-masing pilar pada peserta <strong id="assign-inst-name" class="text-forest-900">-</strong></p>
+
+            <form id="form-admin-assign" method="POST" class="space-y-4 text-xs">
+                @csrf
+                <!-- 1. Asesor Parahyangan -->
+                <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200 space-y-1.5">
+                    <label class="block font-black text-blue-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                        <i class="fas fa-pray text-blue-600"></i> 1. Asesor Bidang Parahyangan
+                    </label>
+                    <select id="assign-parahyangan" name="assessor_parahyangan_id" class="w-full bg-white border border-blue-300 rounded-xl px-3 py-2 text-forest-950 text-xs font-semibold outline-none focus:border-blue-500 cursor-pointer">
+                        <option value="">-- Pilih Asesor Parahyangan --</option>
+                        @foreach($assessorUsers as $au)
+                            <option value="{{ $au->id }}" data-pillar="{{ $au->pillar_specialization }}">
+                                {{ $au->name }} ({{ $au->email }}) {{ $au->pillar_specialization === 'parahyangan' ? '★ Spesialis' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- 2. Asesor Pawongan -->
+                <div class="bg-green-50/60 p-4 rounded-2xl border border-green-200 space-y-1.5">
+                    <label class="block font-black text-green-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                        <i class="fas fa-users text-green-600"></i> 2. Asesor Bidang Pawongan
+                    </label>
+                    <select id="assign-pawongan" name="assessor_pawongan_id" class="w-full bg-white border border-green-300 rounded-xl px-3 py-2 text-forest-950 text-xs font-semibold outline-none focus:border-green-500 cursor-pointer">
+                        <option value="">-- Pilih Asesor Pawongan --</option>
+                        @foreach($assessorUsers as $au)
+                            <option value="{{ $au->id }}" data-pillar="{{ $au->pillar_specialization }}">
+                                {{ $au->name }} ({{ $au->email }}) {{ $au->pillar_specialization === 'pawongan' ? '★ Spesialis' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- 3. Asesor Palemahan -->
+                <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200 space-y-1.5">
+                    <label class="block font-black text-emerald-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                        <i class="fas fa-leaf text-emerald-600"></i> 3. Asesor Bidang Palemahan
+                    </label>
+                    <select id="assign-palemahan" name="assessor_palemahan_id" class="w-full bg-white border border-emerald-300 rounded-xl px-3 py-2 text-forest-950 text-xs font-semibold outline-none focus:border-emerald-500 cursor-pointer">
+                        <option value="">-- Pilih Asesor Palemahan --</option>
+                        @foreach($assessorUsers as $au)
+                            <option value="{{ $au->id }}" data-pillar="{{ $au->pillar_specialization }}">
+                                {{ $au->name }} ({{ $au->email }}) {{ $au->pillar_specialization === 'palemahan' ? '★ Spesialis' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3">
+                    <button type="button" onclick="closeAssignModal()" class="px-5 py-2 bg-beige-200 hover:bg-beige-300 text-forest-900 rounded-full font-semibold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-gold-500 hover:bg-gold-400 text-forest-950 rounded-full font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fas fa-check"></i> Simpan Penugasan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1545,7 +1754,187 @@
             modalAwardee.classList.remove('flex');
         }
 
-        // 6. Awardee/Penerima Filter Helpers
+        // 6. Proposal Detail & Assessor Assignment Modal Helpers
+        const modalAdminPropDetail = document.getElementById('modal-admin-proposal-detail');
+        const modalAdminAssign = document.getElementById('modal-admin-assign-assessors');
+
+        function openAdminProposalDetail(item) {
+            if (!modalAdminPropDetail) return;
+            
+            document.getElementById('det-inst-name').textContent = item.institution_name || '-';
+            document.getElementById('det-inst-cat').textContent = item.category || '-';
+            document.getElementById('det-inst-address').textContent = item.address || '-';
+            
+            const gmapsEl = document.getElementById('det-inst-gmaps');
+            if (item.gmaps_link) {
+                gmapsEl.href = item.gmaps_link;
+                gmapsEl.textContent = item.gmaps_link;
+                gmapsEl.classList.remove('hidden');
+            } else {
+                gmapsEl.href = '#';
+                gmapsEl.textContent = 'Tidak Ada';
+            }
+
+            document.getElementById('det-cp-name').textContent = item.contact_name || '-';
+            
+            const cpWa = document.getElementById('det-cp-wa');
+            if (item.contact_wa) {
+                cpWa.href = `https://wa.me/${item.contact_wa.replace(/[^0-9]/g, '')}`;
+                cpWa.textContent = item.contact_wa;
+            } else {
+                cpWa.href = '#';
+                cpWa.textContent = '-';
+            }
+
+            const cpEmail = document.getElementById('det-cp-email');
+            if (item.contact_email) {
+                cpEmail.href = `mailto:${item.contact_email}`;
+                cpEmail.textContent = item.contact_email;
+            } else {
+                cpEmail.href = '#';
+                cpEmail.textContent = '-';
+            }
+
+            const thkLeaderEl = document.getElementById('det-thk-leader');
+            if (thkLeaderEl) {
+                const name = item.thk_leader_name || '-';
+                const wa = item.thk_leader_wa ? ` (${item.thk_leader_wa})` : '';
+                thkLeaderEl.textContent = name + wa;
+            }
+            const picParahEl = document.getElementById('det-pic-parahyangan');
+            if (picParahEl) {
+                const name = item.pic_parahyangan_name || '-';
+                const wa = item.pic_parahyangan_wa ? ` (${item.pic_parahyangan_wa})` : '';
+                picParahEl.textContent = name + wa;
+            }
+            const picPawoEl = document.getElementById('det-pic-pawongan');
+            if (picPawoEl) {
+                const name = item.pic_pawongan_name || '-';
+                const wa = item.pic_pawongan_wa ? ` (${item.pic_pawongan_wa})` : '';
+                picPawoEl.textContent = name + wa;
+            }
+            const picPalemEl = document.getElementById('det-pic-palemahan');
+            if (picPalemEl) {
+                const name = item.pic_palemahan_name || '-';
+                const wa = item.pic_palemahan_wa ? ` (${item.pic_palemahan_wa})` : '';
+                picPalemEl.textContent = name + wa;
+            }
+
+            const fileProp = document.getElementById('det-file-proposal');
+            if (item.file_path && item.file_path !== '-') {
+                fileProp.href = item.file_path;
+                fileProp.classList.remove('hidden');
+            } else {
+                fileProp.classList.add('hidden');
+            }
+            
+            const filePayment = document.getElementById('det-file-payment');
+            const filePaymentEmpty = document.getElementById('det-file-payment-empty');
+            if (item.payment_proof) {
+                filePayment.href = item.payment_proof;
+                filePayment.classList.remove('hidden');
+                filePaymentEmpty.classList.add('hidden');
+            } else {
+                filePayment.classList.add('hidden');
+                filePaymentEmpty.classList.remove('hidden');
+            }
+
+            const fileAccred = document.getElementById('det-file-accred');
+            const fileAccredEmpty = document.getElementById('det-file-accred-empty');
+            if (item.prev_accreditation) {
+                fileAccred.href = item.prev_accreditation;
+                fileAccred.classList.remove('hidden');
+                fileAccredEmpty.classList.add('hidden');
+            } else {
+                fileAccred.classList.add('hidden');
+                fileAccredEmpty.classList.remove('hidden');
+            }
+
+            const formatLink = (lnk) => {
+                if (!lnk || lnk === '-') return '#';
+                if (!lnk.startsWith('http://') && !lnk.startsWith('https://')) {
+                    return 'https://' + lnk;
+                }
+                return lnk;
+            };
+
+            const linkParah = document.getElementById('det-link-parahyangan');
+            linkParah.href = formatLink(item.link_parahyangan);
+            linkParah.textContent = (item.link_parahyangan && item.link_parahyangan !== '-') ? item.link_parahyangan : '-';
+
+            const linkPawo = document.getElementById('det-link-pawongan');
+            linkPawo.href = formatLink(item.link_pawongan);
+            linkPawo.textContent = (item.link_pawongan && item.link_pawongan !== '-') ? item.link_pawongan : '-';
+
+            const linkPalem = document.getElementById('det-link-palemahan');
+            linkPalem.href = formatLink(item.link_palemahan);
+            linkPalem.textContent = (item.link_palemahan && item.link_palemahan !== '-') ? item.link_palemahan : '-';
+
+            // 3 Pillar Assessor Scores & Notes
+            document.getElementById('det-score-parahyangan').textContent = item.score_parahyangan !== null ? `${item.score_parahyangan}/100` : '-';
+            document.getElementById('det-asesor-parahyangan').textContent = item.assessor_parahyangan ? item.assessor_parahyangan.name : 'Belum Ditugaskan';
+            document.getElementById('det-notes-parahyangan').textContent = item.notes_parahyangan || 'Belum ada catatan evaluasi dari asesor.';
+
+            document.getElementById('det-score-pawongan').textContent = item.score_pawongan !== null ? `${item.score_pawongan}/100` : '-';
+            document.getElementById('det-asesor-pawongan').textContent = item.assessor_pawongan ? item.assessor_pawongan.name : 'Belum Ditugaskan';
+            document.getElementById('det-notes-pawongan').textContent = item.notes_pawongan || 'Belum ada catatan evaluasi dari asesor.';
+
+            document.getElementById('det-score-palemahan').textContent = item.score_palemahan !== null ? `${item.score_palemahan}/100` : '-';
+            document.getElementById('det-asesor-palemahan').textContent = item.assessor_palemahan ? item.assessor_palemahan.name : 'Belum Ditugaskan';
+            document.getElementById('det-notes-palemahan').textContent = item.notes_palemahan || 'Belum ada catatan evaluasi dari asesor.';
+
+            // Average score & medal calculation
+            const scores = [item.score_parahyangan, item.score_pawongan, item.score_palemahan].filter(s => s !== null && s !== undefined);
+            let avg = '-';
+            let medal = item.award_recommendation || 'Belum Lengkap';
+            if (scores.length > 0) {
+                avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+                if (!item.award_recommendation) {
+                    if (avg >= 85) medal = 'Gold Award';
+                    else if (avg >= 70) medal = 'Silver Award';
+                    else if (avg >= 55) medal = 'Bronze Award';
+                    else medal = 'Perlu Perbaikan';
+                }
+            }
+            document.getElementById('det-avg-score-badge').textContent = avg;
+            document.getElementById('det-medal-badge').textContent = medal;
+
+            // Setup decision form
+            const formDecision = document.getElementById('form-admin-decision');
+            if (formDecision) {
+                formDecision.action = `/admin/proposal/decision/${item.id}`;
+                document.getElementById('det-decision-status').value = item.status || 'Pengajuan';
+                document.getElementById('det-decision-medal').value = item.award_recommendation || (medal !== 'Belum Lengkap' ? medal : '');
+            }
+
+            modalAdminPropDetail.classList.remove('hidden');
+            modalAdminPropDetail.classList.add('flex');
+        }
+
+        function closeAdminProposalDetail() {
+            if (!modalAdminPropDetail) return;
+            modalAdminPropDetail.classList.add('hidden');
+            modalAdminPropDetail.classList.remove('flex');
+        }
+
+        function openAssignModal(item) {
+            if (!modalAdminAssign) return;
+            document.getElementById('assign-inst-name').textContent = item.institution_name || '-';
+            document.getElementById('form-admin-assign').action = `/admin/proposal/assign/${item.id}`;
+            document.getElementById('assign-parahyangan').value = item.assessor_parahyangan_id || '';
+            document.getElementById('assign-pawongan').value = item.assessor_pawongan_id || '';
+            document.getElementById('assign-palemahan').value = item.assessor_palemahan_id || '';
+            modalAdminAssign.classList.remove('hidden');
+            modalAdminAssign.classList.add('flex');
+        }
+
+        function closeAssignModal() {
+            if (!modalAdminAssign) return;
+            modalAdminAssign.classList.add('hidden');
+            modalAdminAssign.classList.remove('flex');
+        }
+
+        // 7. Awardee/Penerima Filter Helpers
         const searchInput = document.getElementById('awardee-search-input');
         const categoryFilter = document.getElementById('awardee-category-filter');
         const medalFilter = document.getElementById('awardee-medal-filter');

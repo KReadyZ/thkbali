@@ -72,13 +72,21 @@ Aplikasi memiliki 4 hak akses (*role-based access control*):
  Peserta login kembali ➡️ Muncul kartu hijau "Status Pembayaran: Terverifikasi (Lunas)" 
  ➡️ Peserta mengunggah Proposal PDF/ZIP & memasukkan Tautan Google Drive/Bitly untuk 3 Pilar THK.
      ⬇
-[TAHAP 5: PENILAIAN DOKUMEN & LAPANGAN OLEH ASESOR]
- Asesor login ke /assessor ➡️ Mengunduh berkas & memeriksa tautan pilar ➡️ Melakukan visitasi lapangan 
- ➡️ Mengubah status tahapan penilaian: "Penilaian Lapangan" ➡️ "Hasil Penilaian".
+[TAHAP 5: PENUGASAN 3 ASESOR OLEH ADMIN / PAK LABA]
+ Admin masuk ke /admin ➡️ Buka "Kelola Pendaftaran" ➡️ Menugaskan 3 Asesor Spesialis:
+ • Asesor Parahyangan : Bagas
+ • Asesor Pawongan    : Mang Arya
+ • Asesor Palemahan   : Deta
      ⬇
-[TAHAP 6: PENETAPAN PENGHARGAAN]
- Peserta yang memenuhi syarat resmi dianugerahi medali THK Awards (Gold / Silver / Bronze) 
- dan dicatat dalam daftar direktori penerima penghargaan.
+[TAHAP 6: PENILAIAN 3 PILAR OLEH ASESOR]
+ Masing-masing Asesor login ke /assessor:
+ • Bagas menilai pilar Parahyangan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
+ • Mang Arya menilai pilar Pawongan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
+ • Deta menilai pilar Palemahan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
+     ⬇
+[TAHAP 7: REKAPITULASI NILAI & PENETAPAN PENGHARGAAN]
+ Admin / Pak Laba melihat rekapitulasi nilai 3 pilar, rata-rata skor total otomatis, 
+ dan menetapkan predikat medali THK Awards (Gold / Silver / Bronze).
 ```
 
 ---
@@ -87,17 +95,18 @@ Aplikasi memiliki 4 hak akses (*role-based access control*):
 
 Berikut adalah kredensial resmi yang telah dikonfigurasi pada database seeder:
 
-### 👑 1. Akun Administrator
+### 👑 1. Akun Administrator (Superadmin / Pak Laba)
 * **Email:** `admin@thkbali.com`
 * **Password:** `thkbalisukses369`
 * **Role:** `admin`
-* **Fungsi Demo:** Menunjukkan manajemen konten web, pengaturan rekening/QRIS, dan verifikasi pendaftaran peserta.
+* **Fungsi Demo:** Menugaskan 3 asesor, memverifikasi berkas pendaftaran, melihat rekapitulasi nilai 3 pilar, dan menetapkan keputusan akhir.
 
-### 🎓 2. Akun Asesor Resmi
-* **Email:** `asesor@thkbali.com`
-* **Password:** `asesorthksukses369`
-* **Role:** `asesor`
-* **Fungsi Demo:** Menunjukkan cara asesor menilai dokumen proposal dan memperbarui tahapan sertifikasi.
+### 🎓 2. Akun 3 Asesor Spesialis Pilar & Asesor Umum
+* **Asesor 1 (Parahyangan):** `bagas@thkbali.com` / `asesorthksukses369` (Bidang: Spiritual / Ketuhanan)
+* **Asesor 2 (Pawongan):** `mangarya@thkbali.com` / `asesorthksukses369` (Bidang: Sosial / Kemanusiaan)
+* **Asesor 3 (Palemahan):** `deta@thkbali.com` / `asesorthksukses369` (Bidang: Lingkungan / Alam)
+* **Asesor Umum:** `asesor@thkbali.com` / `asesorthksukses369` (Bidang: Umum)
+* **Fungsi Demo:** Menunjukkan cara masing-masing asesor memeriksa tautan berkas pilar dan mengisi form nilai + catatan evaluasi lapangan.
 
 ### 🏢 3. Akun Peserta Uji Coba
 * **Email:** `komeng@gmail.com`

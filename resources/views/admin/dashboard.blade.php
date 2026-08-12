@@ -1331,6 +1331,13 @@
             </div>
 
             <div class="flex justify-end mt-6">
+                <button onclick="closeAdminProposalDetail()" class="px-6 py-2 bg-forest-900 text-white rounded-full text-xs font-bold hover:bg-forest-950 transition cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== MODAL TUGASKAN ASESOR 3 PILAR ==================== -->
     <div id="modal-assign-assessors" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl border border-beige-200 max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto relative shadow-2xl">

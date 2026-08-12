@@ -51,9 +51,14 @@ Route::prefix('admin')->group(function () {
 
         // CRUD Proposals / Pendaftaran
         Route::post('/proposal/status/{id}', [AdminController::class, 'updateProposalStatus'])->name('admin.proposal.status');
-        Route::post('/proposal/assign/{id}', [AdminController::class, 'assignAssessors'])->name('admin.proposal.assign');
-        Route::post('/proposal/decision/{id}', [AdminController::class, 'updateFinalDecision'])->name('admin.proposal.decision');
+        Route::post('/proposal/assign-assessors/{id}', [AdminController::class, 'assignAssessors'])->name('admin.proposal.assign');
+        Route::post('/proposal/finalize-award/{id}', [AdminController::class, 'finalizeAward'])->name('admin.proposal.finalize');
         Route::any('/proposal/delete/{id}', [AdminController::class, 'deleteProposal'])->name('admin.proposal.delete');
+
+        // Assessor User Accounts Management
+        Route::post('/assessor-user/store', [AdminController::class, 'storeAssessorUser'])->name('admin.assessor.user.store');
+        Route::post('/assessor-user/update/{id}', [AdminController::class, 'updateAssessorUser'])->name('admin.assessor.user.update');
+        Route::any('/assessor-user/delete/{id}', [AdminController::class, 'deleteAssessorUser'])->name('admin.assessor.user.delete');
 
         // Payment Settings
         Route::post('/payment-setting', [AdminController::class, 'updatePaymentSetting'])->name('admin.payment.update');
@@ -70,7 +75,7 @@ Route::get('/payment-info', [AdminController::class, 'getPaymentSetting'])->name
 Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\AssessorDashboardController::class, 'index'])->name('assessor.dashboard');
     Route::post('/proposal/status/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'updateStatus'])->name('assessor.proposal.status');
-    Route::post('/proposal/evaluate/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'submitEvaluation'])->name('assessor.proposal.evaluate');
+    Route::post('/proposal/score/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'submitPillarScore'])->name('assessor.proposal.score');
 });
 
 // 4. View Increment Routes

@@ -23,18 +23,17 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Admin THK Bali',
                 'password' => Hash::make('thkbalisukses369'),
                 'role' => 'admin',
-                'pillar_specialization' => 'umum',
             ]
         );
 
-        // 1b. Seed 3 Pillar Assessors (Bagas, Mang Arya, Deta) + Default Assessor
+        // 1b. Seed 3-Pillar Assessors (Bagas, Mang Arya, Deta, & General Assessor)
         User::updateOrCreate(
             ['email' => 'bagas@thkbali.com'],
             [
                 'name' => 'Bagas (Asesor Parahyangan)',
                 'password' => Hash::make('asesorthksukses369'),
                 'role' => 'asesor',
-                'pillar_specialization' => 'parahyangan',
+                'specialization' => 'parahyangan',
             ]
         );
 
@@ -44,7 +43,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Mang Arya (Asesor Pawongan)',
                 'password' => Hash::make('asesorthksukses369'),
                 'role' => 'asesor',
-                'pillar_specialization' => 'pawongan',
+                'specialization' => 'pawongan',
             ]
         );
 
@@ -54,7 +53,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Deta (Asesor Palemahan)',
                 'password' => Hash::make('asesorthksukses369'),
                 'role' => 'asesor',
-                'pillar_specialization' => 'palemahan',
+                'specialization' => 'palemahan',
             ]
         );
 
@@ -64,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Asesor THK Bali',
                 'password' => Hash::make('asesorthksukses369'),
                 'role' => 'asesor',
-                'pillar_specialization' => 'umum',
+                'specialization' => 'umum',
             ]
         );
 

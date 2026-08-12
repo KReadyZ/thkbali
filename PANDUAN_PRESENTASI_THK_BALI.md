@@ -51,8 +51,8 @@ Aplikasi memiliki 4 hak akses (*role-based access control*):
 | :--- | :--- | :--- |
 | **1. Pengunjung Publik** | Membaca filosofi, berita, agenda kegiatan, galeri foto, melihat profil asesor, dan meninjau daftar penerima THK Awards. | Beranda (`/`) |
 | **2. Peserta Sertifikasi** | Mendaftarkan instansi, membayar biaya administrasi, mengunggah bukti bayar, mengunggah berkas proposal & link 3 pilar THK, serta mengecek progres sertifikasi. | Portal Peserta (`/`) |
-| **3. Tim Asesor** | Meninjau berkas proposal pendaftar, memeriksa pemenuhan kriteria 3 pilar, mengunduh file pendukung, dan memperbarui status tahapan penilaian. | Panel Asesor (`/assessor`) |
-| **4. Administrator (Admin)** | Mengelola seluruh data CMS (Berita, Agenda, Galeri, Tim Asesor, Penerima Awards, Rekening Bank/QRIS, dan Verifikasi Pembayaran Peserta). | Panel Admin (`/admin`) |
+| **3. Tim Asesor (3 Pilar)** | Menilai berkas dan dokumen link spesifik untuk pilar yang ditugaskan (**Bagas** - Parahyangan, **Mang Arya** - Pawongan, **Deta** - Palemahan), menginput nilai (0-100) & catatan evaluasi lapangan, dan menyerahkan nilai ke Admin. | Panel Asesor (`/assessor`) |
+| **4. Administrator (Pak Laba)** | Mengelola data CMS, memvalidasi pembayaran, menugaskan asesor per pilar, melihat rekapitulasi nilai 3 pilar, dan menetapkan hasil akhir penganugerahan (*Gold, Silver, Bronze*). | Panel Admin (`/admin`) |
 
 ---
 
@@ -65,48 +65,56 @@ Aplikasi memiliki 4 hak akses (*role-based access control*):
 [TAHAP 2: PEMBAYARAN ADMINISTRASI]
  Peserta login ➡️ Buka "Unggah Berkas" ➡️ Muncul rincian Rekening Bank & QRIS ➡️ Peserta transfer & unggah bukti transfer.
      ⬇
-[TAHAP 3: VERIFIKASI PEMBAYARAN OLEH ADMIN]
- Admin masuk ke /admin ➡️ Memeriksa bukti transfer di menu Pendaftaran ➡️ Ubah status menjadi "Verifikasi Admin".
+[TAHAP 3: VERIFIKASI PEMBAYARAN & PENUGASAN ASESOR OLEH ADMIN]
+ Admin masuk ke /admin ➡️ Memeriksa bukti transfer ➡️ Ubah status menjadi "Verifikasi Admin" 
+ ➡️ Admin menugaskan Asesor 3 Pilar:
+    • Asesor Parahyangan : Bagas
+    • Asesor Pawongan    : Mang Arya
+    • Asesor Palemahan   : Deta
      ⬇
-[TAHAP 4: PENGUNGGAHAN BERKAS SERTIFIKASI]
+[TAHAP 4: PENGUNGGAHAN BERKAS SERTIFIKASI LENGKAP]
  Peserta login kembali ➡️ Muncul kartu hijau "Status Pembayaran: Terverifikasi (Lunas)" 
  ➡️ Peserta mengunggah Proposal PDF/ZIP & memasukkan Tautan Google Drive/Bitly untuk 3 Pilar THK.
      ⬇
-[TAHAP 5: PENUGASAN 3 ASESOR OLEH ADMIN / PAK LABA]
- Admin masuk ke /admin ➡️ Buka "Kelola Pendaftaran" ➡️ Menugaskan 3 Asesor Spesialis:
- • Asesor Parahyangan : Bagas
- • Asesor Pawongan    : Mang Arya
- • Asesor Palemahan   : Deta
+[TAHAP 5: PENILAIAN 3 PILAR & EVALUASI OLEH ASESOR]
+ Masing-masing asesor login ke /assessor:
+    • Bagas     ➡️ Menilai Pilar Parahyangan (Skor & Catatan Lapangan) ➡️ Kirim Nilai ke Admin
+    • Mang Arya ➡️ Menilai Pilar Pawongan    (Skor & Catatan Lapangan) ➡️ Kirim Nilai ke Admin
+    • Deta      ➡️ Menilai Pilar Palemahan   (Skor & Catatan Lapangan) ➡️ Kirim Nilai ke Admin
      ⬇
-[TAHAP 6: PENILAIAN 3 PILAR OLEH ASESOR]
- Masing-masing Asesor login ke /assessor:
- • Bagas menilai pilar Parahyangan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
- • Mang Arya menilai pilar Pawongan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
- • Deta menilai pilar Palemahan ➡️ Kirim Skor (0-100) & Catatan Lapangan.
-     ⬇
-[TAHAP 7: REKAPITULASI NILAI & PENETAPAN PENGHARGAAN]
- Admin / Pak Laba melihat rekapitulasi nilai 3 pilar, rata-rata skor total otomatis, 
- dan menetapkan predikat medali THK Awards (Gold / Silver / Bronze).
+[TAHAP 6: REKAPITULASI & PENETAPAN PENGHARGAAN OLEH ADMIN]
+ Admin melihat rekapitulasi nilai lengkap ketiga pilar beserta rata-rata skor akhir 
+ ➡️ Admin menetapkan Medali Penghargaan Resmi (Gold / Silver / Bronze Award) dan status "Penghargaan".
 ```
 
 ---
 
 ## 5. 🔑 DATA AKUN & KREDENSIAL UNTUK DEMO PRESENTASI
 
-Berikut adalah kredensial resmi yang telah dikonfigurasi pada database seeder:
+Berikut adalah kredensial resmi yang telah dikonfigurasi pada database:
 
-### 👑 1. Akun Administrator (Superadmin / Pak Laba)
+### 👑 1. Akun Administrator (Pak Laba / Admin Yayasan)
 * **Email:** `admin@thkbali.com`
 * **Password:** `thkbalisukses369`
 * **Role:** `admin`
-* **Fungsi Demo:** Menugaskan 3 asesor, memverifikasi berkas pendaftaran, melihat rekapitulasi nilai 3 pilar, dan menetapkan keputusan akhir.
+* **Fungsi Demo:** Menugaskan asesor 3 pilar, melihat rekapitulasi nilai, mengelola akun asesor, dan menetapkan medali penganugerahan.
 
-### 🎓 2. Akun 3 Asesor Spesialis Pilar & Asesor Umum
-* **Asesor 1 (Parahyangan):** `bagas@thkbali.com` / `asesorthksukses369` (Bidang: Spiritual / Ketuhanan)
-* **Asesor 2 (Pawongan):** `mangarya@thkbali.com` / `asesorthksukses369` (Bidang: Sosial / Kemanusiaan)
-* **Asesor 3 (Palemahan):** `deta@thkbali.com` / `asesorthksukses369` (Bidang: Lingkungan / Alam)
-* **Asesor Umum:** `asesor@thkbali.com` / `asesorthksukses369` (Bidang: Umum)
-* **Fungsi Demo:** Menunjukkan cara masing-masing asesor memeriksa tautan berkas pilar dan mengisi form nilai + catatan evaluasi lapangan.
+### 🎓 2. Akun Tim Asesor 3 Pilar
+* **Asesor Parahyangan (Bagas):**
+  * **Email:** `bagas@thkbali.com`
+  * **Password:** `asesorthksukses369`
+  * **Tugas:** Menilai pilar keagamaan, pura, dan spiritualitas.
+* **Asesor Pawongan (Mang Arya):**
+  * **Email:** `mangarya@thkbali.com`
+  * **Password:** `asesorthksukses369`
+  * **Tugas:** Menilai pilar sosial, hubungan karyawan, dan kemasyarakatan adat.
+* **Asesor Palemahan (Deta):**
+  * **Email:** `deta@thkbali.com`
+  * **Password:** `asesorthksukses369`
+  * **Tugas:** Menilai pilar lingkungan, alam hijau, sanitasi, dan pengolahan limbah.
+* **Asesor Senior (Umum):**
+  * **Email:** `asesor@thkbali.com`
+  * **Password:** `asesorthksukses369`
 
 ### 🏢 3. Akun Peserta Uji Coba
 * **Email:** `komeng@gmail.com`
@@ -133,23 +141,30 @@ Ikuti urutan langkah ini saat melakukan demonstrasi di depan penguji/audiens:
 4. Pilih instansi (misal: *Desa Adat Jatiluwih* atau *I Ketut Mangku, S.Sen.*).
 5. Klik foto pemenang untuk membuka modal **Lightbox Fullscreen** (`z-[9999]`). Tunjukkan foto utuh tanpa terpotong dan tutup menggunakan tombol silang floating tanpa adanya pergeseran layar.
 
-### Langkah 3: Alur Pendaftaran & Portal Peserta (Durasi: 3 Menit)
+### Langkah 3: Alur Pendaftaran & Portal Peserta (Durasi: 2 Menit)
 1. Klik tombol **"Daftar"** di Navbar &rarr; Tunjukkan form pendaftaran instansi yang lengkap dan rapi.
 2. Masuk menggunakan akun peserta.
 3. Klik tombol **"Unggah Berkas"** &rarr; Tunjukkan kartu status pembayaran **"Terverifikasi (Lunas)"** dan formulir upload dokumen sertifikasi (Proposal PDF/ZIP & Tautan 3 Pilar THK).
 
-### Langkah 4: Panel Penilaian Asesor (Durasi: 2 Menit)
-1. Masuk (*login*) menggunakan akun Asesor (`asesor@thkbali.com` / `asesorthksukses369`).
-2. Tunjukkan sistem otomatis mengarahkan ke dashboard `/assessor`.
-3. Tunjukkan daftar berkas instansi peserta, link dokumen 3 pilar, dan fitur dropdown untuk memperbarui status penilaian (*Penilaian Lapangan*, *Hasil Penilaian*, *Penghargaan*).
+### Langkah 4: Penugasan Asesor oleh Admin di Panel Admin (Durasi: 2 Menit)
+1. Masuk (*login*) sebagai Admin (`admin@thkbali.com` / `thkbalisukses369`).
+2. Masuk ke menu **Kelola Pendaftaran** &rarr; Klik tombol **"Tugaskan Asesor"** pada instansi Hotel A.
+3. Pilih:
+   * Asesor Parahyangan: **Bagas**
+   * Asesor Pawongan: **Mang Arya**
+   * Asesor Palemahan: **Deta**
+4. Klik **Simpan Penugasan**.
 
-### Langkah 5: Panel Pengelolaan Admin (Durasi: 2 Menit)
-1. Masuk menggunakan akun Admin (`admin@thkbali.com` / `thkbalisukses369`).
-2. Masuk ke dashboard `/admin`.
-3. Tunjukkan menu pengelolaan:
-   * **Pendaftaran:** Memverifikasi berkas dan bukti pembayaran peserta.
-   * **Pengaturan Pembayaran:** Mengubah nomor rekening bank, nominal biaya, dan unggah QRIS dinamis.
-   * **Berita, Agenda, Galeri, Asesor, dan Penerima Awards:** Pengelolaan CRUD konten lengkap.
+### Langkah 5: Penilaian oleh Asesor (Bagas / Mang Arya / Deta) (Durasi: 2 Menit)
+1. Masuk sebagai Asesor Bagas (`bagas@thkbali.com` / `asesorthksukses369`).
+2. Di Dashboard Asesor, terlihat tugas pilar **Parahyangan**.
+3. Klik tombol **"Beri Nilai"** &rarr; Masukkan skor `94` dan catatan evaluasi lapangan, lalu klik **"Kirim Nilai ke Admin"**.
+
+### Langkah 6: Rekapitulasi & Penetapan Medali oleh Admin (Durasi: 2 Menit)
+1. Masuk kembali ke Panel Admin.
+2. Buka **Kelola Pendaftaran** &rarr; Klik tombol **"Tetapkan Hasil"**.
+3. Tunjukkan rekapitulasi skor 3 pilar yang sudah masuk (Parahyangan: 94, Pawongan: 90, Palemahan: 95) dan rata-rata skor `93.00`.
+4. Tetapkan keputusan akhir: **Gold Award** & Status: **Penghargaan**.
 
 ---
 

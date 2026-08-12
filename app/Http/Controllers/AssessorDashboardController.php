@@ -15,12 +15,12 @@ class AssessorDashboardController extends Controller
 
     public function index()
     {
-        $currentAssessor = Auth::user();
+        $user = Auth::user();
         $proposals = Proposal::with(['user', 'assessorParahyangan', 'assessorPawongan', 'assessorPalemahan'])
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('assessor.dashboard', compact('proposals', 'currentAssessor'));
+        return view('assessor.dashboard', compact('proposals', 'user'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -34,51 +34,53 @@ class AssessorDashboardController extends Controller
             'status' => $request->status,
         ]);
 
-        return back()->with('success', 'Status pendaftaran peserta berhasil diperbarui.');
+        return back()->with('success', 'Status pendaftaran peserta berhasil diperbarui oleh Asesor.');
     }
 
-    public function submitEvaluation(Request $request, $id)
+    public function submitPillarScore(Request $request, $id)
     {
         $request->validate([
             'pillar' => 'required|in:parahyangan,pawongan,palemahan',
-            'score'  => 'required|integer|min:0|max:100',
+            'score'  => 'required|numeric|min:0|max:100',
             'notes'  => 'nullable|string|max:2000',
         ]);
 
         $proposal = Proposal::findOrFail($id);
         $pillar = $request->pillar;
 
-        $updateData = [
-            "score_{$pillar}" => $request->score,
-            "notes_{$pillar}" => $request->notes,
-        ];
-
-        // Also assign current assessor ID if not assigned yet
-        $assessorField = "assessor_{$pillar}_id";
-        if (!$proposal->$assessorField && Auth::id()) {
-            $updateData[$assessorField] = Auth::id();
+        // Update score and notes for the specific pillar
+        if ($pillar === 'parahyangan') {
+            $proposal->score_parahyangan = $request->score;
+            $proposal->notes_parahyangan = $request->notes;
+            $pillarName = 'Parahyangan';
+        } elseif ($pillar === 'pawongan') {
+            $proposal->score_pawongan = $request->score;
+            $proposal->notes_pawongan = $request->notes;
+            $pillarName = 'Pawongan';
+        } else {
+            $proposal->score_palemahan = $request->score;
+            $proposal->notes_palemahan = $request->notes;
+            $pillarName = 'Palemahan';
         }
 
-        $proposal->update($updateData);
+        // Calculate average final score across all 3 pillars if available
+        $scores = array_filter([
+            $proposal->score_parahyangan,
+            $proposal->score_pawongan,
+            $proposal->score_palemahan
+        ], fn($v) => !is_null($v) && $v !== '');
 
-        // Refresh model to compute final score & recommendation
-        $proposal->refresh();
-        $avgScore = $proposal->calculated_average_score;
-        $suggestedMedal = $proposal->suggested_medal;
+        if (count($scores) > 0) {
+            $proposal->final_score = round(array_sum($scores) / count($scores), 2);
+        }
 
-        $proposal->update([
-            'final_score' => $avgScore,
-            'award_recommendation' => $suggestedMedal,
-        ]);
-
-        // If all 3 pillar scores are completed, set status to 'Hasil Penilaian' if still in 'Penilaian Lapangan'
+        // If all 3 pillars have been assessed, update status to 'Hasil Penilaian'
         if (!is_null($proposal->score_parahyangan) && !is_null($proposal->score_pawongan) && !is_null($proposal->score_palemahan)) {
-            if ($proposal->status === 'Penilaian Lapangan' || $proposal->status === 'Verifikasi Admin') {
-                $proposal->update(['status' => 'Hasil Penilaian']);
-            }
+            $proposal->status = 'Hasil Penilaian';
         }
 
-        $pillarName = ucfirst($pillar);
-        return back()->with('success', "Nilai & catatan evaluasi Pilar {$pillarName} ({$request->score}/100) berhasil disimpan dan diteruskan ke Admin.");
+        $proposal->save();
+
+        return back()->with('success', "Penilaian pilar {$pillarName} untuk instansi {$proposal->institution_name} berhasil disimpan dan diserahkan ke Admin / Pak Laba.");
     }
 }

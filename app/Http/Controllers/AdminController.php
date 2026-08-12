@@ -76,8 +76,8 @@ class AdminController extends Controller
         $galleries = Gallery::orderBy('id', 'desc')->paginate(12, ['*'], 'page_galleries');
         $awardCategories = AwardCategory::orderBy('id', 'asc')->get();
         $awardees = Awardee::orderBy('id', 'desc')->paginate(10, ['*'], 'page_awardees');
-        $proposals = Proposal::with(['user', 'assessorParahyangan', 'assessorPawongan', 'assessorPalemahan'])->orderBy('id', 'desc')->paginate(10, ['*'], 'page_proposals');
-        $assessorUsers = User::where('role', 'asesor')->orderBy('name', 'asc')->get();
+        $proposals = Proposal::with(['user', 'assessorParahyangan', 'assessorPawongan', 'assessorPalemahan'])->orderBy('id', 'desc')->paginate(15, ['*'], 'page_proposals');
+        $assessorUsers = User::where('role', 'asesor')->orderBy('id', 'asc')->get();
         $paymentSetting = PaymentSetting::first() ?? new PaymentSetting();
         $webSetting = WebSetting::first() ?? new WebSetting(['site_name' => 'THK Bali', 'site_tagline' => 'Tri Hita Karana']);
 
@@ -466,49 +466,6 @@ class AdminController extends Controller
         return back()->with('success', 'Status pendaftaran peserta berhasil diperbarui.');
     }
 
-    public function assignAssessors(Request $request, $id)
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $request->validate([
-            'assessor_parahyangan_id' => 'nullable|exists:users,id',
-            'assessor_pawongan_id' => 'nullable|exists:users,id',
-            'assessor_palemahan_id' => 'nullable|exists:users,id',
-        ]);
-
-        $proposal = Proposal::findOrFail($id);
-        $proposal->update([
-            'assessor_parahyangan_id' => $request->assessor_parahyangan_id,
-            'assessor_pawongan_id' => $request->assessor_pawongan_id,
-            'assessor_palemahan_id' => $request->assessor_palemahan_id,
-        ]);
-
-        // Auto update status to 'Penilaian Lapangan' if assessors are assigned and status is currently 'Verifikasi Admin'
-        if ($proposal->assessor_parahyangan_id && $proposal->assessor_pawongan_id && $proposal->assessor_palemahan_id && $proposal->status === 'Verifikasi Admin') {
-            $proposal->update(['status' => 'Penilaian Lapangan']);
-        }
-
-        return back()->with('success', 'Penugasan 3 Asesor (Parahyangan, Pawongan, Palemahan) berhasil disimpan.');
-    }
-
-    public function updateFinalDecision(Request $request, $id)
-    {
-        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir.']);
-
-        $request->validate([
-            'status' => 'required|string',
-            'award_recommendation' => 'nullable|string',
-        ]);
-
-        $proposal = Proposal::findOrFail($id);
-        $proposal->update([
-            'status' => $request->status,
-            'award_recommendation' => $request->award_recommendation,
-        ]);
-
-        return back()->with('success', 'Keputusan akhir penilaian peserta berhasil diperbarui oleh Admin.');
-    }
-
     public function deleteProposal($id)
     {
         if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
@@ -610,5 +567,107 @@ class AdminController extends Controller
         $setting->save();
 
         return back()->with('success', 'Pengaturan website berhasil diperbarui.');
+    }
+
+    // Assign 3-Pillar Assessors to a Proposal
+    public function assignAssessors(Request $request, $id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
+
+        $request->validate([
+            'assessor_parahyangan_id' => 'nullable|exists:users,id',
+            'assessor_pawongan_id'    => 'nullable|exists:users,id',
+            'assessor_palemahan_id'   => 'nullable|exists:users,id',
+        ]);
+
+        $proposal = Proposal::findOrFail($id);
+        $proposal->update([
+            'assessor_parahyangan_id' => $request->assessor_parahyangan_id,
+            'assessor_pawongan_id'    => $request->assessor_pawongan_id,
+            'assessor_palemahan_id'   => $request->assessor_palemahan_id,
+            'status'                  => ($proposal->status === 'Verifikasi Admin' || $proposal->status === 'Pengajuan') ? 'Penilaian Lapangan' : $proposal->status,
+        ]);
+
+        return back()->with('success', 'Penugasan tim asesor 3 pilar untuk instansi ' . $proposal->institution_name . ' berhasil disimpan.');
+    }
+
+    // Finalize Award Decision & Score
+    public function finalizeAward(Request $request, $id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
+
+        $request->validate([
+            'status'               => 'required|string',
+            'award_recommendation' => 'nullable|string',
+        ]);
+
+        $proposal = Proposal::findOrFail($id);
+        $proposal->update([
+            'status'               => $request->status,
+            'award_recommendation' => $request->award_recommendation,
+        ]);
+
+        return back()->with('success', 'Keputusan penganugerahan dan status akhir instansi ' . $proposal->institution_name . ' berhasil ditetapkan.');
+    }
+
+    // Assessor User Accounts Management (CRUD)
+    public function storeAssessorUser(Request $request)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
+
+        $request->validate([
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|email|unique:users,email',
+            'password'       => 'required|string|min:6',
+            'specialization' => 'required|string',
+        ]);
+
+        User::create([
+            'name'           => $request->name,
+            'email'          => $request->email,
+            'password'       => Hash::make($request->password),
+            'role'           => 'asesor',
+            'specialization' => $request->specialization,
+        ]);
+
+        return back()->with('success', 'Akun Asesor baru berhasil dibuat dan didaftarkan.');
+    }
+
+    public function updateAssessorUser(Request $request, $id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
+
+        $user = User::where('role', 'asesor')->findOrFail($id);
+
+        $request->validate([
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|email|unique:users,email,' . $user->id,
+            'password'       => 'nullable|string|min:6',
+            'specialization' => 'required|string',
+        ]);
+
+        $data = [
+            'name'           => $request->name,
+            'email'          => $request->email,
+            'specialization' => $request->specialization,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return back()->with('success', 'Data akun asesor ' . $user->name . ' berhasil diperbarui.');
+    }
+
+    public function deleteAssessorUser($id)
+    {
+        if (!$this->checkAuth()) return redirect()->route('admin.login')->withErrors(['auth' => 'Sesi administrator Anda berakhir. Silakan masuk kembali.']);
+
+        $user = User::where('role', 'asesor')->findOrFail($id);
+        $user->delete();
+
+        return back()->with('success', 'Akun asesor berhasil dihapus.');
     }
 }

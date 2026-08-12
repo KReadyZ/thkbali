@@ -232,10 +232,10 @@
 
                                         <!-- Aksi -->
                                         <td class="py-4 px-4 text-right space-x-2">
-                                            <button onclick="openScoringModal({{ json_encode($prop) }})" class="px-3.5 py-1.5 bg-gold-500 hover:bg-gold-400 text-forest-950 font-black text-xs rounded-xl shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
+                                            <button onclick="openScoringModalById({{ $prop->id }})" class="px-3.5 py-1.5 bg-gold-500 hover:bg-gold-400 text-forest-950 font-black text-xs rounded-xl shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
                                                 <i class="fas fa-edit"></i> Beri Nilai
                                             </button>
-                                            <button onclick="openAssessorProposalDetail({{ json_encode($prop) }})" class="px-3 py-1.5 bg-[#eaf4f0] hover:bg-[#dfeee8] text-forest-900 border border-[#b8dad0] font-bold text-xs rounded-xl transition inline-flex items-center gap-1 cursor-pointer">
+                                            <button onclick="openAssessorProposalDetailById({{ $prop->id }})" class="px-3 py-1.5 bg-[#eaf4f0] hover:bg-[#dfeee8] text-forest-900 border border-[#b8dad0] font-bold text-xs rounded-xl transition inline-flex items-center gap-1 cursor-pointer">
                                                 <i class="fas fa-eye"></i> Detail
                                             </button>
                                         </td>
@@ -623,6 +623,23 @@
             if (!modalAssessorPropDetail) return;
             modalAssessorPropDetail.classList.add('hidden');
             modalAssessorPropDetail.classList.remove('flex');
+        }
+
+        // Global Proposals Map for Assessor Modals
+        const assessorProposals = @json($proposals);
+        const assessorProposalsById = {};
+        if (Array.isArray(assessorProposals)) {
+            assessorProposals.forEach(p => { assessorProposalsById[p.id] = p; });
+        }
+
+        function openScoringModalById(id) {
+            const item = assessorProposalsById[id];
+            if (item) openScoringModal(item);
+        }
+
+        function openAssessorProposalDetailById(id) {
+            const item = assessorProposalsById[id];
+            if (item) openAssessorProposalDetail(item);
         }
     </script>
 </body>

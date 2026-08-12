@@ -613,7 +613,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="py-3 px-4 text-right space-x-2">
-                                                    <button onclick="openEditAssessorUserModal({{ json_encode($asUser) }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs cursor-pointer">
+                                                    <button onclick="openEditAssessorUserModalById({{ $asUser->id }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs cursor-pointer">
                                                         Edit
                                                     </button>
                                                     <a href="{{ route('admin.assessor.user.delete', $asUser->id) }}" class="delete-confirm-btn text-red-500 hover:text-red-400 font-bold text-xs" data-message="Apakah Anda yakin ingin menghapus akun asesor {{ $asUser->name }}?">
@@ -757,15 +757,15 @@
                                         <!-- Aksi & Manajemen -->
                                         <td class="py-4 px-4 text-right space-y-1.5">
                                             <div class="flex items-center justify-end gap-2">
-                                                <button onclick="openAssignAssessorsModal({{ json_encode($prop) }})" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-bold transition cursor-pointer" title="Tugaskan Asesor 3 Pilar">
+                                                <button onclick="openAssignAssessorsModalById({{ $prop->id }})" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-bold transition cursor-pointer" title="Tugaskan Asesor 3 Pilar">
                                                     <i class="fas fa-user-tag mr-1"></i> Tugaskan Asesor
                                                 </button>
-                                                <button onclick="openFinalizeAwardModal({{ json_encode($prop) }})" class="px-2.5 py-1 bg-gold-500 hover:bg-gold-400 text-forest-950 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer" title="Rekap Nilai & Tetapkan Penghargaan">
+                                                <button onclick="openFinalizeAwardModalById({{ $prop->id }})" class="px-2.5 py-1 bg-gold-500 hover:bg-gold-400 text-forest-950 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer" title="Rekap Nilai & Tetapkan Penghargaan">
                                                     <i class="fas fa-medal mr-1"></i> Tetapkan Hasil
                                                 </button>
                                             </div>
                                             <div class="flex items-center justify-end gap-3 pt-1">
-                                                <button onclick="openAdminProposalDetail({{ json_encode($prop) }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs cursor-pointer">
+                                                <button onclick="openAdminProposalDetailById({{ $prop->id }})" class="text-gold-600 hover:text-gold-500 font-bold text-xs cursor-pointer">
                                                     <i class="fas fa-eye"></i> Detail
                                                 </button>
                                                 <a href="{{ route('admin.proposal.delete', $prop->id) }}" class="delete-confirm-btn text-red-500 hover:text-red-400 font-bold text-xs" data-message="PERHATIAN: Menghapus pendaftaran ini juga akan menghapus akun peserta (login) secara permanen di database. Apakah Anda yakin?">
@@ -1843,6 +1843,41 @@
             if (!modalEditAssessorUser) return;
             modalEditAssessorUser.classList.add('hidden');
             modalEditAssessorUser.classList.remove('flex');
+        }
+
+        // Global Data Maps for Admin Modals (Avoid HTML unescaped JSON syntax errors)
+        const adminProposalsMap = @json($proposals->items() ?? $proposals);
+        const adminProposalsById = {};
+        if (Array.isArray(adminProposalsMap)) {
+            adminProposalsMap.forEach(p => { if (p && p.id) adminProposalsById[p.id] = p; });
+        } else if (typeof adminProposalsMap === 'object' && adminProposalsMap !== null) {
+            Object.values(adminProposalsMap).forEach(p => { if (p && p.id) adminProposalsById[p.id] = p; });
+        }
+
+        const adminAssessorsMap = @json($assessorUsers);
+        const adminAssessorsById = {};
+        if (Array.isArray(adminAssessorsMap)) {
+            adminAssessorsMap.forEach(u => { if (u && u.id) adminAssessorsById[u.id] = u; });
+        }
+
+        function openAdminProposalDetailById(id) {
+            const item = adminProposalsById[id];
+            if (item) openAdminProposalDetail(item);
+        }
+
+        function openAssignAssessorsModalById(id) {
+            const item = adminProposalsById[id];
+            if (item) openAssignAssessorsModal(item);
+        }
+
+        function openFinalizeAwardModalById(id) {
+            const item = adminProposalsById[id];
+            if (item) openFinalizeAwardModal(item);
+        }
+
+        function openEditAssessorUserModalById(id) {
+            const user = adminAssessorsById[id];
+            if (user) openEditAssessorUserModal(user);
         }
 
         // 1. News Modal Helpers

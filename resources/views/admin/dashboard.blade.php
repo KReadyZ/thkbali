@@ -1357,7 +1357,7 @@
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
                             <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [{{ ucfirst($asUser->specialization ?? 'Umum') }}]
+                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
                             </option>
                         @endforeach
                     </select>
@@ -1373,7 +1373,7 @@
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
                             <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [{{ ucfirst($asUser->specialization ?? 'Umum') }}]
+                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
                             </option>
                         @endforeach
                     </select>
@@ -1389,7 +1389,7 @@
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
                             <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [{{ ucfirst($asUser->specialization ?? 'Umum') }}]
+                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
                             </option>
                         @endforeach
                     </select>

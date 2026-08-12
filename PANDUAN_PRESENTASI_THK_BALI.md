@@ -112,9 +112,6 @@ Berikut adalah kredensial resmi yang telah dikonfigurasi pada database:
   * **Email:** `deta@thkbali.com`
   * **Password:** `asesorthksukses369`
   * **Tugas:** Menilai pilar lingkungan, alam hijau, sanitasi, dan pengolahan limbah.
-* **Asesor Senior (Umum):**
-  * **Email:** `asesor@thkbali.com`
-  * **Password:** `asesorthksukses369`
 
 ### 🏢 3. Akun Peserta Uji Coba
 * **Email:** `komeng@gmail.com`

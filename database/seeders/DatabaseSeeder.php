@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 1b. Seed 3-Pillar Assessors (Bagas, Mang Arya, Deta, & General Assessor)
+        // 1b. Seed 3-Pillar Assessors (Bagas - Parahyangan, Mang Arya - Pawongan, Deta - Palemahan)
         User::updateOrCreate(
             ['email' => 'bagas@thkbali.com'],
             [
@@ -54,16 +54,6 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('asesorthksukses369'),
                 'role' => 'asesor',
                 'specialization' => 'palemahan',
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'asesor@thkbali.com'],
-            [
-                'name' => 'Asesor THK Bali',
-                'password' => Hash::make('asesorthksukses369'),
-                'role' => 'asesor',
-                'specialization' => 'umum',
             ]
         );
 

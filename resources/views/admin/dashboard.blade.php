@@ -568,12 +568,11 @@
                                     <input type="text" name="password" required value="asesorthksukses369" class="w-full bg-white border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-gold-500 outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-forest-800 mb-1">Spesialisasi Bidang / Pilar</label>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-forest-800 mb-1">Pilar Tri Hita Karana yang Diampu</label>
                                     <select name="specialization" required class="w-full bg-white border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-gold-500 outline-none cursor-pointer">
                                         <option value="parahyangan">1. Parahyangan (Spiritual / Tempat Suci / Upacara)</option>
                                         <option value="pawongan">2. Pawongan (Sosial / Karyawan / Masyarakat Adat)</option>
                                         <option value="palemahan">3. Palemahan (Lingkungan / Alam / Pengolahan Sampah)</option>
-                                        <option value="umum">4. Umum / Senior Assessor (Multi-Pilar)</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="w-full py-3 bg-forest-950 hover:bg-gold-500 text-gold-400 hover:text-forest-950 font-bold text-xs rounded-xl transition duration-300 shadow-sm cursor-pointer flex items-center justify-center gap-2">
@@ -1524,12 +1523,11 @@
                     <input type="text" id="edit-as-password" name="password" placeholder="Masukkan password baru..." class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-gold-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-forest-800 mb-1">Spesialisasi Bidang / Pilar</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-forest-800 mb-1">Pilar Tri Hita Karana yang Diampu</label>
                     <select id="edit-as-spec" name="specialization" required class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-gold-500 outline-none cursor-pointer">
                         <option value="parahyangan">1. Parahyangan (Spiritual / Tempat Suci / Upacara)</option>
                         <option value="pawongan">2. Pawongan (Sosial / Karyawan / Masyarakat Adat)</option>
                         <option value="palemahan">3. Palemahan (Lingkungan / Alam / Pengolahan Sampah)</option>
-                        <option value="umum">4. Umum / Senior Assessor (Multi-Pilar)</option>
                     </select>
                 </div>
                 <div class="pt-3 border-t border-beige-200 flex justify-end gap-3">

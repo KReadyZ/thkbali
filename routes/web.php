@@ -74,7 +74,6 @@ Route::get('/payment-info', [AdminController::class, 'getPaymentSetting'])->name
 // 3. Assessor Panel Routes
 Route::prefix('assessor')->middleware(['role:asesor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\AssessorDashboardController::class, 'index'])->name('assessor.dashboard');
-    Route::post('/proposal/status/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'updateStatus'])->name('assessor.proposal.status');
     Route::post('/proposal/score/{id}', [\App\Http\Controllers\AssessorDashboardController::class, 'submitPillarScore'])->name('assessor.proposal.score');
 });
 

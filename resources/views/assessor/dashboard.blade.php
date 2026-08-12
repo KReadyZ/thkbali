@@ -201,18 +201,33 @@
                                             @endif
                                         </td>
 
-                                        <!-- Tahapan -->
+                                        <!-- Tahapan (Status Ditetapkan Admin) -->
                                         <td class="py-4 px-4">
-                                            <form action="{{ route('assessor.proposal.status', $prop->id) }}" method="POST" class="inline-block">
-                                                @csrf
-                                                <select name="status" onchange="this.form.submit()" class="bg-[#f4faf8] border border-[#b8dad0] rounded-xl px-2.5 py-1.5 text-xs font-bold text-forest-900 outline-none focus:border-gold-500 cursor-pointer shadow-2xs">
-                                                    <option value="Pengajuan" {{ $prop->status === 'Pengajuan' ? 'selected' : '' }}>Pengajuan</option>
-                                                    <option value="Verifikasi Admin" {{ $prop->status === 'Verifikasi Admin' ? 'selected' : '' }}>Verifikasi Admin</option>
-                                                    <option value="Penilaian Lapangan" {{ $prop->status === 'Penilaian Lapangan' ? 'selected' : '' }}>Penilaian Lapangan</option>
-                                                    <option value="Hasil Penilaian" {{ $prop->status === 'Hasil Penilaian' ? 'selected' : '' }}>Hasil Penilaian</option>
-                                                    <option value="Penghargaan" {{ $prop->status === 'Penghargaan' ? 'selected' : '' }}>Penghargaan</option>
-                                                </select>
-                                            </form>
+                                            @if($prop->status === 'Pengajuan')
+                                                <span class="px-2.5 py-1 bg-gray-100 border border-gray-300 text-gray-700 text-[11px] font-bold rounded-full inline-block">
+                                                    Pengajuan
+                                                </span>
+                                            @elseif($prop->status === 'Verifikasi Admin')
+                                                <span class="px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-800 text-[11px] font-bold rounded-full inline-block">
+                                                    Verifikasi Admin
+                                                </span>
+                                            @elseif($prop->status === 'Penilaian Lapangan')
+                                                <span class="px-2.5 py-1 bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-bold rounded-full inline-block">
+                                                    Penilaian Lapangan
+                                                </span>
+                                            @elseif($prop->status === 'Hasil Penilaian')
+                                                <span class="px-2.5 py-1 bg-purple-50 border border-purple-200 text-purple-900 text-[11px] font-bold rounded-full inline-block">
+                                                    Hasil Penilaian
+                                                </span>
+                                            @elseif($prop->status === 'Penghargaan')
+                                                <span class="px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-900 text-[11px] font-black rounded-full inline-block">
+                                                    🏆 Penghargaan
+                                                </span>
+                                            @else
+                                                <span class="px-2.5 py-1 bg-gray-100 text-gray-700 text-[11px] font-bold rounded-full inline-block">
+                                                    {{ $prop->status }}
+                                                </span>
+                                            @endif
                                         </td>
 
                                         <!-- Aksi -->

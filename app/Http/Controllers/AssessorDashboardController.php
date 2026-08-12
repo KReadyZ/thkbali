@@ -23,20 +23,6 @@ class AssessorDashboardController extends Controller
         return view('assessor.dashboard', compact('proposals', 'user'));
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|string',
-        ]);
-
-        $proposal = Proposal::findOrFail($id);
-        $proposal->update([
-            'status' => $request->status,
-        ]);
-
-        return back()->with('success', 'Status pendaftaran peserta berhasil diperbarui oleh Asesor.');
-    }
-
     public function submitPillarScore(Request $request, $id)
     {
         $request->validate([

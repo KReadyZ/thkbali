@@ -148,6 +148,7 @@
                                 <option value="Lembaga Pendidikan">Kategori Pendidikan</option>
                                 <option value="Desa Adat">Desa Adat</option>
                                 <option value="Individu">Kategori Individu</option>
+                                <option value="Pemerintah">Kategori Pemerintah</option>
                             </select>
                             <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
                                 <i class="fas fa-chevron-down text-xs"></i>
@@ -866,6 +867,52 @@
                 </div>
             </div>
         </div>
+
+        <!-- Content for Pemerintah -->
+        <div id="drawer-content-pemerintah" class="award-content-section hidden space-y-6">
+            <div class="relative rounded-2xl overflow-hidden h-56 border border-white/10">
+                <img src="{{ asset('images/Kategori Organisasi.jpg') }}" 
+                     alt="Kategori Pemerintah" 
+                     class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-transparent to-transparent"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <p class="text-white/80 leading-relaxed text-sm md:text-base">
+                    <strong class="text-gold-400 font-serif text-lg">Kategori Pemerintah</strong> diberikan kepada instansi dinas, dinas daerah, kantor badan publik, dan lembaga pemerintahan di Bali yang berhasil menyelaraskan pelayanan publik prima dengan nilai-nilai luhur Tri Hita Karana, penghijauan perkantoran, dan pelestarian adat budaya Bali.
+                </p>
+                
+                <h4 class="font-serif text-gold-400 text-lg font-semibold border-b border-white/10 pb-2">Aspek Penilaian & Hubungan THK</h4>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-gold-500 font-bold text-base mt-0.5">•</span>
+                        <div>
+                            <strong class="text-white">Parahyangan:</strong> Penyediaan fasilitas tempat ibadah (pelinggih/padmasana) yang tertata rapi di kompleks kantor, pelaksanaan upacara pujawali, dan toleransi beragama.
+                        </div>
+                    </li>
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-gold-500 font-bold text-base mt-0.5">•</span>
+                        <div>
+                            <strong class="text-white">Pawongan:</strong> Kebijakan ketenagakerjaan berkeadilan, suasana kerja harmonis bebas diskriminasi, keterbukaan informasi publik, serta dedikasi pelayanan tanpa pamrih kepada masyarakat.
+                        </div>
+                    </li>
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-gold-500 font-bold text-base mt-0.5">•</span>
+                        <div>
+                            <strong class="text-white">Palemahan:</strong> Kebijakan kantor hijau (Green Office), pelarangan plastik sekali pakai di areal dinas, optimalisasi taman kantor, efisiensi energi listrik/air, dan pengelolaan arsip ramah lingkungan.
+                        </div>
+                    </li>
+                </ul>
+
+                <h4 class="font-serif text-gold-400 text-lg font-semibold border-b border-white/10 pb-2">Kriteria Kelayakan Khusus</h4>
+                <div class="grid grid-cols-1 gap-3 text-xs md:text-sm">
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/10 hover:border-gold-500/30 transition">
+                        <span class="text-gold-500 font-semibold block mb-1">Kebijakan Kantor Ramah Lingkungan (Eco-Office)</span>
+                        Memiliki aturan tertulis tingkat dinas mengenai efisiensi sumber daya dan pemilahan sampah elektronik & kertas secara teratur.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer Action -->
@@ -1097,6 +1144,7 @@
                                     <option value="Lembaga Pendidikan" {{ isset($userProposal) && $userProposal->category === 'Lembaga Pendidikan' ? 'selected' : '' }}>Kategori Pendidikan</option>
                                     <option value="Desa Adat" {{ isset($userProposal) && $userProposal->category === 'Desa Adat' ? 'selected' : '' }}>Desa Adat</option>
                                     <option value="Individu" {{ isset($userProposal) && $userProposal->category === 'Individu' ? 'selected' : '' }}>Kategori Individu</option>
+                                    <option value="Pemerintah" {{ isset($userProposal) && $userProposal->category === 'Pemerintah' ? 'selected' : '' }}>Kategori Pemerintah</option>
                                 </select>
                                 <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-forest-500 pointer-events-none">
                                     <i class="fas fa-chevron-down text-xs"></i>

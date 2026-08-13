@@ -1504,6 +1504,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (categoryKey === 'restoran') {
             awardDrawerTitle.textContent = currentLang === 'en' ? 'Restaurant Category' : 'Kategori Restoran';
             awardDrawerBadge.textContent = currentLang === 'en' ? 'THK Awards — Restaurant' : 'THK Awards — Restoran';
+        } else if (categoryKey === 'pemerintah') {
+            awardDrawerTitle.textContent = currentLang === 'en' ? 'Government Category' : 'Kategori Pemerintah';
+            awardDrawerBadge.textContent = currentLang === 'en' ? 'THK Awards — Government' : 'THK Awards — Pemerintah';
         }
 
         // Dynamically filter awardees list in the left slide panel

@@ -376,6 +376,19 @@ Manfaat Book Chapter:
                 'asesor_init' => 'R',
                 'asesor_name' => 'Asosiasi Kuliner Bali',
                 'asesor_role' => 'Penilai Higienis & Budaya',
+            ],
+            [
+                'key' => 'pemerintah',
+                'name_id' => 'Kategori Pemerintah',
+                'name_en' => 'Government Category',
+                'description_id' => 'Diberikan kepada dinas, kantor badan publik, dan instansi pemerintahan yang mengimplementasikan nilai Tri Hita Karana dalam pelayanan publik, tata ruang hijau kantor, dan pelestarian adat.',
+                'description_en' => 'Awarded to regional agencies, public sector offices, and government institutions that implement Tri Hita Karana values in public services, green office environments, and cultural preservation.',
+                'image' => '/images/Kategori Organisasi.jpg',
+                'badges_id' => ['Pelayanan Publik', 'Green Office', 'Tata Kelola'],
+                'badges_en' => ['Public Service', 'Green Office', 'Good Governance'],
+                'asesor_init' => 'G',
+                'asesor_name' => 'Tim Evaluator Publik',
+                'asesor_role' => 'Penilai Tata Kelola & Layanan',
             ]
         ];
 
@@ -548,7 +561,29 @@ Manfaat Book Chapter:
                 'image' => '/images/Subak News.jpg',
                 'parahyangan_achievement' => 'Pembangunan Pura Penunggun Karang di area restoran secara asri.',
                 'pawongan_achievement' => 'Penyediaan panggung seni berkala untuk seniman musik dan tari banjar lokal.',
-                'palemahan_achievement' => 'Perlindungan ekosistem sawah dan burung liar di sekitar area makan restoran.',
+                'palemahan_achievement' => 'Perlindungan ekosistem sawah and burung liar di sekitar area makan restoran.',
+            ],
+            [
+                'category_key' => 'pemerintah',
+                'name' => 'Dinas Lingkungan Hidup dan Kehutanan Provinsi Bali',
+                'medal' => 'Gold Award',
+                'year' => '2026',
+                'description' => 'Dinas Lingkungan Hidup & Kehutanan Provinsi Bali meraih Gold Award atas kebijakan perluasan areal konservasi mangrove, larangan penggunaan plastik sekali pakai di perkantoran, dan pelestarian tempat suci di dinas.',
+                'image' => '/images/Kategori Organisasi.jpg',
+                'parahyangan_achievement' => 'Pemeliharaan Pura Padmasana kantor dan upacara keagamaan Pujawali secara rutin.',
+                'pawongan_achievement' => 'Kerja sama strategis dengan LSM peduli sampah dan pembinaan komunitas adat peduli kebersihan.',
+                'palemahan_achievement' => 'Penerapan konsep Eco-Office, pemilahan sampah kertas & plastik terpadu, dan pembibitan pohon lindung.',
+            ],
+            [
+                'category_key' => 'pemerintah',
+                'name' => 'Kantor Bupati Karangasem',
+                'medal' => 'Silver Award',
+                'year' => '2026',
+                'description' => 'Kantor Pemerintahan Kabupaten Karangasem berhasil mengintegrasikan taman hijau kantor asri dengan pelayanan administrasi yang ramah lingkungan dan transparan.',
+                'image' => '/images/Ulun Danu Beratan.jpg',
+                'parahyangan_achievement' => 'Penyediaan Padmasana agung perkantoran yang tertata bersih dan asri.',
+                'pawongan_achievement' => 'Apresiasi kinerja pegawai berprestasi secara transparan dan kegiatan bakti sosial karyawan.',
+                'palemahan_achievement' => 'Pengurangan penggunaan botol kemasan plastik dalam rapat kedinasan dan penanaman pohon kamboja tradisional.',
             ]
         ];
 

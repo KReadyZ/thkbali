@@ -459,6 +459,7 @@
                                 <option value="destinasi">Destinasi</option>
                                 <option value="restoran">Restoran</option>
                                 <option value="pendidikan">Lembaga Pendidikan</option>
+                                <option value="pemerintah">Pemerintah</option>
                             </select>
 
                             <!-- Medal Filter -->
@@ -509,6 +510,7 @@
                                             @elseif($aw->category_key === 'destinasi') Destinasi
                                             @elseif($aw->category_key === 'restoran') Restoran
                                             @elseif($aw->category_key === 'pendidikan') Lembaga Pendidikan
+                                            @elseif($aw->category_key === 'pemerintah') Pemerintah
                                             @else {{ $aw->category_key }}
                                             @endif
                                         </td>
@@ -1139,6 +1141,7 @@
                             <option value="destinasi">Destinasi</option>
                             <option value="restoran">Restoran</option>
                             <option value="pendidikan">Lembaga Pendidikan</option>
+                            <option value="pemerintah">Pemerintah</option>
                         </select>
                     </div>
                 </div>

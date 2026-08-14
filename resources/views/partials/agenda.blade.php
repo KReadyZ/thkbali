@@ -148,7 +148,7 @@
                         <button id="agenda-modal-cancel" class="px-5 py-2.5 rounded-full border border-white/20 text-white hover:bg-white/10 transition text-xs font-semibold cursor-pointer">
                             Tutup
                         </button>
-                        <a id="agenda-modal-wa" href="https://wa.me/628113996698" target="_blank" class="px-6 py-2.5 rounded-full bg-gold-500 text-forest-950 hover:bg-gold-400 transition text-xs font-black flex items-center gap-1.5 shadow-md">
+                        <a id="agenda-modal-wa" href="https://wa.me/081337644463" target="_blank" class="px-6 py-2.5 rounded-full bg-gold-500 text-forest-950 hover:bg-gold-400 transition text-xs font-black flex items-center gap-1.5 shadow-md">
                             Hubungi Narahubung via WhatsApp
                         </a>
                     </div>

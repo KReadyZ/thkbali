@@ -1366,9 +1366,11 @@
                     <select id="assign-parahyangan" name="assessor_parahyangan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
-                            <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
-                            </option>
+                            @if($asUser->specialization === 'parahyangan')
+                                <option value="{{ $asUser->id }}">
+                                    {{ $asUser->name }} ({{ $asUser->email }})
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -1382,9 +1384,11 @@
                     <select id="assign-pawongan" name="assessor_pawongan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
-                            <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
-                            </option>
+                            @if($asUser->specialization === 'pawongan')
+                                <option value="{{ $asUser->id }}">
+                                    {{ $asUser->name }} ({{ $asUser->email }})
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -1398,9 +1402,11 @@
                     <select id="assign-palemahan" name="assessor_palemahan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
                         <option value="">-- Belum Ditugaskan --</option>
                         @foreach($assessorUsers as $asUser)
-                            <option value="{{ $asUser->id }}">
-                                {{ $asUser->name }} ({{ $asUser->email }}) - [Pilar: {{ ucfirst($asUser->specialization) }}]
-                            </option>
+                            @if($asUser->specialization === 'palemahan')
+                                <option value="{{ $asUser->id }}">
+                                    {{ $asUser->name }} ({{ $asUser->email }})
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>

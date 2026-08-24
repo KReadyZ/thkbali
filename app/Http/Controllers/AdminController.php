@@ -578,13 +578,19 @@ class AdminController extends Controller
             'assessor_parahyangan_id' => 'nullable|exists:users,id',
             'assessor_pawongan_id'    => 'nullable|exists:users,id',
             'assessor_palemahan_id'   => 'nullable|exists:users,id',
+            'visit_day_parahyangan'   => 'nullable|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'visit_day_pawongan'      => 'nullable|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'visit_day_palemahan'     => 'nullable|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
         ]);
 
         $proposal = Proposal::findOrFail($id);
         $proposal->update([
             'assessor_parahyangan_id' => $request->assessor_parahyangan_id,
+            'visit_day_parahyangan'   => $request->assessor_parahyangan_id ? $request->visit_day_parahyangan : null,
             'assessor_pawongan_id'    => $request->assessor_pawongan_id,
+            'visit_day_pawongan'      => $request->assessor_pawongan_id ? $request->visit_day_pawongan : null,
             'assessor_palemahan_id'   => $request->assessor_palemahan_id,
+            'visit_day_palemahan'     => $request->assessor_palemahan_id ? $request->visit_day_palemahan : null,
             'status'                  => ($proposal->status === 'Verifikasi Admin' || $proposal->status === 'Pengajuan') ? 'Penilaian Lapangan' : $proposal->status,
         ]);
 

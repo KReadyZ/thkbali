@@ -685,18 +685,27 @@
                                                 <span class="text-[10px] font-bold px-1.5 py-0.2 bg-amber-100 text-amber-900 border border-amber-300 rounded">Parah:</span>
                                                 <span class="text-[11px] {{ $prop->assessorParahyangan ? 'font-bold text-forest-900' : 'text-gray-400 italic' }}">
                                                     {{ $prop->assessorParahyangan ? $prop->assessorParahyangan->name : 'Belum Ditugaskan' }}
+                                                    @if($prop->assessorParahyangan && $prop->visit_day_parahyangan)
+                                                        <span class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded-md text-[9px] font-black whitespace-nowrap"><i class="far fa-calendar-alt text-[8px] mr-0.5"></i>{{ $prop->visit_day_parahyangan }}</span>
+                                                    @endif
                                                 </span>
                                             </div>
                                             <div class="flex items-center gap-1.5">
                                                 <span class="text-[10px] font-bold px-1.5 py-0.2 bg-blue-100 text-blue-900 border border-blue-300 rounded">Pawo:</span>
                                                 <span class="text-[11px] {{ $prop->assessorPawongan ? 'font-bold text-forest-900' : 'text-gray-400 italic' }}">
                                                     {{ $prop->assessorPawongan ? $prop->assessorPawongan->name : 'Belum Ditugaskan' }}
+                                                    @if($prop->assessorPawongan && $prop->visit_day_pawongan)
+                                                        <span class="ml-1 px-1.5 py-0.5 bg-blue-500 text-white rounded-md text-[9px] font-black whitespace-nowrap"><i class="far fa-calendar-alt text-[8px] mr-0.5"></i>{{ $prop->visit_day_pawongan }}</span>
+                                                    @endif
                                                 </span>
                                             </div>
                                             <div class="flex items-center gap-1.5">
                                                 <span class="text-[10px] font-bold px-1.5 py-0.2 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded">Palem:</span>
                                                 <span class="text-[11px] {{ $prop->assessorPalemahan ? 'font-bold text-forest-900' : 'text-gray-400 italic' }}">
                                                     {{ $prop->assessorPalemahan ? $prop->assessorPalemahan->name : 'Belum Ditugaskan' }}
+                                                    @if($prop->assessorPalemahan && $prop->visit_day_palemahan)
+                                                        <span class="ml-1 px-1.5 py-0.5 bg-emerald-500 text-white rounded-md text-[9px] font-black whitespace-nowrap"><i class="far fa-calendar-alt text-[8px] mr-0.5"></i>{{ $prop->visit_day_palemahan }}</span>
+                                                    @endif
                                                 </span>
                                             </div>
                                         </td>
@@ -1358,57 +1367,102 @@
             <form id="form-assign-assessors" method="POST" action="" class="space-y-4">
                 @csrf
                 <!-- 1. Asesor Parahyangan -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-900 mb-1 flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-                        1. Asesor Bidang Parahyangan (Spiritual)
-                    </label>
-                    <select id="assign-parahyangan" name="assessor_parahyangan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
-                        <option value="">-- Belum Ditugaskan --</option>
-                        @foreach($assessorUsers as $asUser)
-                            @if($asUser->specialization === 'parahyangan')
-                                <option value="{{ $asUser->id }}">
-                                    {{ $asUser->name }} ({{ $asUser->email }})
-                                </option>
-                            @endif
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-amber-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                            1. Asesor Parahyangan
+                        </label>
+                        <select id="assign-parahyangan" name="assessor_parahyangan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Belum Ditugaskan --</option>
+                            @foreach($assessorUsers as $asUser)
+                                @if($asUser->specialization === 'parahyangan')
+                                    <option value="{{ $asUser->id }}">
+                                        {{ $asUser->name }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-forest-700 mb-1">Hari Penilaian</label>
+                        <select id="assign-day-parahyangan" name="visit_day_parahyangan" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Pilih Hari --</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- 2. Asesor Pawongan -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-blue-900 mb-1 flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
-                        2. Asesor Bidang Pawongan (Sosial / Karyawan)
-                    </label>
-                    <select id="assign-pawongan" name="assessor_pawongan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
-                        <option value="">-- Belum Ditugaskan --</option>
-                        @foreach($assessorUsers as $asUser)
-                            @if($asUser->specialization === 'pawongan')
-                                <option value="{{ $asUser->id }}">
-                                    {{ $asUser->name }} ({{ $asUser->email }})
-                                </option>
-                            @endif
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-blue-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                            2. Asesor Pawongan
+                        </label>
+                        <select id="assign-pawongan" name="assessor_pawongan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Belum Ditugaskan --</option>
+                            @foreach($assessorUsers as $asUser)
+                                @if($asUser->specialization === 'pawongan')
+                                    <option value="{{ $asUser->id }}">
+                                        {{ $asUser->name }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-forest-700 mb-1">Hari Penilaian</label>
+                        <select id="assign-day-pawongan" name="visit_day_pawongan" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Pilih Hari --</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- 3. Asesor Palemahan -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-emerald-900 mb-1 flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                        3. Asesor Bidang Palemahan (Lingkungan / Alam)
-                    </label>
-                    <select id="assign-palemahan" name="assessor_palemahan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
-                        <option value="">-- Belum Ditugaskan --</option>
-                        @foreach($assessorUsers as $asUser)
-                            @if($asUser->specialization === 'palemahan')
-                                <option value="{{ $asUser->id }}">
-                                    {{ $asUser->name }} ({{ $asUser->email }})
-                                </option>
-                            @endif
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-emerald-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                            3. Asesor Palemahan
+                        </label>
+                        <select id="assign-palemahan" name="assessor_palemahan_id" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Belum Ditugaskan --</option>
+                            @foreach($assessorUsers as $asUser)
+                                @if($asUser->specialization === 'palemahan')
+                                    <option value="{{ $asUser->id }}">
+                                        {{ $asUser->name }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-forest-700 mb-1">Hari Penilaian</label>
+                        <select id="assign-day-palemahan" name="visit_day_palemahan" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-forest-950 focus:border-gold-500 outline-none cursor-pointer">
+                            <option value="">-- Pilih Hari --</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="pt-3 border-t border-beige-200 flex justify-end gap-3">
@@ -1781,8 +1835,11 @@
             formAssignAssessors.action = `/admin/proposal/assign-assessors/${item.id}`;
             document.getElementById('assign-modal-title').textContent = `Tugaskan Asesor: ${item.institution_name}`;
             document.getElementById('assign-parahyangan').value = item.assessor_parahyangan_id || '';
+            document.getElementById('assign-day-parahyangan').value = item.visit_day_parahyangan || '';
             document.getElementById('assign-pawongan').value = item.assessor_pawongan_id || '';
+            document.getElementById('assign-day-pawongan').value = item.visit_day_pawongan || '';
             document.getElementById('assign-palemahan').value = item.assessor_palemahan_id || '';
+            document.getElementById('assign-day-palemahan').value = item.visit_day_palemahan || '';
 
             modalAssignAssessors.classList.remove('hidden');
             modalAssignAssessors.classList.add('flex');
